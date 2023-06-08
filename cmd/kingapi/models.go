@@ -39,9 +39,16 @@ type PVals struct {
 
 // this is the Tal personality along with some moves
 var testJson = `{
-	"moves": [
-		"e2e4", "c7c6", "d2d4", "d7d5", "b1c3", "d5e4", "c3e4", "g8f6", "e4f6", 
-		"e7f6", "g2g3", "f8d6"
+	"moves" : [
+		"h2h4",  "d7d5", "f2f3",
+		"d5d4",  "a2a4", "d4d3",
+		"b2b4",  "d3c2", "h1h2",
+		"c2b1q", "e2e3", "b1a1",
+		"f1d3",  "d8d3", "h2h1",
+		"c7c5",  "g2g3", "c8e6",
+		"g1h3",  "b8c6", "d1b3",
+		"e8c8",  "b3e6", "f7e6",
+		"b8d8"
 	],
 	"pVals": {
 		"opp": "107",

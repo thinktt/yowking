@@ -19,6 +19,7 @@ import (
 func main() {
 	isWsl := os.Getenv("IS_WSL")
 	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
+	fmt.Println("shouldPostInput: " + shouldPostInput)
 
 	var cmd *exec.Cmd
 	if isWsl == "true" {
@@ -76,24 +77,27 @@ func main() {
 
 	for _, move := range settings.Moves {
 		moveStr := fmt.Sprintf("%s\n", move)
+		fmt.Printf(moveStr)
 		engine.Write([]byte(moveStr))
 	}
-
 	engine.Write([]byte("go\n"))
 
-	// fmt.Println("Engine wrapper started, waiting for commands")
+	scanOutput(engine)
+
+	cmd.Wait()
+}
+
+func scanOutput(engine io.WriteCloser) {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		line := s.Text()
-		if shouldPostInput == "true" {
-			fmt.Printf("In: " + line + "\n")
-		}
+		// if shouldPostInput == "true" {
+		// 	fmt.Printf("In: " + line + "\n")
+		// }
 		engine.Write([]byte(line + "\n"))
 		if line == "quit" {
 			fmt.Println("quit received, waiting for engine to quit")
 			break
 		}
 	}
-
-	cmd.Wait()
 }
