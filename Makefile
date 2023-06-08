@@ -30,4 +30,4 @@ dexec: dbuild
 
 run: export IS_WSL=true
 run: 
-	go run ./cmd/kingapi/main.go
+	go run ./cmd/kingapi
