@@ -1,0 +1,61 @@
+Today
+build move api
+  connect to engine
+
+
+...Overview...
+build api
+connect to engine
+connect to book builder
+? connect to calirations
+
+
+Featrues
+  engine module in yow now in go API
+    xx can I put go bin outside of wine? 
+    use enginewrap
+    getMoves
+    setLogLevel
+
+  gin endpoints for yowbot engine commands
+  basic move endpoint with personality vars
+  calibrations?
+    load calibration files?
+    have calibrations come in trhough api
+  opening books?
+    turn node book reader into its own callable exe
+      use pkg to do packaging
+      pipe in book name and moves
+      can also use it to validate move?
+      call book reader from king service
+  game moves validation??
+  personalitiy move endpoints
+  cli commands?
+
+
+
+Security
+  https
+  JWT security?
+    token endpoint authed through lichess
+    jwt validation middleware
+
+Professionalism
+  test
+  enviroment vars
+
+Scaling service
+  kubernetes scaling?
+  use nginx?
+
+Presentation
+  Diagram of entire YOW system
+  a bot tournament?
+    simple bot tournamnent in yowfront?
+
+mention your intersest in grpc
+mention your interest in using api gatway security
+
+
+.....Out of Scope.....
+x    grpc?
