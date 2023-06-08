@@ -8,7 +8,9 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
 	"os"
 	"os/exec"
@@ -40,10 +42,43 @@ func main() {
 		os.Exit(1)
 	}
 
+	var settings Settings
+	err = json.Unmarshal([]byte(testJson), &settings)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	fmt.Println("Success marshalling json")
+	cmpLoaderTemplate := `cm_parm default
+	cm_parm opp={{.Opp}} opn={{.Opn}} opb={{.Opb}} opr={{.Opr}} opq={{.Opq}}
+	cm_parm myp={{.Myp}} myn={{.Myn}} myb={{.Myb}} myr={{.Myr}} myq={{.Myq}}
+	cm_parm mycc={{.Mycc}} mymob={{.Mymob}} myks={{.Myks}}  mypp={{.Mypp}} mypw={{.Mypw}}
+	cm_parm opcc={{.Opcc}} opmob={{.Opmob}} opks={{.Opks}} oppp={{.Oppp}} oppw={{.Oppw}}
+	cm_parm cfd={{.Cfd}} sop={{.Sop}} avd={{.Avd}} rnd={{.Rnd}} sel={{.Sel}} md={{.Md}}
+	cm_parm tts={{.Tts}}
+	easy
+	`
+
+	t := template.Must(template.New("pValsTemplate").Parse(cmpLoaderTemplate))
+	buf := &bytes.Buffer{}
+	if err := t.Execute(buf, settings.PVals); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
+	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
+
 	engine.Write([]byte("xboard\n"))
 	engine.Write([]byte("post\n"))
-	engine.Write([]byte("time 10000\n"))
-	engine.Write([]byte("otim 10000\n"))
+	engine.Write([]byte(timeStr))
+	engine.Write([]byte(otimStr))
+	engine.Write([]byte(buf.String()))
+
+	for _, move := range settings.Moves {
+		moveStr := fmt.Sprintf("%s\n", move)
+		engine.Write([]byte(moveStr))
+	}
+
 	engine.Write([]byte("go\n"))
 
 	// fmt.Println("Engine wrapper started, waiting for commands")
