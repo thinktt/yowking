@@ -37,18 +37,47 @@ type PVals struct {
 	Tts   string `json:"tts"`
 }
 
+var engineLinesString = ` 
+3001  +144      0       417 Nf5 Nc3 Rad8+ Kc1 Nxe3
+4001  +144      1      1740 Nf5 Nc3 Rad8+ Kc1 Nxe3
+5002  +156      1      6187 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
+6002  +156      3     20899 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
+7002  +153      7     58359 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 c5 Nc4
+8003  +169     13    133468 Nf5 Nc3 Rad8+ Kc1 Nxe3 Re1 Nxg2 Re4 Rxe4 Nxe4
+9003  +171     25    314861 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4
+10003  +164     47    657961 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Re4 Nb5 Nd5+ Kd2 Rb4 a4 Rxb2 Nxa7
+11004  +154    147   2430138 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4 Rxg3 Re1
+`
+
+// {
+//   "depth": 11004,
+//   "eval": 154,
+//   "time": 147,
+//   "id": 2430138,
+//   "algebraMove": "Nf5",
+//   "coordinateMove": "d4f5",
+//   "willAcceptDraw": false,
+//   "timeForMove": 2177,
+//   "engineMove": "d4f5"
+// }
+
+type MoveData struct {
+	Depth          int    `json:"depth"`
+	Eval           int    `json:"eval"`
+	Time           int    `json:"time"`
+	ID             int    `json:"id"`
+	AlgebraMove    string `json:"algebraMove"`
+	CoordinateMove string `json:"coordinateMove"`
+	WillAcceptDraw bool   `json:"willAcceptDraw"`
+	TimeForMove    int    `json:"timeForMove"`
+	EngineMove     string `json:"engineMove"`
+}
+
 // this is the Tal personality along with some moves
 var testJson = `{
 	"moves" : [
 		"h2h4",  "d7d5", "f2f3",
-		"d5d4",  "a2a4", "d4d3",
-		"b2b4",  "d3c2", "h1h2",
-		"c2b1q", "e2e3", "b1a1",
-		"f1d3",  "d8d3", "h2h1",
-		"c7c5",  "g2g3", "c8e6",
-		"g1h3",  "b8c6", "d1b3",
-		"e8c8",  "b3e6", "f7e6",
-		"b8d8"
+		"d5d4",  "a2a4", "d4d3"
 	],
 	"pVals": {
 		"opp": "107",

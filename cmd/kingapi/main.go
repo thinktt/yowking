@@ -28,21 +28,37 @@ func main() {
 		cmd = exec.Command("wine", "enginewrap.exe")
 	}
 
-	var stdoutBuf, stderrBuf bytes.Buffer
-	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
-	cmd.Stderr = io.MultiWriter(os.Stderr, &stderrBuf)
 	engine, err := cmd.StdinPipe()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
+	engineOut, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	engineErr, err := cmd.StderrPipe()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// handle the engine steams in real time
+	go pipeOut(engineOut)
+	go pipeOut(engineErr)
+	go forwardUserCommands(engine)
+
+	// start the engine
 	err = cmd.Start()
 	if err != nil {
 		fmt.Printf("cmd.Run() failed with %s\n", err)
 		os.Exit(1)
 	}
 
+	// marshall the settings json data
 	var settings Settings
 	err = json.Unmarshal([]byte(testJson), &settings)
 	if err != nil {
@@ -50,6 +66,8 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("Success marshalling json")
+
+	// prepare all the personality setting commands to be sent to the engine
 	cmpLoaderTemplate := `cm_parm default
 	cm_parm opp={{.Opp}} opn={{.Opn}} opb={{.Opb}} opr={{.Opr}} opq={{.Opq}}
 	cm_parm myp={{.Myp}} myn={{.Myn}} myb={{.Myb}} myr={{.Myr}} myq={{.Myq}}
@@ -59,7 +77,6 @@ func main() {
 	cm_parm tts={{.Tts}}
 	easy
 	`
-
 	t := template.Must(template.New("pValsTemplate").Parse(cmpLoaderTemplate))
 	buf := &bytes.Buffer{}
 	if err := t.Execute(buf, settings.PVals); err != nil {
@@ -69,35 +86,38 @@ func main() {
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
 	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
 
+	// send settings to the engine
 	engine.Write([]byte("xboard\n"))
 	engine.Write([]byte("post\n"))
 	engine.Write([]byte(timeStr))
 	engine.Write([]byte(otimStr))
 	engine.Write([]byte(buf.String()))
 
+	// send all the moves to the engine
 	for _, move := range settings.Moves {
 		moveStr := fmt.Sprintf("%s\n", move)
-		fmt.Printf(moveStr)
 		engine.Write([]byte(moveStr))
 	}
+
+	// start the engine
 	engine.Write([]byte("go\n"))
 
-	scanOutput(engine)
-
+	// keep this app going while the egine is running
 	cmd.Wait()
 }
 
-func scanOutput(engine io.WriteCloser) {
+func pipeOut(r io.Reader) {
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		fmt.Println(s.Text())
+	}
+}
+
+func forwardUserCommands(engine io.WriteCloser) {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		line := s.Text()
-		// if shouldPostInput == "true" {
-		// 	fmt.Printf("In: " + line + "\n")
-		// }
+		fmt.Println(line)
 		engine.Write([]byte(line + "\n"))
-		if line == "quit" {
-			fmt.Println("quit received, waiting for engine to quit")
-			break
-		}
 	}
 }
