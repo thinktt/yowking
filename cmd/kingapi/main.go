@@ -117,7 +117,6 @@ func forwardUserCommands(engine io.WriteCloser) {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		line := s.Text()
-		fmt.Println(line)
 		engine.Write([]byte(line + "\n"))
 	}
 }
