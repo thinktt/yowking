@@ -12,6 +12,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -21,6 +22,8 @@ func main() {
 		return
 	}
 	fmt.Println(moveData)
+	// wait 10 seconds before exiting
+	time.Sleep(10 * time.Second)
 }
 
 func getMove() (MoveData, error) {
@@ -67,7 +70,11 @@ func getMove() (MoveData, error) {
 		errToGo := fmt.Errorf("cmd.Run() failed with %s\n", err)
 		return MoveData{}, errToGo
 	}
-	defer cmd.Wait()
+
+	// from here if getMove() errors or completes be sure to stop the engine
+	defer func() {
+		go stopEngine(engine, cmd)
+	}()
 
 	// marshall the settings json data
 	var settings Settings
@@ -114,14 +121,26 @@ func getMove() (MoveData, error) {
 
 	// wait for the engine to send back a move
 	moveData := <-moveChan
-	engine.Write([]byte("quit\n"))
-	if cmd.Process != nil {
-		// cmd.Process.Kill()
-		fmt.Println("it looks like the process is still running")
-	}
-
 	return moveData, nil
+}
 
+func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
+	// send a quilt command to the engine
+	engine.Write([]byte("quit\n"))
+
+	// make sure the engine closes with a timeout
+	isExited := false
+	go func() {
+		time.Sleep(5 * time.Second)
+		if !isExited {
+			fmt.Println("engine looks stuck, killing it")
+			cmd.Process.Kill()
+		}
+	}()
+
+	cmd.Wait()
+	isExited = true
+	fmt.Println("engine closed")
 }
 
 func pipeOut(r io.Reader, moveChan chan MoveData) {
