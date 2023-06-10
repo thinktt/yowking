@@ -1,8 +1,3 @@
-// This is a simple wrapper for the Chess engine. For some reason the pipes
-// from Node to wine to the engine break but when we wrap the engine in a
-// Go win binary they work. The order of operations is then
-// Node in linux --> Wine --> enginewrap.exe --> engine
-
 package main
 
 import (
@@ -20,6 +15,15 @@ import (
 )
 
 func main() {
+	moveData, err := getMove()
+	if err != nil {
+		fmt.Println("There was ane error getting the move: ", err)
+		return
+	}
+	fmt.Println(moveData)
+}
+
+func getMove() (MoveData, error) {
 	isWsl := os.Getenv("IS_WSL")
 	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	fmt.Println("shouldPostInput: " + shouldPostInput)
@@ -34,39 +38,43 @@ func main() {
 	engine, err := cmd.StdinPipe()
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return MoveData{}, err
 	}
 
 	engineOut, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return MoveData{}, err
 	}
 
 	engineErr, err := cmd.StderrPipe()
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return MoveData{}, err
 	}
 
-	// handle the engine steams in real time
-	go pipeOut(engineOut)
-	go pipeOut(engineErr)
+	moveChan := make(chan MoveData)
+	defer close(moveChan)
+
+	// handle the engine streams in real time
+	go pipeOut(engineOut, moveChan)
+	go pipeOutErr(engineErr)
 	go forwardUserCommands(engine)
 
 	// start the engine
 	err = cmd.Start()
 	if err != nil {
-		fmt.Printf("cmd.Run() failed with %s\n", err)
-		os.Exit(1)
+		errToGo := fmt.Errorf("cmd.Run() failed with %s\n", err)
+		return MoveData{}, errToGo
 	}
+	defer cmd.Wait()
 
 	// marshall the settings json data
 	var settings Settings
 	err = json.Unmarshal([]byte(testJson), &settings)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		err := errors.New("Error unmarshalling settings json")
+		return MoveData{}, err
 	}
 	fmt.Println("Success marshalling json")
 
@@ -83,8 +91,7 @@ func main() {
 	t := template.Must(template.New("pValsTemplate").Parse(cmpLoaderTemplate))
 	buf := &bytes.Buffer{}
 	if err := t.Execute(buf, settings.PVals); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return MoveData{}, err
 	}
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
 	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
@@ -105,13 +112,22 @@ func main() {
 	// start the engine
 	engine.Write([]byte("go\n"))
 
-	// keep this app going while the egine is running
-	cmd.Wait()
+	// wait for the engine to send back a move
+	moveData := <-moveChan
+	engine.Write([]byte("quit\n"))
+	if cmd.Process != nil {
+		// cmd.Process.Kill()
+		fmt.Println("it looks like the process is still running")
+	}
+
+	return moveData, nil
+
 }
 
-func pipeOut(r io.Reader) {
+func pipeOut(r io.Reader, moveChan chan MoveData) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
+
 	for s.Scan() {
 		engineLine := s.Text()
 		fmt.Println(engineLine)
@@ -123,7 +139,7 @@ func pipeOut(r io.Reader) {
 			break
 		}
 
-		// parese the enginLine if it is a move line
+		// parse the enginLine if it is a move line
 		moveData, err := parseMoveLine(words)
 		if err != nil {
 			continue
@@ -131,7 +147,15 @@ func pipeOut(r io.Reader) {
 		moveCandidate = moveData
 	}
 
-	fmt.Println("moveCandidate: ", moveCandidate)
+	moveChan <- moveCandidate
+}
+
+func pipeOutErr(r io.Reader) {
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		engineLine := s.Text()
+		fmt.Println(engineLine)
+	}
 }
 
 func parseMoveLine(words []string) (MoveData, error) {
