@@ -1,4 +1,4 @@
-package main
+package models
 
 type Settings struct {
 	Moves          []string `json:"moves"`
@@ -76,7 +76,7 @@ type MoveData struct {
 // 10003   +27    205   2205499 e4 dxc2 Qxc2 e5 f4 exf4 d4 Bd6 Nf3 Nf6 Ne5 c5
 
 // this is the Tal personality along with some moves
-var testJson = `{
+var TestJson = `{
 	"moves" : [
 		"h2h4",  "d7d5", "f2f3",
 		"d5d4",  "a2a4", "d4d3"
