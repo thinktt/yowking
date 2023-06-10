@@ -65,13 +65,15 @@ type MoveData struct {
 	Depth          int    `json:"depth"`
 	Eval           int    `json:"eval"`
 	Time           int    `json:"time"`
-	ID             int    `json:"id"`
+	Id             int    `json:"id"`
 	AlgebraMove    string `json:"algebraMove"`
 	CoordinateMove string `json:"coordinateMove"`
 	WillAcceptDraw bool   `json:"willAcceptDraw"`
-	TimeForMove    int    `json:"timeForMove"`
-	EngineMove     string `json:"engineMove"`
+	// TimeForMove    int    `json:"timeForMove"`
+	// EngineMove     string `json:"engineMove"`
 }
+
+// 10003   +27    205   2205499 e4 dxc2 Qxc2 e5 f4 exf4 d4 Bd6 Nf3 Nf6 Ne5 c5
 
 // this is the Tal personality along with some moves
 var testJson = `{

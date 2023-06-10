@@ -9,11 +9,14 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
 	"os"
 	"os/exec"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -108,9 +111,55 @@ func main() {
 
 func pipeOut(r io.Reader) {
 	s := bufio.NewScanner(r)
+	moveCandidate := MoveData{}
 	for s.Scan() {
-		fmt.Println(s.Text())
+		engineLine := s.Text()
+		fmt.Println(engineLine)
+
+		// check if the engine line final move result
+		words := strings.Fields(engineLine)
+		if strings.Contains(engineLine, "move") && len(words) == 2 {
+			moveCandidate.CoordinateMove = strings.Fields(engineLine)[1]
+			break
+		}
+
+		// parese the enginLine if it is a move line
+		moveData, err := parseMoveLine(words)
+		if err != nil {
+			continue
+		}
+		moveCandidate = moveData
 	}
+
+	fmt.Println("moveCandidate: ", moveCandidate)
+}
+
+func parseMoveLine(words []string) (MoveData, error) {
+	if len(words) < 5 {
+		return MoveData{}, errors.New("Not enough words for move line")
+	}
+
+	// only a valid move line if first 4 words are numbers
+	var err error
+	var numbers [4]int
+	for i := 0; i < 4; i++ {
+		numbers[i], err = strconv.Atoi(words[i])
+		if err != nil {
+			return MoveData{}, errors.New("First 4 words of engine line are not numbers")
+		}
+	}
+
+	moveData := MoveData{
+		Depth:          numbers[0],
+		Eval:           numbers[1],
+		Time:           numbers[2],
+		Id:             numbers[3],
+		AlgebraMove:    words[4],
+		CoordinateMove: "",
+		WillAcceptDraw: false,
+	}
+
+	return moveData, nil
 }
 
 func forwardUserCommands(engine io.WriteCloser) {
