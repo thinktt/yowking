@@ -156,10 +156,22 @@ func parseMoveLine(words []string) (MoveData, error) {
 		Id:             numbers[3],
 		AlgebraMove:    words[4],
 		CoordinateMove: "",
-		WillAcceptDraw: false,
 	}
 
 	return moveData, nil
+}
+
+func getDrawEval(currentEval int, settings Settings) bool {
+	contemtForDraw, err := strconv.Atoi(settings.PVals.Cfd)
+	if err != nil {
+		return false
+	}
+
+	if len(settings.Moves) <= 30 {
+		return false
+	}
+
+	return (currentEval + contemtForDraw) < 0
 }
 
 func forwardUserCommands(engine io.WriteCloser) {
