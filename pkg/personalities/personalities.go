@@ -8,10 +8,7 @@ import (
 	"github.com/thinktt/yowking/pkg/models"
 )
 
-type Cmp = models.Cmp
-type PVals = models.PVals
-
-var CmpMap = make(map[string]Cmp)
+var CmpMap = make(map[string]models.Cmp)
 
 func init() {
 	loadCmps()
@@ -27,13 +24,6 @@ func loadCmps() {
 
 	err = json.NewDecoder(file).Decode(&CmpMap)
 	if err != nil {
-		fmt.Printf("Error decoding JSON: %v", err)
+		fmt.Println("Error decoding JSON:", err)
 	}
-
-	fmt.Println(CmpMap)
 }
-
-// pull json from the file personalities.json parse it into an slice
-// of Cmp structs
-
-// func getPersonality(cmpName string) Cmp {

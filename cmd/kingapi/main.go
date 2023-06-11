@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
-	// "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/engine"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/personalities"
@@ -12,12 +13,42 @@ import (
 type MoveData = models.MoveData
 type Settings = models.Settings
 
-// var testJson = models.TestJson
-
 func main() {
+
+	r := gin.Default()
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "API is healthy",
+		})
+	})
+
+	r.POST("/move-req", func(c *gin.Context) {
+		var moveReq models.MoveReq
+		if err := c.ShouldBindJSON(&moveReq); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		settings := models.Settings{
+			Moves:     moveReq.Moves,
+			CmpVals:   personalities.CmpMap[moveReq.CmpName].Vals,
+			ClockTime: 5750,
+		}
+
+		moveData, err := engine.GetMove(settings)
+		if err != nil {
+			fmt.Println("There was ane error getting the move: ", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
+			return
+		}
+
+		c.JSON(http.StatusOK, moveData)
+	})
+
+	r.Run()
+
 	settings := Settings{
 		Moves:     []string{"e2e4", "e7e5", "g1f3", "b8c6", "f1b5"},
-		PVals:     personalities.CmpMap["Tal"].PVals,
+		CmpVals:   personalities.CmpMap["Stanly"].Vals,
 		ClockTime: 15000,
 	}
 
