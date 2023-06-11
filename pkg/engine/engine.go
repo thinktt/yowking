@@ -61,7 +61,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	// start the engine
 	err = cmd.Start()
 	if err != nil {
-		errToGo := fmt.Errorf("cmd.Run() failed with %s\n", err)
+		errToGo := fmt.Errorf("cmd.Run() failed with %s", err)
 		return MoveData{}, errToGo
 	}
 
@@ -158,13 +158,13 @@ func pipeOutErr(r io.Reader) {
 	s := bufio.NewScanner(r)
 	for s.Scan() {
 		engineLine := s.Text()
-		fmt.Println(engineLine)
+		fmt.Println("Engine ERR:", engineLine)
 	}
 }
 
 func parseMoveLine(words []string) (MoveData, error) {
 	if len(words) < 5 {
-		return MoveData{}, errors.New("Not enough words for move line")
+		return MoveData{}, errors.New("not enough words for move line")
 	}
 
 	// only a valid move line if first 4 words are numbers
@@ -173,7 +173,7 @@ func parseMoveLine(words []string) (MoveData, error) {
 	for i := 0; i < 4; i++ {
 		numbers[i], err = strconv.Atoi(words[i])
 		if err != nil {
-			return MoveData{}, errors.New("First 4 words of engine line are not numbers")
+			return MoveData{}, errors.New("first 4 words of engine line are not numbers")
 		}
 	}
 
@@ -187,19 +187,6 @@ func parseMoveLine(words []string) (MoveData, error) {
 	}
 
 	return moveData, nil
-}
-
-func getDrawEval(currentEval int, settings Settings) bool {
-	contemtForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
-	if err != nil {
-		return false
-	}
-
-	if len(settings.Moves) <= 30 {
-		return false
-	}
-
-	return (currentEval + contemtForDraw) < 0
 }
 
 func forwardUserCommands(engine io.WriteCloser) {
