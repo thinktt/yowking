@@ -28,9 +28,17 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		cmp, ok := personalities.CmpMap[moveReq.CmpName]
+		if !ok {
+			errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
+			c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
+			return
+		}
+
 		settings := models.Settings{
 			Moves:     moveReq.Moves,
-			CmpVals:   personalities.CmpMap[moveReq.CmpName].Vals,
+			CmpVals:   cmp.Vals,
 			ClockTime: 5750,
 		}
 
@@ -40,6 +48,8 @@ func main() {
 			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
 			return
 		}
+
+		moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 
 		c.JSON(http.StatusOK, moveData)
 	})

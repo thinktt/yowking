@@ -1,17 +1,17 @@
 // This is a simple wrapper for the Chess engine. For some reason the pipes
-// from Node to wine to the engine break but when we wrap the engine in a 
+// from Node to wine to the engine break but when we wrap the engine in a
 // Go win binary they work. The order of operations is then
 // Node in linux --> Wine --> enginewrap.exe --> engine
 
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
-	"bufio"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 
 	err = cmd.Start()
 	if err != nil {
-		fmt.Println("cmd.Run() failed with %s\n", err)
+		fmt.Printf("cmd.Run() failed with %s\n", err)
 		os.Exit(1)
 	}
 
@@ -47,5 +47,6 @@ func main() {
 		}
 	}
 
+	engine.Close()
 	cmd.Wait()
 }

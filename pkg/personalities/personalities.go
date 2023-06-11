@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/thinktt/yowking/pkg/models"
 )
@@ -26,4 +27,17 @@ func loadCmps() {
 	if err != nil {
 		fmt.Println("Error decoding JSON:", err)
 	}
+}
+
+func GetDrawEval(currentEval int, settings models.Settings) bool {
+	contemtForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
+	if err != nil {
+		return false
+	}
+
+	if len(settings.Moves) <= 30 {
+		return false
+	}
+
+	return (currentEval + contemtForDraw) < 0
 }
