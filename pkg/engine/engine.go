@@ -22,12 +22,12 @@ type Settings = models.Settings
 func GetMove(settings Settings) (MoveData, error) {
 
 	isWsl := os.Getenv("IS_WSL")
-	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
-	fmt.Println("shouldPostInput: " + shouldPostInput)
+	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
+	// fmt.Println("shouldPostInput: " + shouldPostInput)
 
 	var cmd *exec.Cmd
 	if isWsl == "true" {
-		cmd = exec.Command("./assets/TheKing350noOpk.exe")
+		cmd = exec.Command("./TheKing350noOpk.exe")
 	} else {
 		cmd = exec.Command("wine", "enginewrap.exe")
 	}

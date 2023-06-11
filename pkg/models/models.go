@@ -37,17 +37,29 @@ type PVals struct {
 	Tts   string `json:"tts"`
 }
 
-var engineLinesString = ` 
-3001  +144      0       417 Nf5 Nc3 Rad8+ Kc1 Nxe3
-4001  +144      1      1740 Nf5 Nc3 Rad8+ Kc1 Nxe3
-5002  +156      1      6187 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
-6002  +156      3     20899 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
-7002  +153      7     58359 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 c5 Nc4
-8003  +169     13    133468 Nf5 Nc3 Rad8+ Kc1 Nxe3 Re1 Nxg2 Re4 Rxe4 Nxe4
-9003  +171     25    314861 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4
-10003  +164     47    657961 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Re4 Nb5 Nd5+ Kd2 Rb4 a4 Rxb2 Nxa7
-11004  +154    147   2430138 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4 Rxg3 Re1
-`
+type MoveReq struct {
+	Moves   []string `json:"moves"`
+	CmpName string   `json:"cmpName"`
+}
+
+type Cmp struct {
+	PVals  PVals  `json:"out"`
+	Name   string `json:"name"`
+	Ponder string `json:"ponder"`
+	Book   string `json:"book"`
+}
+
+// var engineLinesString = `
+// 3001  +144      0       417 Nf5 Nc3 Rad8+ Kc1 Nxe3
+// 4001  +144      1      1740 Nf5 Nc3 Rad8+ Kc1 Nxe3
+// 5002  +156      1      6187 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
+// 6002  +156      3     20899 Nf5 Re1 Rad8+ Kc3 c5 Nd2 Nxe3
+// 7002  +153      7     58359 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 c5 Nc4
+// 8003  +169     13    133468 Nf5 Nc3 Rad8+ Kc1 Nxe3 Re1 Nxg2 Re4 Rxe4 Nxe4
+// 9003  +171     25    314861 Nf5 Re1 Rad8+ Kc3 Nxe3 Nd2 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4
+// 10003  +164     47    657961 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Re4 Nb5 Nd5+ Kd2 Rb4 a4 Rxb2 Nxa7
+// 11004  +154    147   2430138 Nf5 Re1 Rad8+ Kc3 Nxe3 Na3 Nxg2 Rxe8+ Rxe8 Nc4 Ne3 Nxe3 Rxe3+ Kd4 Rxg3 Re1
+// `
 
 // {
 //   "depth": 11004,
