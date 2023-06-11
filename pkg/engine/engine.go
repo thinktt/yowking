@@ -82,7 +82,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	`
 	t := template.Must(template.New("pValsTemplate").Parse(cmpLoaderTemplate))
 	buf := &bytes.Buffer{}
-	if err := t.Execute(buf, settings.PVals); err != nil {
+	if err := t.Execute(buf, settings.CmpVals); err != nil {
 		return MoveData{}, err
 	}
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
@@ -190,7 +190,7 @@ func parseMoveLine(words []string) (MoveData, error) {
 }
 
 func getDrawEval(currentEval int, settings Settings) bool {
-	contemtForDraw, err := strconv.Atoi(settings.PVals.Cfd)
+	contemtForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
 	if err != nil {
 		return false
 	}

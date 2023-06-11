@@ -2,12 +2,12 @@ package models
 
 type Settings struct {
 	Moves          []string `json:"moves"`
-	PVals          PVals    `json:"pVals"`
+	CmpVals        CmpVals  `json:"cmpVals"`
 	ClockTime      int      `json:"clockTime"`
 	SecondsPerMove *int     `json:"secondsPerMove"`
 }
 
-type PVals struct {
+type CmpVals struct {
 	Opp   string `json:"opp"`
 	Opn   string `json:"opn"`
 	Opb   string `json:"opb"`
@@ -43,10 +43,10 @@ type MoveReq struct {
 }
 
 type Cmp struct {
-	PVals  PVals  `json:"out"`
-	Name   string `json:"name"`
-	Ponder string `json:"ponder"`
-	Book   string `json:"book"`
+	Vals   CmpVals `json:"out"`
+	Name   string  `json:"name"`
+	Ponder string  `json:"ponder"`
+	Book   string  `json:"book"`
 }
 
 // var engineLinesString = `
