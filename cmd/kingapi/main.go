@@ -49,6 +49,12 @@ func main() {
 			return
 		}
 
+		// engine didn't accept the input, return a 400 error
+		if moveData.Err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": *moveData.Err})
+			return
+		}
+
 		moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 
 		c.JSON(http.StatusOK, moveData)

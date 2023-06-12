@@ -74,13 +74,14 @@ type Cmp struct {
 // }
 
 type MoveData struct {
-	Depth          int    `json:"depth"`
-	Eval           int    `json:"eval"`
-	Time           int    `json:"time"`
-	Id             int    `json:"id"`
-	AlgebraMove    string `json:"algebraMove"`
-	CoordinateMove string `json:"coordinateMove"`
-	WillAcceptDraw bool   `json:"willAcceptDraw"`
+	Depth          int     `json:"depth"`
+	Eval           int     `json:"eval"`
+	Time           int     `json:"time"`
+	Id             int     `json:"id"`
+	AlgebraMove    string  `json:"algebraMove"`
+	CoordinateMove string  `json:"coordinateMove"`
+	WillAcceptDraw bool    `json:"willAcceptDraw"`
+	Err            *string `json:"err,omitempty"`
 	// TimeForMove    int    `json:"timeForMove"`
 	// EngineMove     string `json:"engineMove"`
 }

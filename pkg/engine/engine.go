@@ -51,11 +51,13 @@ func GetMove(settings Settings) (MoveData, error) {
 	}
 
 	moveChan := make(chan MoveData)
+	errChan := make(chan error)
 	defer close(moveChan)
+	defer close(errChan)
 
 	// handle the engine streams in real time
-	go pipeOut(engineOut, moveChan)
-	go pipeOutErr(engineErr)
+	go readEngineOut(engineOut, moveChan, errChan)
+	go readEngineErrs(engineErr)
 	go forwardUserCommands(engine)
 
 	// start the engine
@@ -93,13 +95,20 @@ func GetMove(settings Settings) (MoveData, error) {
 	engine.Write([]byte("post\n"))
 	engine.Write([]byte(timeStr))
 	engine.Write([]byte(otimStr))
-	engine.Write([]byte(buf.String()))
+	engine.Write(buf.Bytes())
 
 	// send all the moves to the engine
 	for _, move := range settings.Moves {
 		moveStr := fmt.Sprintf("%s\n", move)
 		engine.Write([]byte(moveStr))
 	}
+
+	// if engine loaded moves correctly nil is sent back on error channel this way
+	// the engine tells us if we see bad input, and we won't waste time staring it
+	// err = <-errChan
+	// if err != nil {
+	// 	return MoveData{}, err
+	// }
 
 	// start the engine
 	engine.Write([]byte("go\n"))
@@ -128,13 +137,19 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
 	fmt.Println("engine closed")
 }
 
-func pipeOut(r io.Reader, moveChan chan MoveData) {
+func readEngineOut(r io.Reader, moveChan chan MoveData, errChan chan error) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
+	var errStr *string
 
 	for s.Scan() {
 		engineLine := s.Text()
 		fmt.Println(engineLine)
+
+		if strings.Contains(engineLine, "Error") ||
+			strings.Contains(engineLine, "Illegal") {
+			errStr = &engineLine
+		}
 
 		// check if the engine line final move result
 		words := strings.Fields(engineLine)
@@ -151,10 +166,11 @@ func pipeOut(r io.Reader, moveChan chan MoveData) {
 		moveCandidate = moveData
 	}
 
+	moveCandidate.Err = errStr
 	moveChan <- moveCandidate
 }
 
-func pipeOutErr(r io.Reader) {
+func readEngineErrs(r io.Reader) {
 	s := bufio.NewScanner(r)
 	for s.Scan() {
 		engineLine := s.Text()
