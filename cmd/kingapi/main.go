@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/engine"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/personalities"
@@ -24,30 +24,47 @@ func main() {
 		})
 	})
 
-	// get a jwt token
-	r.POST("/token", func(c *gin.Context) {
-		var (
-			key []byte
-			t   *jwt.Token
-			s   string
-		)
+	// get a yow jwt token by sending a lichess token
+	r.GET("/token", func(c *gin.Context) {
 
-		key = []byte("fake-key")
-		t = jwt.NewWithClaims(jwt.SigningMethodHS256,
-			jwt.MapClaims{
-				"iss":   "yeoldwizard.com",
-				"sub":   "bobuser",
-				"exp":   time.Now().Add(time.Hour * 24).Unix(),
-				"roles": []string{"amdin", "mover"},
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "No Authorization header provided",
 			})
-
-		s, err := t.SignedString(key)
-		if err != nil {
-			fmt.Println("There was an error signing the token: ", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"token": s})
+
+		parts := strings.SplitN(authHeader, " ", 2)
+		if !(len(parts) == 2 && parts[0] == "Bearer") {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "Invalid Authorization header",
+			})
+			return
+		}
+
+		lichessToken := parts[1]
+
+		token, err := auth.GetToken(lichessToken)
+
+		switch {
+
+		}
+
+		if err != nil {
+			switch err.(type) {
+			case *auth.AuthError:
+				c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+				return
+			case *auth.ServerError:
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			default:
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
 
 	r.POST("/move-req", func(c *gin.Context) {
