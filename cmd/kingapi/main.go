@@ -56,9 +56,6 @@ func main() {
 			case *auth.AuthError:
 				c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 				return
-			case *auth.ServerError:
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			}
