@@ -103,6 +103,14 @@ func GetMove(settings Settings) (MoveData, error) {
 		engine.Write([]byte(moveStr))
 	}
 
+	select {
+	case moveData := <-moveChan:
+		// having move Data right now means the engine didn't like the settings
+		return moveData, nil
+	default:
+		fmt.Println("engine accepted the settings witouth error")
+	}
+
 	// start the engine
 	engine.Write([]byte("go\n"))
 
@@ -133,15 +141,18 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
 func readEngineOut(r io.Reader, moveChan chan MoveData) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
-	var errStr *string
+	// var errStr *string
 
 	for s.Scan() {
 		engineLine := s.Text()
 		fmt.Println(engineLine)
 
+		// if the engine finds a setting error send empty move response with an error
 		if strings.Contains(engineLine, "Error") ||
 			strings.Contains(engineLine, "Illegal") {
-			errStr = &engineLine
+			errStr := "callout by engine: " + engineLine
+			moveCandidate = MoveData{Err: &errStr}
+			break
 		}
 
 		// check if the engine line final move result
@@ -159,7 +170,7 @@ func readEngineOut(r io.Reader, moveChan chan MoveData) {
 		moveCandidate = moveData
 	}
 
-	moveCandidate.Err = errStr
+	// moveCandidate.Err = errStr
 	moveChan <- moveCandidate
 }
 
