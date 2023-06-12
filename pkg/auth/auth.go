@@ -36,8 +36,9 @@ func GetToken(lichessToken string) (string, error) {
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println("error contacting lichess: ", err)
-		return "", &ServerError{"error contactiing lichess"}
+		errMsg := "error contacting lichess"
+		fmt.Println(errMsg, err)
+		return "", &ServerError{errMsg}
 	}
 	defer res.Body.Close()
 

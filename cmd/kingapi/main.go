@@ -58,6 +58,7 @@ func main() {
 				return
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
 			}
 		}
 
