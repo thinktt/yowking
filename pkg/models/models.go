@@ -38,8 +38,8 @@ type CmpVals struct {
 }
 
 type MoveReq struct {
-	Moves   []string `json:"moves"`
-	CmpName string   `json:"cmpName"`
+	Moves   []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
+	CmpName string   `json:"cmpName" binding:"required,alphanum,max=15"`
 }
 
 type Cmp struct {
