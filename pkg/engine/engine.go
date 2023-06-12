@@ -56,7 +56,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	defer close(errChan)
 
 	// handle the engine streams in real time
-	go readEngineOut(engineOut, moveChan, errChan)
+	go readEngineOut(engineOut, moveChan)
 	go readEngineErrs(engineErr)
 	go forwardUserCommands(engine)
 
@@ -103,13 +103,6 @@ func GetMove(settings Settings) (MoveData, error) {
 		engine.Write([]byte(moveStr))
 	}
 
-	// if engine loaded moves correctly nil is sent back on error channel this way
-	// the engine tells us if we see bad input, and we won't waste time staring it
-	// err = <-errChan
-	// if err != nil {
-	// 	return MoveData{}, err
-	// }
-
 	// start the engine
 	engine.Write([]byte("go\n"))
 
@@ -137,7 +130,7 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
 	fmt.Println("engine closed")
 }
 
-func readEngineOut(r io.Reader, moveChan chan MoveData, errChan chan error) {
+func readEngineOut(r io.Reader, moveChan chan MoveData) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
 	var errStr *string
