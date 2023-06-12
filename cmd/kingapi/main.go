@@ -12,9 +12,6 @@ import (
 	"github.com/thinktt/yowking/pkg/personalities"
 )
 
-type MoveData = models.MoveData
-type Settings = models.Settings
-
 func main() {
 
 	r := gin.Default()
@@ -26,7 +23,6 @@ func main() {
 
 	// get a yow jwt token by sending a lichess token
 	r.GET("/token", func(c *gin.Context) {
-
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -34,7 +30,6 @@ func main() {
 			})
 			return
 		}
-
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -42,15 +37,9 @@ func main() {
 			})
 			return
 		}
-
 		lichessToken := parts[1]
 
-		token, err := auth.GetToken(lichessToken)
-
-		switch {
-
-		}
-
+		tokenRes, err := auth.GetToken(lichessToken)
 		if err != nil {
 			switch err.(type) {
 			case *auth.AuthError:
@@ -62,7 +51,7 @@ func main() {
 			}
 		}
 
-		c.JSON(http.StatusOK, gin.H{"token": token})
+		c.JSON(http.StatusOK, tokenRes)
 	})
 
 	r.POST("/move-req", func(c *gin.Context) {

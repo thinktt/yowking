@@ -22,11 +22,16 @@ type LichessAccount struct {
 	Username string `json:"username"`
 }
 
-func GetToken(lichessToken string) (string, error) {
+type TokenRes struct {
+	Token  string                 `json:"token"`
+	Claims map[string]interface{} `json:"claims"`
+}
+
+func GetToken(lichessToken string) (TokenRes, error) {
 	req, err := http.NewRequest("GET", lichessUrl, nil)
 	if err != nil {
 		fmt.Println("error creating lichess request: ", err)
-		return "", &ServerError{"error creating lichess request"}
+		return TokenRes{}, &ServerError{"error creating lichess request"}
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", lichessToken))
@@ -38,50 +43,54 @@ func GetToken(lichessToken string) (string, error) {
 	if err != nil {
 		errMsg := "error contacting lichess"
 		fmt.Println(errMsg, err)
-		return "", &ServerError{errMsg}
+		return TokenRes{}, &ServerError{errMsg}
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
 		errMsg := fmt.Sprintf("lichess auth failed with: %s", res.Status)
 		fmt.Println(errMsg)
-		return "", &AuthError{errMsg}
+		return TokenRes{}, &AuthError{errMsg}
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println("error reading lichess response: ", err)
-		return "", &ServerError{"error reading lichess response"}
+		return TokenRes{}, &ServerError{"error reading lichess response"}
 	}
 
 	var account LichessAccount
 	err = json.Unmarshal(body, &account)
 	if err != nil {
 		fmt.Println("error parsing lichess response: ", err)
-		return "", &ServerError{"error parsing lichess response"}
+		return TokenRes{}, &ServerError{"error parsing lichess response"}
 	}
 
 	if !isValidUser(account.Username) {
 		errMsg := fmt.Sprintf("no authorization found for user %s", account.Username)
-		return "", &AuthError{errMsg}
+		return TokenRes{}, &AuthError{errMsg}
 	}
 
 	key := []byte("fake-key")
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
-		jwt.MapClaims{
-			"iss":   "yeoldwizard.com",
-			"sub":   account.Id,
-			"exp":   time.Now().Add(time.Hour * 24).Unix(),
-			"roles": []string{"mover"},
-		})
-
+	claims := jwt.MapClaims{
+		"iss":   "yeoldwizard.com",
+		"sub":   account.Id,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"roles": []string{"mover"},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenStr, err := token.SignedString(key)
 	if err != nil {
 		fmt.Println("error creating token:", err)
-		return "", &ServerError{"error creating token"}
+		return TokenRes{}, &ServerError{"error creating token"}
 	}
 
-	return tokenStr, nil
+	tokenRes := TokenRes{
+		Token:  tokenStr,
+		Claims: claims,
+	}
+
+	return tokenRes, nil
 }
 
 func isValidUser(username string) bool {
