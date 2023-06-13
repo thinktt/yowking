@@ -1,6 +1,8 @@
 # JS_FILES := $(wildcard *.txt)
 # BINS := $(JS_FILES:%.txt=%)
 
+SHELL := /bin/bash
+
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
 	getassets
@@ -32,7 +34,8 @@ dexec: dbuild
 
 run: export IS_WSL=true
 run: dist
-	cd dist && 	go run ../cmd/kingapi
+	source .env; \
+	cd dist && go run ../cmd/kingapi
 
 # later we will import and build these from CM11 folder, for now borrowed locally
 assets:
