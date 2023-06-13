@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 var lichessUrl = "https://lichess.org/api/account"
+var jwtKey = os.Getenv("JWT_KEY")
 
 // hard coded for now, will be deligated to a db or api later
 var validUsers = []string{"thinktt"}
@@ -71,7 +73,6 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		return TokenRes{}, &AuthError{errMsg}
 	}
 
-	key := []byte("fake-key")
 	claims := jwt.MapClaims{
 		"iss":   "yeoldwizard.com",
 		"sub":   account.Id,
@@ -79,7 +80,7 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		"roles": []string{"mover"},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString(key)
+	tokenStr, err := token.SignedString(jwtKey)
 	if err != nil {
 		fmt.Println("error creating token:", err)
 		return TokenRes{}, &ServerError{"error creating token"}
