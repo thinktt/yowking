@@ -5,7 +5,13 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets
+	getassets test
+
+test: dist
+	source .env; \
+	export ROOT_DIR=$(shell pwd);  \
+	go test ./...
+
 
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
