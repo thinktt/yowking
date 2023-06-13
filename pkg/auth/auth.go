@@ -80,7 +80,7 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		"roles": []string{"mover"},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString(jwtKey)
+	tokenStr, err := token.SignedString([]byte(jwtKey))
 	if err != nil {
 		fmt.Println("error creating token:", err)
 		return TokenRes{}, &ServerError{"error creating token"}
