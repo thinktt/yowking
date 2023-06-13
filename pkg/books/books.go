@@ -20,7 +20,7 @@ func GetMove(moves []string, bookName string) (models.MoveData, error) {
 		Book:  bookName,
 	}
 
-	fmt.Printf("query %v\n", bookQuery)
+	// fmt.Printf("query %v\n", bookQuery)
 
 	bookQueryJson, err := json.Marshal(bookQuery)
 	if err != nil {
@@ -30,7 +30,7 @@ func GetMove(moves []string, bookName string) (models.MoveData, error) {
 	cmd := exec.Command("./runbook", string(bookQueryJson))
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println(string(out))
+		fmt.Println("book:", string(out))
 		return models.MoveData{}, err
 	}
 

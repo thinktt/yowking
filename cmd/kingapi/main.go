@@ -86,7 +86,7 @@ func main() {
 		}
 
 		moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
-
+		moveData.Type = "engine"
 		c.JSON(http.StatusOK, moveData)
 	})
 
