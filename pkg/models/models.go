@@ -81,7 +81,7 @@ type MoveData struct {
 	Id             int     `json:"id,omitempty"`
 	AlgebraMove    string  `json:"algebraMove,omitempty"`
 	CoordinateMove string  `json:"coordinateMove,omitempty"`
-	WillAcceptDraw bool    `json:"willAcceptDraw,omitempty"`
+	WillAcceptDraw bool    `json:"willAcceptDraw"`
 	Err            *string `json:"err,omitempty"`
 	Type           string  `json:"type"`
 	// TimeForMove    int    `json:"timeForMove"`
