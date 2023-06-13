@@ -47,6 +47,7 @@ type Cmp struct {
 	Name   string  `json:"name"`
 	Ponder string  `json:"ponder"`
 	Book   string  `json:"book"`
+	Rating int     `json:"rating"`
 }
 
 // var engineLinesString = `
