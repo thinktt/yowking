@@ -14,6 +14,7 @@ type BookQuery struct {
 }
 
 func GetMove(moves []string, bookName string) (models.MoveData, error) {
+	// fmt.Printf("moves %v", moves)
 
 	bookQuery := BookQuery{
 		Moves: moves,
@@ -31,7 +32,8 @@ func GetMove(moves []string, bookName string) (models.MoveData, error) {
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("book:", string(out))
-		return models.MoveData{}, err
+		errStr := string(out)
+		return models.MoveData{Err: &errStr}, err
 	}
 
 	moveData := models.MoveData{
