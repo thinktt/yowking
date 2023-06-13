@@ -118,3 +118,34 @@ type AuthError struct {
 func (e *AuthError) Error() string {
 	return e.Message
 }
+
+type Claims struct {
+	Roles []string `json:"roles"`
+	jwt.RegisteredClaims
+}
+
+func CheckToken(tokenStr string) (Claims, error) {
+	claims := &Claims{}
+
+	// parse the token
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(jwtKey), nil
+	})
+
+	if err != nil {
+		errMsg := "invalid token format"
+		fmt.Println(errMsg, err)
+		return Claims{}, &AuthError{errMsg}
+	}
+
+	if !token.Valid {
+		return Claims{}, fmt.Errorf("token is not valid")
+	}
+
+	// If we get here, everything worked and we can return the Claims
+	return *claims, nil
+}
