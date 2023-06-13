@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
+	"github.com/thinktt/yowking/pkg/books"
 	"github.com/thinktt/yowking/pkg/engine"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/personalities"
@@ -55,6 +56,13 @@ func main() {
 		if !ok {
 			errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
 			c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
+			return
+		}
+
+		bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
+		// if no err we have a book move and can just return the move
+		if err == nil {
+			c.JSON(http.StatusOK, bookMove)
 			return
 		}
 
