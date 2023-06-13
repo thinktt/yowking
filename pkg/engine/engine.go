@@ -87,6 +87,8 @@ func GetMove(settings Settings) (MoveData, error) {
 	if err := t.Execute(buf, settings.CmpVals); err != nil {
 		return MoveData{}, err
 	}
+
+	fmt.Println("clockTime: ", settings.ClockTime)
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
 	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
 

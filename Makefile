@@ -19,7 +19,9 @@ dbuild: dist
 
 dist: assets
 	mkdir dist 
+	mkdir dist/calibrations
 	cp assets/* dist/
+	mv dist/clockTimes.json dist/calibrations/clockTimes.json
 	make gobuild
 
 clean: 
@@ -41,6 +43,7 @@ run: dist
 assets:
 	mkdir assets
 	# cp -r ../yeoldwiz-lnx/yowbot/dist/books assets/books
-	cp ../yeoldwiz-lnx/yowbot/dist/calibrations/clockTimes.json assets/clockTimes.json
+	cp ../yeoldwiz-lnx/yowbot/cals/xps/run1/clockTimes.json assets/clockTimes.json
 	cp ../yeoldwiz-lnx/yowbot/dist/TheKing350noOpk.exe assets/TheKing350noOpk.exe
 	cp ../yeoldwiz-lnx/yowbot/dist/personalities.json assets/personalities.json
+	cp ../yeoldwiz-lnx/yowbot/dist/runbook assets/runbook

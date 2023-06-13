@@ -61,7 +61,7 @@ func main() {
 		settings := models.Settings{
 			Moves:     moveReq.Moves,
 			CmpVals:   cmp.Vals,
-			ClockTime: 5750,
+			ClockTime: personalities.GetClockTime(cmp),
 		}
 
 		moveData, err := engine.GetMove(settings)
