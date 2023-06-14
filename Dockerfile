@@ -1,8 +1,7 @@
 FROM benjymous/docker-wine-headless
 
 RUN wine cmd /c echo Wine is setup || true
-COPY dist/* /opt/yowking/
-COPY assets/* /opt/yowking/
+COPY dist /opt/yowking/
 WORKDIR /opt/yowking
 
 
