@@ -11,7 +11,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/thinktt/yowking/pkg/models"
 )
@@ -124,20 +123,21 @@ func GetMove(settings Settings) (MoveData, error) {
 func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
 	// send a quilt command to the engine
 	engine.Write([]byte("quit\n"))
+	engine.Close()
+	cmd.Wait()
+	fmt.Println("engine closed")
 
 	// make sure the engine closes with a timeout
-	isExited := false
-	go func() {
-		time.Sleep(5 * time.Second)
-		if !isExited {
-			fmt.Println("engine looks stuck, killing it")
-			cmd.Process.Kill()
-		}
-	}()
+	// isExited := false
+	// go func() {
+	// 	time.Sleep(5 * time.Second)
+	// 	if !isExited {
+	// 		fmt.Println("engine looks stuck, killing it")
+	// 		cmd.Process.Kill()
+	// 	}
+	// }()
+	// isExited = true
 
-	cmd.Wait()
-	isExited = true
-	fmt.Println("engine closed")
 }
 
 func readEngineOut(r io.Reader, moveChan chan MoveData) {
