@@ -47,6 +47,6 @@ func main() {
 		}
 	}
 
-	engine.Close()
-	cmd.Wait()
+	// engine.Close()
+	// cmd.Wait()
 }
