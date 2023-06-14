@@ -5,7 +5,14 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test
+	getassets test startk8 dbuild2 dbuild3
+
+startk8:
+	minikube start --insecure-registry="ace:5000"
+
+
+push: 
+	docker push ace:5000/yowking
 
 test: dist
 	source .env; \
@@ -22,6 +29,21 @@ dbuild: dist
 	docker image rm ace:5000/yowking:latest || true
 	docker build -t ace:5000/yowking .
 	# docker push ace:5000/yowking  
+
+dbuild2: 
+	docker rm yowking || true
+	docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true
+	docker build -t us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest .
+	docker push us-central1-docker.pkg.dev/thinktt/yowking/yowking
+
+dbuild3: 
+	docker rm yowking || true
+	docker image thinktt/yowking:latest || true
+	docker build -t thinktt/yowking:latest .
+	docker push thinktt/yowking:latest
+
+
+
 
 dist: assets
 	mkdir dist 

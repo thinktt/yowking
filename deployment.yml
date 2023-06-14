@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yowking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: yowking
+  template:
+    metadata:
+      labels:
+        name: yowking
+    spec:
+      containers:
+      - name: yowking
+        image: thinktt/yowking:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        # - secretRef:
+        #     name: test-secret
+        ports:
+          - containerPort: 8080
+      imagePullSecrets:
+      - name: regcred
