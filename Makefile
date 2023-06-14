@@ -35,10 +35,11 @@ clean:
 	rm -rf dist
 
 drun: dbuild
-	docker run --rm -it --name yowking ace:5000/yowking
+	docker run --rm -it --name yowking  -p 8080:8080 ace:5000/yowking
 
-dexec: dbuild
-	docker run --rm -it --name yowking ace:5000/yowking /bin/bash
+dexec: 
+	# docker run --rm -it --name yowking ace:5000/yowking /bin/bash
+	docker exec -it yowking /bin/bash
 
 run: export IS_WSL=true
 run: dist
