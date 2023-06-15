@@ -41,7 +41,7 @@ Security
     token endpoint authed through lichess
     jwt validation middleware
 
-Professionalism
+Best Practices
   test
   enviroment vars
 
@@ -54,9 +54,7 @@ Presentation
   a bot tournament?
     simple bot tournamnent in yowfront?
 
-mention your intersest in grpc
-mention your interest in using api gatway security
+Ideas and Interest for project
+intersest in grpc
+interest in using api gatway security
 
-
-.....Out of Scope.....
-x    grpc?
