@@ -15,8 +15,24 @@ import (
 
 func main() {
 
-	r := gin.Default()
+	healthWasCalled := false
+
+	// r := gin.Default()
+	r := gin.New()
+
+	r.Use(func(c *gin.Context) {
+		if c.Request.URL.Path == "/health" && healthWasCalled {
+			c.Next()
+			return
+		}
+		gin.Logger()(c)
+		c.Next()
+	})
+
+	r.Use(gin.Recovery())
+
 	r.GET("/health", func(c *gin.Context) {
+		healthWasCalled = true
 		c.JSON(http.StatusOK, gin.H{
 			"message": "API is healthy",
 		})
