@@ -16,10 +16,19 @@ spec:
       - name: yowking
         image: thinktt/yowking:latest
         imagePullPolicy: IfNotPresent
-        envFrom:
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        # env: 
+        # - name: GIN_MODE
+        #   value: release
+        # envFrom:
         # - secretRef:
-        #     name: test-secret
+        #   name: yowking-secrets
         ports:
-          - containerPort: 8080
+        - containerPort: 8080
       imagePullSecrets:
       - name: regcred
