@@ -15,11 +15,9 @@ import (
 
 func main() {
 
-	healthWasCalled := false
-
-	// r := gin.Default()
 	r := gin.New()
 
+	healthWasCalled := false
 	r.Use(func(c *gin.Context) {
 		if c.Request.URL.Path == "/health" && healthWasCalled {
 			c.Next()
