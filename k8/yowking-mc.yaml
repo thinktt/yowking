@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: managed-cert
+  name: yowking-mc
 spec:
   domains:
   - yowking.yeodlwizard.com
