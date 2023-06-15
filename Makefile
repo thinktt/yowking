@@ -12,7 +12,8 @@ startk8:
 
 
 push: 
-	docker push ace:5000/yowking
+	# docker push ace:5000/yowking
+	docker push thinktt/yowking:latest
 
 test: dist
 	source .env; \
@@ -41,9 +42,6 @@ dbuild3:
 	docker image thinktt/yowking:latest || true
 	docker build -t thinktt/yowking:latest .
 	docker push thinktt/yowking:latest
-
-
-
 
 dist: assets
 	mkdir dist 

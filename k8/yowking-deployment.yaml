@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yowking
+  name: yowking1
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: yowking
-        image: thinktt/yowking:latest
+        image: thinktt/yowking:1
         imagePullPolicy: IfNotPresent
         readinessProbe:
           httpGet:
@@ -22,12 +22,12 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10
-        # env: 
-        # - name: GIN_MODE
-        #   value: release
-        # envFrom:
-        # - secretRef:
-        #   name: yowking-secrets
+        env: 
+        - name: GIN_MODE
+          value: release
+        envFrom:
+        - secretRef:
+            name: yowking-secrets
         ports:
         - containerPort: 8080
       imagePullSecrets:
