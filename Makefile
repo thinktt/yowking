@@ -5,11 +5,15 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test startk8 dbuild2 dbuild3
+	getassets test startk8 dbuild2 dbuild3 
+
+certs: 
+	mkdir certs
+	openssl req -x509 -newkey rsa:4096 -keyout certs/key.pem -out certs/cert.pem \
+	-days 1825  -nodes -subj '/CN=localhost'
 
 startk8:
 	minikube start --insecure-registry="ace:5000"
-
 
 push: 
 	# docker push ace:5000/yowking
@@ -54,8 +58,10 @@ clean:
 	rm -rf assets
 	rm -rf dist
 
-drun: dbuild
+drun: 
 	docker run --rm -it --name yowking  -p 8080:8080 ace:5000/yowking
+	docker run --rm -it --name yowking  -p 8080:8080 thinktt/yowking:latest
+
 
 dexec: 
 	# docker run --rm -it --name yowking ace:5000/yowking /bin/bash
