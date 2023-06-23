@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/books"
@@ -14,8 +15,13 @@ import (
 )
 
 func main() {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"}
+	config.AllowHeaders = []string{"*"}
 
 	r := gin.New()
+	r.Use(cors.New(config))
 
 	healthWasCalled := false
 	r.Use(func(c *gin.Context) {
