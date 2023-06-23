@@ -1,13 +1,24 @@
 Today
-Use Books 
-Write some tests
-Kubernetes
+test h2 on localhost
+  self signed cert
+  gin ssl self singe cert
+  
+
+
+
+x https on kuberntes
+game from web board
+multipel games
+scale on kubernetes
+
+
+
 
 
 ...Overview...
-build api
-connect to engine
-connect to book builder
+x build api
+x connect to engine
+x connect to book builder
 ? connect to calirations
 
 
@@ -23,12 +34,12 @@ Featrues
   calibrations?
     load calibration files?
     have calibrations come in trhough api
-  opening books?
-    turn node book reader into its own callable exe
-      use pkg to do packaging
-      pipe in book name and moves
-      can also use it to validate move?
-      call book reader from king service
+  x opening books?
+    x turn node book reader into its own callable exe
+      x use pkg to do packaging
+      x pipe in book name and moves
+      x can also use it to validate move?
+      x call book reader from king service
   game moves validation??
   personalitiy move endpoints
   cli commands?
@@ -58,3 +69,7 @@ Ideas and Interest for project
 intersest in grpc
 interest in using api gatway security
 
+...done...
+x Use Books 
+x Write some tests
+x Kubernetes
