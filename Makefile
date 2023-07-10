@@ -5,7 +5,24 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test startk8 dbuild2 dbuild3 
+	getassets test startk8 dbuild2 dbuild3 dodcal
+
+dodcal:
+	docker rm ${CAL_NAME} || true
+	docker volume rm ${CAL_NAME} || true
+	docker run --cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
+		-v ${CAL_NAME}:/opt/yeoldwiz/calibrations \
+		-l "traefik.enable=true" \
+		-l 'traefik.http.routers.yowking.rule=Host(`yowking.localhost`)' \
+		-l "traefik.http.routers.yowking.service=yowking" \
+		-l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
+		--network=traefik_default \
+		-d --name ${CAL_NAME} ace:5000/yowking \
+		# --platform linux/386 \
+		# --name ${CAL_NAME} -it ace:5000/yeoldwiz \
+		# /bin/sh
+		# ace:5000/yeoldwiz ./node docalibrate.js
+
 
 certs: 
 	mkdir certs

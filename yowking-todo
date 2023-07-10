@@ -1,27 +1,21 @@
 Today
-test h2 on localhost
-  self signed cert
-  gin ssl self singe cert
-  
+docker run yowking script
+  list of logic cpus for real cores 
+  connect to traefik
+yowking use env PORT
+yowking use clocks.json
+yowking move que
+test grand tournamnet
+yowbot engine mod pass through to yowking api
 
 
 
-x https on kuberntes
-game from web board
-multipel games
-scale on kubernetes
 
 
 
 
 
 ...Overview...
-x build api
-x connect to engine
-x connect to book builder
-? connect to calirations
-
-
 Featrues
   engine module in yow now in go API
     xx can I put go bin outside of wine? 
@@ -73,3 +67,19 @@ interest in using api gatway security
 x Use Books 
 x Write some tests
 x Kubernetes
+x test h2 on localhost
+  x self signed cert
+  x gin ssl self singe cert
+x https on kuberntes
+x game from web board
+x multipel games
+x build api
+x connect to engine
+x connect to book builder
+? connect to calirations
+x temp fix for enginewrap throwing errors
+x fix make docalibrate 
+x pull from my own registry
+ x ssh tunne? not needed
+ x create a docker registry service 
+  x used canister
