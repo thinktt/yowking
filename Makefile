@@ -7,8 +7,8 @@ SHELL := /bin/bash
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
 	getassets test startk8 dbuild2 dbuild3 dodcal doservice
 
-export CPU1=2
-export CPU2=3
+export CPU1=10
+export CPU2=11
 export LOGICAL_PROCESSOR=${CPU1},${CPU2}
 export NAME=yowking-${CPU1}${CPU2}
 export VOL_NAME=cal45
@@ -19,9 +19,14 @@ doservice:
 		--cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
 		-v ${VOL_NAME}:/opt/yowking/calibrations \
 		-l "traefik.enable=true" \
-		-l 'traefik.http.routers.yowking.rule=Host(`yowking.localhost`)' \
+		-l 'traefik.http.routers.yowking.rule=Host("yowking.localhost")' \
+		-l "traefik.http.routers.yowking.entrypoints=websecure" \
+		-l "traefik.http.routers.yowking.tls=true" \
 		-l "traefik.http.routers.yowking.service=yowking" \
 		-l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
+		-l 'traefik.http.routers.yowking-http.rule=Host("yowking.localhost")' \
+		-l "traefik.http.routers.yowking-http.entrypoints=web" \
+		-l "traefik.http.routers.yowking-http.service=yowking" \
 		--network=traefik_default \
 		--name ${NAME} \
 		-d ace:5000/yowking

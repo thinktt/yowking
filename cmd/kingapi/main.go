@@ -3,14 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/books"
-	"github.com/thinktt/yowking/pkg/engine"
 	"github.com/thinktt/yowking/pkg/models"
+	"github.com/thinktt/yowking/pkg/moveque"
 	"github.com/thinktt/yowking/pkg/personalities"
 )
 
@@ -19,6 +20,11 @@ func main() {
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"}
 	config.AllowHeaders = []string{"*"}
+	port := os.Getenv("PORT")
+	if port == "" {
+		fmt.Println("No PORT environment variable detected, defaulting to 8080")
+		port = "8080"
+	}
 
 	r := gin.New()
 	r.Use(cors.New(config))
@@ -82,17 +88,19 @@ func main() {
 		bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
 		// if no err we have a book move and can just return the move
 		if err == nil {
+			bookMove.GameId = moveReq.GameId
 			c.JSON(http.StatusOK, bookMove)
 			return
 		}
 
+		// we were unable to get a book move, let's try the engine
 		settings := models.Settings{
 			Moves:     moveReq.Moves,
 			CmpVals:   cmp.Vals,
 			ClockTime: personalities.GetClockTime(cmp),
 		}
 
-		moveData, err := engine.GetMove(settings)
+		moveData, err := moveque.GetMove(settings)
 		if err != nil {
 			fmt.Println("There was ane error getting the move: ", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
@@ -107,11 +115,16 @@ func main() {
 
 		moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 		moveData.Type = "engine"
+		moveData.GameId = moveReq.GameId
 		c.JSON(http.StatusOK, moveData)
 	})
 
-	r.Run(":8080")
-	// r.RunTLS(":8443", "../certs/cert.pem", "../certs/key.pem")
+	if port == "8443" {
+		r.RunTLS(":8443", "../certs/cert.pem", "../certs/key.pem")
+		return
+	}
+
+	r.Run(":" + port)
 }
 
 func PullToken() gin.HandlerFunc {
