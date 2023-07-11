@@ -5,24 +5,26 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test startk8 dbuild2 dbuild3 dodcal
+	getassets test startk8 dbuild2 dbuild3 dodcal doservice
 
-dodcal:
-	docker rm ${CAL_NAME} || true
-	docker volume rm ${CAL_NAME} || true
-	docker run --cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
-		-v ${CAL_NAME}:/opt/yeoldwiz/calibrations \
+export LOGICAL_PROCESSOR=4,5
+export NAME=yowking-45
+export VOL_NAME=cal45
+
+doservice:
+	docker rm ${NAME} || true
+	docker run \
+		--cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
+		-v ${VOL_NAME}:/opt/yeoldwiz/calibrations \
+		--platform linux/386 \
 		-l "traefik.enable=true" \
 		-l 'traefik.http.routers.yowking.rule=Host(`yowking.localhost`)' \
 		-l "traefik.http.routers.yowking.service=yowking" \
 		-l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
 		--network=traefik_default \
-		-d --name ${CAL_NAME} ace:5000/yowking \
-		# --platform linux/386 \
-		# --name ${CAL_NAME} -it ace:5000/yeoldwiz \
-		# /bin/sh
-		# ace:5000/yeoldwiz ./node docalibrate.js
-
+		--name ${NAME} \
+		-it ace:5000/yowking /bin/sh
+		#-d ace:5000/yowking \
 
 certs: 
 	mkdir certs
@@ -44,7 +46,7 @@ test: dist
 
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
-	GOOS=linux go build -o dist/kingapi  ./cmd/kingapi
+	GOOS=linux GOARCH=386 go build -o dist/kingapi  ./cmd/kingapi
 
 dbuild: dist
 	docker rm yowking || true
