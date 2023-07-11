@@ -1,13 +1,17 @@
-FROM benjymous/docker-wine-headless
+FROM i386/alpine
 
-RUN wine cmd /c echo Wine is setup || true
+RUN apk update
+RUN apk add wine
+RUN apk add nodejs
+RUN apk add vim
+RUN winecfg
+RUN apk add xvfb
+
+ENV WINEDEBUG=-all
+ENV DISPLAY=:0.0
+
 COPY dist /opt/yowking/
 WORKDIR /opt/yowking
 
-
-# ADD dist.tar /opt/yeoldwiz
-# WORKDIR /opt/yeoldwiz
-# COPY --from=node:16-buster-slim /usr/local/bin/node .
-
-# ENV ENG_CMD="/usr/bin/wine enginewrap.exe"
+ENV ENG_CMD="/usr/bin/wine enginewrap.exe"
 CMD ["./kingapi"]

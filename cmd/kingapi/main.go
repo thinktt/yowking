@@ -110,7 +110,7 @@ func main() {
 		c.JSON(http.StatusOK, moveData)
 	})
 
-	r.Run(":8082")
+	r.Run(":8080")
 	// r.RunTLS(":8443", "../certs/cert.pem", "../certs/key.pem")
 }
 
