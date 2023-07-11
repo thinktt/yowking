@@ -7,24 +7,25 @@ SHELL := /bin/bash
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
 	getassets test startk8 dbuild2 dbuild3 dodcal doservice
 
-export LOGICAL_PROCESSOR=4,5
-export NAME=yowking-45
+export CPU1=2
+export CPU2=3
+export LOGICAL_PROCESSOR=${CPU1},${CPU2}
+export NAME=yowking-${CPU1}${CPU2}
 export VOL_NAME=cal45
 
 doservice:
 	docker rm ${NAME} || true
 	docker run \
 		--cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
-		-v ${VOL_NAME}:/opt/yeoldwiz/calibrations \
-		--platform linux/386 \
+		-v ${VOL_NAME}:/opt/yowking/calibrations \
 		-l "traefik.enable=true" \
 		-l 'traefik.http.routers.yowking.rule=Host(`yowking.localhost`)' \
 		-l "traefik.http.routers.yowking.service=yowking" \
 		-l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
 		--network=traefik_default \
 		--name ${NAME} \
-		-it ace:5000/yowking /bin/sh
-		#-d ace:5000/yowking \
+		-d ace:5000/yowking
+		# -it ace:5000/yowking /bin/sh
 
 certs: 
 	mkdir certs
@@ -46,7 +47,7 @@ test: dist
 
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
-	GOOS=linux GOARCH=386 go build -o dist/kingapi  ./cmd/kingapi
+	GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
 
 dbuild: dist
 	docker rm yowking || true
