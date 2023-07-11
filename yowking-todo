@@ -1,16 +1,15 @@
 Today
-yowking use env PORT
-yowking use clocks.json
-yowking move que
-yowking disallow empty jwt secret
-yowking log levels with silent engine option
-test grand tournamnet
 yowbot engine mod pass through to yowking api
-x docker run yowking script
-  x list of logic cpus for real cores 
-  x connect to traefik
-  all containers one script
+yowking log levels with silent engine option
+handle stuck engine
+yowking disallow empty jwt secret
+all containers one script
 
+rzen
+  test hardware
+  x window key backup
+  install debian
+  setup ssh
 
 
 
@@ -85,3 +84,10 @@ x pull from my own registry
  x ssh tunne? not needed
  x create a docker registry service 
   x used canister
+x yowking use env PORT
+x yowking use clocks.json
+x yowking move que
+x https on proxy
+x docker run yowking script
+  x list of logic cpus for real cores 
+  x connect to traefik

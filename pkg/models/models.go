@@ -40,6 +40,7 @@ type CmpVals struct {
 type MoveReq struct {
 	Moves   []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
 	CmpName string   `json:"cmpName" binding:"required,alphanum,max=15"`
+	GameId  string   `json:"gameId" binding:"required,alphanum,max=15"`
 }
 
 type Cmp struct {
@@ -84,6 +85,7 @@ type MoveData struct {
 	WillAcceptDraw bool    `json:"willAcceptDraw"`
 	Err            *string `json:"err,omitempty"`
 	Type           string  `json:"type"`
+	GameId         string  `json:"gameId,omitempty"`
 	// TimeForMove    int    `json:"timeForMove"`
 	// EngineMove     string `json:"engineMove"`
 }
