@@ -1,13 +1,15 @@
 Today
-docker run yowking script
-  list of logic cpus for real cores 
-  connect to traefik
 yowking use env PORT
 yowking use clocks.json
 yowking move que
+yowking disallow empty jwt secret
+yowking log levels with silent engine option
 test grand tournamnet
 yowbot engine mod pass through to yowking api
-
+x docker run yowking script
+  x list of logic cpus for real cores 
+  x connect to traefik
+  all containers one script
 
 
 
