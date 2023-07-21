@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"time"
 
 	"github.com/nats-io/nats.go"
 	"github.com/thinktt/yowking/pkg/books"
@@ -27,30 +28,43 @@ func main() {
 	}
 
 	// Subscribe
-	log.Print("Subscribing to stream...")
-	_, err = js.Subscribe("move-req", handleMoveReq, nats.Durable("move-req"))
+	log.Print("Subscribing to stream queue...")
+	_, err = js.QueueSubscribe(
+		"move-req",
+		"kingworkers",
+		handleMoveReq,
+		nats.MaxAckPending(1),
+		nats.ManualAck(),
+		nats.AckWait(30*time.Second),
+	)
 	if err != nil {
-		log.Printf("Error subscribing to stream: %v", err)
+		log.Printf("Error subscribing to stream queue: %v", err)
 	}
 	runtime.Goexit()
 }
 
 func handleMoveReq(m *nats.Msg) {
 
+	meta, err := m.Metadata()
+	if err != nil {
+		log.Fatalf("Error retrieving message metadata: %v", err)
+	}
+	log.Println("Received message seq:", meta.Sequence.Stream, "msgId:", meta.Sequence.Consumer)
+
 	// Create a new instance of engine.Settings
 	var moveReq models.MoveReq
 
 	// Unmarshal the JSON data into settings
-	err := json.Unmarshal(m.Data, &moveReq)
+	err = json.Unmarshal(m.Data, &moveReq)
 	if err != nil {
-		fmt.Printf("Error unmarshaling data: %v", err)
+		log.Printf("Error unmarshaling data: %v", err)
 		return
 	}
 
 	cmp, ok := personalities.CmpMap[moveReq.CmpName]
 	if !ok {
 		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
-		fmt.Print(errMsg)
+		log.Print(errMsg)
 		return
 	}
 
@@ -58,7 +72,7 @@ func handleMoveReq(m *nats.Msg) {
 	// if no err we have a book move and can just return the move
 	if err == nil {
 		bookMove.GameId = moveReq.GameId
-		fmt.Println(bookMove)
+		log.Println(bookMove)
 		m.Ack()
 		return
 	}
@@ -72,18 +86,19 @@ func handleMoveReq(m *nats.Msg) {
 
 	moveData, err := engine.GetMove(settings)
 	if err != nil {
-		fmt.Println("There was ane error getting the move: ", err)
+		log.Println("There was ane error getting the move: ", err)
 		return
 	}
 
 	// engine didn't accept the input, return a 400 error
 	if moveData.Err != nil {
-		fmt.Println(*moveData.Err)
+		log.Println(*moveData.Err)
 		return
 	}
 
 	moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 	moveData.Type = "engine"
 	moveData.GameId = moveReq.GameId
+	m.Ack()
 
 }
