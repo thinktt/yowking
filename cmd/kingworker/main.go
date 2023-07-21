@@ -47,7 +47,7 @@ func handleMoveReq(m *nats.Msg) {
 
 	meta, err := m.Metadata()
 	if err != nil {
-		log.Fatalf("Error retrieving message metadata: %v", err)
+		log.Printf("Error retrieving message metadata: %v", err)
 	}
 	log.Println("Received message seq:", meta.Sequence.Stream, "msgId:", meta.Sequence.Consumer)
 
@@ -101,4 +101,24 @@ func handleMoveReq(m *nats.Msg) {
 	moveData.GameId = moveReq.GameId
 	m.Ack()
 
+}
+
+// PubMoveRes publishes the move data to the move_res.<gameId> subject
+func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
+	// Convert your moveData to JSON
+	data, err := json.Marshal(moveData)
+	if err != nil {
+		return err
+	}
+
+	// Generate the subject name
+	subject := fmt.Sprintf("move_res.%s", moveData.GameId)
+
+	// Publish the data
+	_, err = js.Publish(subject, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
