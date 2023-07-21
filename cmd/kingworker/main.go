@@ -52,12 +52,24 @@ func main() {
 			continue
 		}
 		m := msgs[0]
-		handleMoveReq(m)
+		moveRes, err := handleMoveReq(m)
+		if err != nil {
+			log.Printf("Error handling move request: %v", err)
+			continue
+		}
+
+		err = PubMoveRes(js, moveRes)
+		if err != nil {
+			log.Printf("Error publishing move response: %v", err)
+			// continue
+		}
+
+		m.Ack()
 	}
 
 }
 
-func handleMoveReq(m *nats.Msg) {
+func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 
 	meta, err := m.Metadata()
 	if err != nil {
@@ -72,14 +84,14 @@ func handleMoveReq(m *nats.Msg) {
 	err = json.Unmarshal(m.Data, &moveReq)
 	if err != nil {
 		log.Printf("Error unmarshaling data: %v", err)
-		return
+		return models.MoveData{}, err
 	}
 
 	cmp, ok := personalities.CmpMap[moveReq.CmpName]
 	if !ok {
 		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
 		log.Print(errMsg)
-		return
+		return models.MoveData{}, err
 	}
 
 	bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
@@ -88,7 +100,7 @@ func handleMoveReq(m *nats.Msg) {
 		bookMove.GameId = moveReq.GameId
 		log.Println(bookMove)
 		m.Ack()
-		return
+		return bookMove, nil
 	}
 
 	// we were unable to get a book move, let's try the engine
@@ -101,19 +113,19 @@ func handleMoveReq(m *nats.Msg) {
 	moveData, err := engine.GetMove(settings)
 	if err != nil {
 		log.Println("There was ane error getting the move: ", err)
-		return
+		return models.MoveData{}, err
 	}
 
-	// engine didn't accept the input, return a 400 error
 	if moveData.Err != nil {
 		log.Println(*moveData.Err)
-		return
+		return models.MoveData{}, err
 	}
 
 	moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 	moveData.Type = "engine"
 	moveData.GameId = moveReq.GameId
-	m.Ack()
+
+	return moveData, nil
 
 }
 
@@ -126,7 +138,7 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	}
 
 	// Generate the subject name
-	subject := fmt.Sprintf("move_res.%s", moveData.GameId)
+	subject := fmt.Sprintf("move-res.%s", moveData.GameId)
 
 	// Publish the data
 	_, err = js.Publish(subject, data)
