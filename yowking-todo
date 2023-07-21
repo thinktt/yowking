@@ -1,17 +1,17 @@
 Today
+kingapi
+  GET endpoint, returns move req from que
+create a kingworker
+  GET move-req from yowkking
+  POST move-res to yowking
+
+
+
 yowbot engine mod pass through to yowking api
 yowking log levels with silent engine option
-handle stuck engine
+handle stuck engine move timeout
 yowking disallow empty jwt secret
 all containers one script
-
-rzen
-  test hardware
-  x window key backup
-  install debian
-  setup ssh
-
-
 
 
 
@@ -39,7 +39,18 @@ Featrues
   personalitiy move endpoints
   cli commands?
 
-
+rzen
+  setup Docker 
+  traefik container
+  speed throttling
+  calibration containers
+  yowking containers
+  calibrations
+  x window key backup
+  x install debian
+  x setup ssh
+  test hardware
+  setup registry?
 
 Security
   https
@@ -91,3 +102,16 @@ x https on proxy
 x docker run yowking script
   x list of logic cpus for real cores 
   x connect to traefik
+
+
+RabbitMQ: RabbitMQ is one of the most widely deployed open source message brokers. It supports multiple messaging protocols, message queuing, delivery acknowledgement, flexible routing to queues, and multiple exchange type.
+
+Apache Kafka: Apache Kafka is a distributed streaming platform designed to handle real-time data feeds with high throughput and low latency. It can publish, subscribe, store, and process streams of records in real time.
+
+Redis Pub/Sub: Redis, primarily known as a data structure store, also provides a pub/sub system. It's simple to use but it does not provide a lot of the advanced features that other messaging systems do, such as persistent storage or message acknowledgment.
+
+NATS: NATS is a simple, high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
+
+Mosquitto (MQTT): Mosquitto is an open source message broker that implements MQTT protocol versions 5.0, 3.1.1 and 3.1. MQTT is a lightweight pub/sub messaging protocol designed for M2M (Machine to Machine) telemetry in low bandwidth environments.
+
+Apache Pulsar: Apache Pulsar is a cloud-native, distributed messaging and streaming platform that manages hundreds of billions of events per day. It was originally developed by Yahoo.
