@@ -80,22 +80,24 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	// Create a new instance of engine.Settings
 	var moveReq models.MoveReq
 
-	// Unmarshal the JSON data into settings
+	// Unmarshal the JSON data errors will be relayed to via move response
 	err = json.Unmarshal(m.Data, &moveReq)
 	if err != nil {
-		log.Printf("Error unmarshaling data: %v", err)
-		return models.MoveData{}, err
+		errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
+		log.Print(errMsg)
+		return models.MoveData{Err: &errMsg}, nil
 	}
 
+	// Get the personality info, errors will be relayed to via move response
 	cmp, ok := personalities.CmpMap[moveReq.CmpName]
 	if !ok {
 		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
 		log.Print(errMsg)
-		return models.MoveData{}, err
+		return models.MoveData{Err: &errMsg}, nil
 	}
 
+	// attemt to get a book move, if successful return it as the move
 	bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
-	// if no err we have a book move and can just return the move
 	if err == nil {
 		bookMove.GameId = moveReq.GameId
 		log.Println(bookMove)
@@ -110,15 +112,17 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 		ClockTime: personalities.GetClockTime(cmp),
 	}
 
+	// Get the move data from the engine,
 	moveData, err := engine.GetMove(settings)
 	if err != nil {
 		log.Println("There was ane error getting the move: ", err)
 		return models.MoveData{}, err
 	}
 
+	// if movdData has inbbeded err relay it back to the client
 	if moveData.Err != nil {
 		log.Println(*moveData.Err)
-		return models.MoveData{}, err
+		return moveData, nil
 	}
 
 	moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
