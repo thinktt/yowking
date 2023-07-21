@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"runtime"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -27,20 +26,35 @@ func main() {
 		log.Fatalf("Error creating JetStream context: %v", err)
 	}
 
-	// Subscribe
-	log.Print("Subscribing to stream queue...")
-	_, err = js.QueueSubscribe(
+	sub, err := js.PullSubscribe(
 		"move-req",
 		"kingworkers",
-		handleMoveReq,
-		nats.MaxAckPending(1),
 		nats.ManualAck(),
 		nats.AckWait(30*time.Second),
 	)
 	if err != nil {
-		log.Printf("Error subscribing to stream queue: %v", err)
+		log.Fatalf("Error subscribing to stream queue: %v", err)
 	}
-	runtime.Goexit()
+
+	for {
+		msgs, err := sub.Fetch(1)
+		if err != nil && err == nats.ErrTimeout {
+			continue
+		}
+
+		if err != nil {
+			log.Printf("Error fetching messages: %v", err)
+			continue
+		}
+
+		if len(msgs) == 0 {
+			log.Println("an empty message slice was returned")
+			continue
+		}
+		m := msgs[0]
+		handleMoveReq(m)
+	}
+
 }
 
 func handleMoveReq(m *nats.Msg) {
