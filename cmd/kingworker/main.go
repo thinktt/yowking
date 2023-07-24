@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -14,8 +15,20 @@ import (
 )
 
 func main() {
-	// Connect to NATS server
-	nc, err := nats.Connect(nats.DefaultURL)
+	token := os.Getenv("NATS_TOKEN")
+	if token == "" {
+		log.Fatal("NATS_TOKEN environment variable is not set")
+	}
+
+	natsUrl := os.Getenv("NATS_URL")
+	if natsUrl == "" {
+		log.Println("NATS_URL not set, useing:", nats.DefaultURL)
+		natsUrl = nats.DefaultURL
+	} else {
+		log.Println("NATS_URL set to:", natsUrl)
+	}
+
+	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
 		log.Fatalf("Error connecting to NATS: %v", err)
 	}

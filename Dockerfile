@@ -15,4 +15,4 @@ WORKDIR /opt/yowking
 
 ENV ENG_CMD="/usr/bin/wine enginewrap.exe"
 ENV GIN_MODE=release
-CMD ["./kingapi"]
+CMD ["./kingworker"]

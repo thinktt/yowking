@@ -3,7 +3,7 @@ services:
   nats:
     image: nats:latest
     container_name: nats
-    command: ["-js"]
+    command: ["-js", "-auth", "${NATS_TOKEN}"]
     ports:
       - "4222:4222"
       - "8222:8222"
