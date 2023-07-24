@@ -53,6 +53,8 @@ test: dist
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
 	GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
+	GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker  ./cmd/kingworker
+
 
 dbuild: dist
 	docker rm yowking || true
