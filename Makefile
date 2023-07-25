@@ -5,32 +5,39 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test startk8 dbuild2 dbuild3 dodcal doservice
+	getassets test startk8 dbuild2 dbuild3 dodcal doservice docker-compose.yml
 
 export CPU1=10
 export CPU2=11
 export LOGICAL_PROCESSOR=${CPU1},${CPU2}
 export NAME=yowking-${CPU1}${CPU2}
 export VOL_NAME=cal45
+export CPU_START=2
+export CPU_END=11
+
+docker-compose.yml:
+	node buildKingYaml.mjs
 
 doservice:
 	docker rm ${NAME} || true
 	docker run \
 		--cpus=1 --cpuset-cpus=${LOGICAL_PROCESSOR} \
 		-v ${VOL_NAME}:/opt/yowking/calibrations \
-		-l "traefik.enable=true" \
-		-l 'traefik.http.routers.yowking.rule=Host("yowking.localhost")' \
-		-l "traefik.http.routers.yowking.entrypoints=websecure" \
-		-l "traefik.http.routers.yowking.tls=true" \
-		-l "traefik.http.routers.yowking.service=yowking" \
-		-l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
-		-l 'traefik.http.routers.yowking-http.rule=Host("yowking.localhost")' \
-		-l "traefik.http.routers.yowking-http.entrypoints=web" \
-		-l "traefik.http.routers.yowking-http.service=yowking" \
-		--network=traefik_default \
+		--env-file docker.env \
 		--name ${NAME} \
+		--network=yow \
 		-d ace:5000/yowking
 		# -it ace:5000/yowking /bin/sh
+		# -l "traefik.enable=true" \
+		# -l 'traefik.http.routers.yowking.rule=Host("yowking.localhost")' \
+		# -l "traefik.http.routers.yowking.entrypoints=websecure" \
+		# -l "traefik.http.routers.yowking.tls=true" \
+		# -l "traefik.http.routers.yowking.service=yowking" \
+		# -l "traefik.http.services.yowking.loadbalancer.server.port=8080" \
+		# -l 'traefik.http.routers.yowking-http.rule=Host("yowking.localhost")' \
+		# -l "traefik.http.routers.yowking-http.entrypoints=web" \
+		# -l "traefik.http.routers.yowking-http.service=yowking" \
+		# --network=traefik_default \
 
 certs: 
 	mkdir certs

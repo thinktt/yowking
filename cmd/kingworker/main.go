@@ -22,7 +22,7 @@ func main() {
 
 	natsUrl := os.Getenv("NATS_URL")
 	if natsUrl == "" {
-		log.Println("NATS_URL not set, useing:", nats.DefaultURL)
+		log.Println("NATS_URL not set, using:", nats.DefaultURL)
 		natsUrl = nats.DefaultURL
 	} else {
 		log.Println("NATS_URL set to:", natsUrl)
