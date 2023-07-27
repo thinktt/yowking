@@ -39,4 +39,4 @@ for (let i = 0; i < cpuSets.length; i+=2) {
 data += `\n\nnetworks:\n  yow:\n    external: true\n`;
 data += `\nvolumes:\n  cal45:\n    external: true\n`;
 
-writeFileSync('docker-compose.yml', data, 'utf8')
+writeFileSync('compose-yowking.yaml', data, 'utf8')

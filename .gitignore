@@ -1,5 +1,4 @@
 dist
 assets
-.env
-docker.env
+*.env
 certs

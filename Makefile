@@ -5,7 +5,8 @@ SHELL := /bin/bash
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
-	getassets test startk8 dbuild2 dbuild3 dodcal doservice docker-compose.yml
+	getassets test startk8 dbuild2 dbuild3 dodcal doservice  \
+	compose-yowking.yaml up down
 
 export CPU1=10
 export CPU2=11
@@ -13,9 +14,17 @@ export LOGICAL_PROCESSOR=${CPU1},${CPU2}
 export NAME=yowking-${CPU1}${CPU2}
 export VOL_NAME=cal45
 export CPU_START=2
-export CPU_END=11
+export CPU_END=5
 
-docker-compose.yml:
+
+
+up:
+	docker compose -f compose.yaml -f compose-yowking.yaml up -d
+
+down:
+	docker compose -f compose.yaml -f compose-yowking.yaml down
+
+compose-yowking.yaml:
 	node buildKingYaml.mjs
 
 doservice:
@@ -104,8 +113,8 @@ dexec:
 run: export IS_WSL=true
 run: dist
 	source .env; \
-	# cd dist && go run ../cmd/kingapi
 	cd dist && go run ../cmd/kingworker
+	# cd dist && go run ../cmd/kingapi
 
 # later we will import and build these from CM11 folder, for now borrowed locally
 assets:

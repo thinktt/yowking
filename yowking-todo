@@ -1,23 +1,9 @@
 Today
-x nats use token
-x yowbot nats token auth
-x yowking nats token auth
-use nats host env, yowking and yowbot
-nats traefik endpoint
-kingapi api uses nats
-yowapi behind nats
-fix yowbackup
-one compose file for whole system
-deploy whole system to zen
 
 
 
 
-yowbot engine mod pass through to yowking api
-yowking log levels with silent engine option
-handle stuck engine move timeout
-yowking disallow empty jwt secret
-all containers one script
+
 
 
 
@@ -111,6 +97,23 @@ x docker run yowking script
 x create a kingworker
   x GET move-req from yowkking
   x POST move-res to yowking
+
+
+
+.........stash..............
+nats traefik endpoint
+kingapi api uses nats
+yowapi behind nats
+fix yowbackup
+one compose file for whole system
+deploy whole system to zen
+yowbot engine mod pass through to yowking api
+yowking log levels with silent engine option
+handle stuck engine move timeout
+yowking disallow empty jwt secret
+all containers one script
+
+
 
 
 RabbitMQ: RabbitMQ is one of the most widely deployed open source message brokers. It supports multiple messaging protocols, message queuing, delivery acknowledgement, flexible routing to queues, and multiple exchange type.
