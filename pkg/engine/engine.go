@@ -65,7 +65,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	defer close(errChan)
 
 	// handle the engine streams in real time
-	go readEngineOut(engineOut, moveChan)
+	go readEngineOut(engineOut, moveChan, settings.StopId)
 	go readEngineErrs(engineErr)
 	go forwardUserCommands(engine)
 
@@ -138,7 +138,7 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
 	log.Println("engine closed")
 }
 
-func readEngineOut(r io.Reader, moveChan chan MoveData) {
+func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
 	// var errStr *string
@@ -170,6 +170,11 @@ func readEngineOut(r io.Reader, moveChan chan MoveData) {
 			continue
 		}
 		moveCandidate = moveData
+
+		// if the move line is the stopId move line, stop the engine
+		if moveData.Id == stopId {
+			log.Println("engine found stopId, move:", moveData.AlgebraMove)
+		}
 	}
 
 	// moveCandidate.Err = errStr

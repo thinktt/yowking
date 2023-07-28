@@ -144,7 +144,6 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 		logContext.Error("There was ane error getting the move: ", err)
 		return models.MoveData{}, err
 	}
-	logContext.Println("move received from engine:", moveData.CoordinateMove)
 
 	// if movdData has inbbeded err relay it back to the client
 	if moveData.Err != nil {
@@ -156,8 +155,7 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	moveData.Type = "engine"
 	moveData.GameId = moveReq.GameId
 
-	logContext.Println("engine move was scucessful:", moveData.CoordinateMove)
-
+	logContext.Println("move received from engine:", moveData.CoordinateMove)
 	return moveData, nil
 
 }
