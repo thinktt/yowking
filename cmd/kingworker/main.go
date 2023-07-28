@@ -106,6 +106,7 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	// set logger context
 	logContext := logrus.WithFields(logrus.Fields{
 		"gameId": moveReq.GameId,
+		"moveNo": len(moveReq.Moves),
 	})
 
 	// Get the personality info, errors will be relayed to via move response
@@ -121,7 +122,7 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
 	if err == nil {
 		bookMove.GameId = moveReq.GameId
-		logContext.Println("book move found:", bookMove)
+		logContext.Println("book move found:", bookMove.CoordinateMove)
 		m.Ack()
 		return bookMove, nil
 	}

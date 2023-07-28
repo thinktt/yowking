@@ -26,6 +26,7 @@ var log *logrus.Entry
 func GetMove(settings Settings) (MoveData, error) {
 	log = logger.WithFields(logrus.Fields{
 		"gameId": settings.GameId,
+		"moveNo": len(settings.Moves),
 	})
 
 	isWsl := os.Getenv("IS_WSL")
@@ -76,7 +77,7 @@ func GetMove(settings Settings) (MoveData, error) {
 
 	// from here if getMove() errors or completes be sure to stop the engine
 	defer func() {
-		go stopEngine(engine, cmd)
+		go stopEngine(engine, cmd, log)
 	}()
 
 	// prepare all the personality setting commands to be sent to the engine
@@ -128,7 +129,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	return moveData, nil
 }
 
-func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
+func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
 	// send a quilt command to the engine
 	engine.Write([]byte("quit\n"))
 	engine.Close()
