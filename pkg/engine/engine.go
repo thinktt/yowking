@@ -17,7 +17,7 @@ import (
 )
 
 type MoveData = models.MoveData
-type Settings = models.Settings
+type Settings = models.MoveReq
 
 var isVerboseMode = false
 var logger = logrus.New()

@@ -1,7 +1,6 @@
 Today
-Set game context for logs in yowking
-  use loggorus wrapped in logging package
-  
+Calibration trhough message bus
+
 
 
 
@@ -99,7 +98,8 @@ x docker run yowking script
 x create a kingworker
   x GET move-req from yowkking
   x POST move-res to yowking
-
+x Set game context for logs in yowking
+  x use loggorus wrapped in logging package
 
 
 .........stash..............

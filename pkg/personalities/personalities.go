@@ -52,7 +52,7 @@ func loadClockTimes() {
 	fmt.Printf("clockTimes loaded: %+v\n", clockTimes)
 }
 
-func GetDrawEval(currentEval int, settings models.Settings) bool {
+func GetDrawEval(currentEval int, settings models.MoveReq) bool {
 	contemtForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
 	if err != nil {
 		return false

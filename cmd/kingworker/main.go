@@ -129,11 +129,16 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	logContext.Println("no book move found, sending move to engine")
 
 	// we were unable to get a book move, let's try the engine
-	settings := models.Settings{
-		Moves:     moveReq.Moves,
-		CmpVals:   cmp.Vals,
-		ClockTime: personalities.GetClockTime(cmp),
-		GameId:    moveReq.GameId,
+	// settings := models.Settings{
+	// 	Moves:     moveReq.Moves,
+	// 	CmpVals:   cmp.Vals,
+	// 	ClockTime: personalities.GetClockTime(cmp),
+	// 	GameId:    moveReq.GameId,
+	// }
+	settings := moveReq
+	moveReq.CmpVals = cmp.Vals
+	if moveReq.ClockTime == 0 {
+		settings.ClockTime = personalities.GetClockTime(cmp)
 	}
 
 	// Get the move data from the engine,
