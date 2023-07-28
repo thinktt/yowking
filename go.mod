@@ -7,6 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/nats-io/nats.go v1.28.0
+	github.com/sirupsen/logrus v1.9.3
 )
 
 require (

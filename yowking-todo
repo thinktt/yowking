@@ -1,5 +1,7 @@
 Today
-
+Set game context for logs in yowking
+  use loggorus wrapped in logging package
+  
 
 
 

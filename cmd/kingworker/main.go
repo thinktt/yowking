@@ -3,16 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
 	"github.com/nats-io/nats.go"
+	"github.com/sirupsen/logrus"
 	"github.com/thinktt/yowking/pkg/books"
 	"github.com/thinktt/yowking/pkg/engine"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/personalities"
 )
+
+var log = logrus.New()
 
 func main() {
 	token := os.Getenv("NATS_TOKEN")
@@ -86,7 +88,7 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 
 	meta, err := m.Metadata()
 	if err != nil {
-		log.Printf("Error retrieving message metadata: %v", err)
+		log.Errorf("Error retrieving message metadata: %v", err)
 	}
 	log.Println("Received message seq:", meta.Sequence.Stream, "msgId:", meta.Sequence.Consumer)
 
@@ -97,44 +99,52 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	err = json.Unmarshal(m.Data, &moveReq)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
-		log.Print(errMsg)
+		log.Error(errMsg)
 		return models.MoveData{Err: &errMsg}, nil
 	}
+
+	// set logger context
+	logContext := logrus.WithFields(logrus.Fields{
+		"gameId": moveReq.GameId,
+	})
 
 	// Get the personality info, errors will be relayed to via move response
 	cmp, ok := personalities.CmpMap[moveReq.CmpName]
 	if !ok {
 		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
-		log.Print(errMsg)
+		logContext.Error(errMsg)
 		return models.MoveData{Err: &errMsg}, nil
 	}
+	logContext.Println("playing as", cmp.Name, "using book", cmp.Book)
 
 	// attemt to get a book move, if successful return it as the move
 	bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
 	if err == nil {
 		bookMove.GameId = moveReq.GameId
-		log.Println(bookMove)
+		logContext.Println("book move found:", bookMove)
 		m.Ack()
 		return bookMove, nil
 	}
+	logContext.Println("no book move found, sending move to engine")
 
 	// we were unable to get a book move, let's try the engine
 	settings := models.Settings{
 		Moves:     moveReq.Moves,
 		CmpVals:   cmp.Vals,
 		ClockTime: personalities.GetClockTime(cmp),
+		GameId:    moveReq.GameId,
 	}
 
 	// Get the move data from the engine,
 	moveData, err := engine.GetMove(settings)
 	if err != nil {
-		log.Println("There was ane error getting the move: ", err)
+		logContext.Error("There was ane error getting the move: ", err)
 		return models.MoveData{}, err
 	}
 
 	// if movdData has inbbeded err relay it back to the client
 	if moveData.Err != nil {
-		log.Println(*moveData.Err)
+		logContext.Error(*moveData.Err)
 		return moveData, nil
 	}
 

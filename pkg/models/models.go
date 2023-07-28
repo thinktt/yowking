@@ -5,6 +5,7 @@ type Settings struct {
 	CmpVals        CmpVals  `json:"cmpVals"`
 	ClockTime      int      `json:"clockTime"`
 	SecondsPerMove *int     `json:"secondsPerMove"`
+	GameId         string   `json:"gameId"`
 }
 
 type CmpVals struct {
@@ -38,9 +39,13 @@ type CmpVals struct {
 }
 
 type MoveReq struct {
-	Moves   []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
-	CmpName string   `json:"cmpName" binding:"required,alphanum,max=15"`
-	GameId  string   `json:"gameId" binding:"required,alphanum,max=15"`
+	Moves          []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
+	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
+	GameId         string   `json:"gameId" binding:"required,alphanum,max=15"`
+	StopId         int      `json:"stopId" binding:"alphanum,max=15"`
+	ClockTime      int      `json:"clockTime"`
+	RandomIsOff    bool     `json:"randomIsOff"`
+	ShouldSkipBook bool     `json:"shouldSkipBook"`
 }
 
 type Cmp struct {
