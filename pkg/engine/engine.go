@@ -12,17 +12,25 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"github.com/thinktt/yowking/pkg/models"
 )
 
 type MoveData = models.MoveData
 type Settings = models.Settings
 
+var isVerboseMode = false
+var logger = logrus.New()
+var log *logrus.Entry
+
 func GetMove(settings Settings) (MoveData, error) {
+	log = logger.WithFields(logrus.Fields{
+		"gameId": settings.GameId,
+	})
 
 	isWsl := os.Getenv("IS_WSL")
 	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
-	// fmt.Println("shouldPostInput: " + shouldPostInput)
+	// log.Println("shouldPostInput: " + shouldPostInput)
 
 	var cmd *exec.Cmd
 	if isWsl == "true" {
@@ -33,19 +41,19 @@ func GetMove(settings Settings) (MoveData, error) {
 
 	engine, err := cmd.StdinPipe()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return MoveData{}, err
 	}
 
 	engineOut, err := cmd.StdoutPipe()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return MoveData{}, err
 	}
 
 	engineErr, err := cmd.StderrPipe()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return MoveData{}, err
 	}
 
@@ -87,7 +95,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		return MoveData{}, err
 	}
 
-	fmt.Println("clockTime: ", settings.ClockTime)
+	log.Println("clockTime: ", settings.ClockTime)
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
 	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
 
@@ -109,7 +117,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		// having move Data right now means the engine didn't like the settings
 		return moveData, nil
 	default:
-		fmt.Println("engine accepted the settings witouth error")
+		log.Println("engine accepted the settings witouth error")
 	}
 
 	// start the engine
@@ -125,19 +133,7 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd) {
 	engine.Write([]byte("quit\n"))
 	engine.Close()
 	cmd.Wait()
-	fmt.Println("engine closed")
-
-	// make sure the engine closes with a timeout
-	// isExited := false
-	// go func() {
-	// 	time.Sleep(5 * time.Second)
-	// 	if !isExited {
-	// 		fmt.Println("engine looks stuck, killing it")
-	// 		cmd.Process.Kill()
-	// 	}
-	// }()
-	// isExited = true
-
+	log.Println("engine closed")
 }
 
 func readEngineOut(r io.Reader, moveChan chan MoveData) {
@@ -147,7 +143,9 @@ func readEngineOut(r io.Reader, moveChan chan MoveData) {
 
 	for s.Scan() {
 		engineLine := s.Text()
-		fmt.Println(engineLine)
+		if isVerboseMode {
+			log.Println(engineLine)
+		}
 
 		// if the engine finds a setting error send empty move response with an error
 		if strings.Contains(engineLine, "Error") ||
@@ -180,7 +178,7 @@ func readEngineErrs(r io.Reader) {
 	s := bufio.NewScanner(r)
 	for s.Scan() {
 		engineLine := s.Text()
-		fmt.Println("Engine ERR:", engineLine)
+		log.Error("Engine ERR:", engineLine)
 	}
 }
 

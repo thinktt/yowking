@@ -2,7 +2,6 @@ package books
 
 import (
 	"encoding/json"
-	"fmt"
 	"os/exec"
 
 	"github.com/thinktt/yowking/pkg/models"
@@ -31,7 +30,7 @@ func GetMove(moves []string, bookName string) (models.MoveData, error) {
 	cmd := exec.Command("./runbook", string(bookQueryJson))
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("book:", string(out))
+		// fmt.Println("book:", string(out))
 		errStr := string(out)
 		return models.MoveData{Err: &errStr}, err
 	}
