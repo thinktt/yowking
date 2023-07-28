@@ -24,6 +24,7 @@ var logger = logrus.New()
 var log *logrus.Entry
 
 func GetMove(settings Settings) (MoveData, error) {
+	// fmt.Println(settings)
 	log = logger.WithFields(logrus.Fields{
 		"gameId": settings.GameId,
 		"moveNo": len(settings.Moves),
@@ -96,7 +97,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		return MoveData{}, err
 	}
 
-	log.Println("clockTime: ", settings.ClockTime)
+	// log.Println("clockTime: ", settings.ClockTime)
 	timeStr := fmt.Sprintf("time %d\n", settings.ClockTime)
 	otimStr := fmt.Sprintf("otim %d\n", settings.ClockTime)
 

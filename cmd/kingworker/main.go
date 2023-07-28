@@ -58,7 +58,7 @@ func main() {
 		}
 
 		if err != nil {
-			log.Printf("Error fetching messages: %v", err)
+			log.Errorf("Error fetching messages: %v", err)
 			continue
 		}
 
@@ -69,15 +69,16 @@ func main() {
 		m := msgs[0]
 		moveRes, err := handleMoveReq(m)
 		if err != nil {
-			log.Printf("Error handling move request: %v", err)
+			log.Errorf("Error handling move request: %v", err)
 			continue
 		}
 
 		err = PubMoveRes(js, moveRes)
 		if err != nil {
-			log.Printf("Error publishing move response: %v", err)
+			log.Errorf("Error publishing move response: %v", err)
 			// continue
 		}
+		log.Println("succesfully published move response")
 
 		m.Ack()
 	}
@@ -128,17 +129,13 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	}
 	logContext.Println("no book move found, sending move to engine")
 
-	// we were unable to get a book move, let's try the engine
-	// settings := models.Settings{
-	// 	Moves:     moveReq.Moves,
-	// 	CmpVals:   cmp.Vals,
-	// 	ClockTime: personalities.GetClockTime(cmp),
-	// 	GameId:    moveReq.GameId,
-	// }
 	settings := moveReq
-	moveReq.CmpVals = cmp.Vals
+	settings.CmpVals = cmp.Vals
 	if moveReq.ClockTime == 0 {
 		settings.ClockTime = personalities.GetClockTime(cmp)
+		logContext.Println("using calibrated clock time:", settings.ClockTime)
+	} else {
+		logContext.Println("using manual clock time:", settings.ClockTime)
 	}
 
 	// Get the move data from the engine,
@@ -147,6 +144,7 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 		logContext.Error("There was ane error getting the move: ", err)
 		return models.MoveData{}, err
 	}
+	logContext.Println("move received from engine:", moveData.CoordinateMove)
 
 	// if movdData has inbbeded err relay it back to the client
 	if moveData.Err != nil {
@@ -157,6 +155,8 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 	moveData.Type = "engine"
 	moveData.GameId = moveReq.GameId
+
+	logContext.Println("engine move was scucessful:", moveData.CoordinateMove)
 
 	return moveData, nil
 
