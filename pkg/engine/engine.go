@@ -149,7 +149,6 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
 func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
-	// var errStr *string
 
 	for s.Scan() {
 		engineLine := s.Text()
@@ -179,9 +178,10 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 		}
 		moveCandidate = moveData
 
-		// if the move line is the stopId move line, stop the engine
+		// if the move line is the stopId move line, break and send this move
 		if moveData.Id == stopId {
 			log.Println("engine found stopId, move:", moveData.AlgebraMove)
+			break
 		}
 	}
 
