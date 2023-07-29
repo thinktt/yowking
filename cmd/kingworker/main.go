@@ -67,43 +67,48 @@ func main() {
 			continue
 		}
 		m := msgs[0]
-		moveRes, err := handleMoveReq(m)
+
+		meta, err := m.Metadata()
 		if err != nil {
-			log.Errorf("Error handling move request: %v", err)
+			log.Errorf("Error retrieving message metadata: %v", err)
+		}
+		log.Println("Received message seq:", meta.Sequence.Stream, "msgId:", meta.Sequence.Consumer)
+
+		// Create a new instance of engine.Settings
+		var moveReq models.MoveReq
+
+		// Unmarshal the JSON data errors will be relayed to via move response
+		err = json.Unmarshal(m.Data, &moveReq)
+		if err != nil {
+			errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
+			log.Error(errMsg)
+			continue
+		}
+
+		// since we have move-req data we can now log with context
+		logContext := logrus.WithFields(logrus.Fields{
+			"gameId": moveReq.GameId,
+			"moveNo": len(moveReq.Moves),
+		})
+
+		moveRes, err := handleMoveReq(moveReq)
+		if err != nil {
+			logContext.Errorf("Error handling move request: %v", err)
 			continue
 		}
 
 		err = PubMoveRes(js, moveRes)
 		if err != nil {
-			log.Errorf("Error publishing move response: %v", err)
+			logContext.Errorf("Error publishing move response: %v", err)
 			// continue
 		}
-		log.Println("succesfully published move response")
+		logContext.Println("succesfully published move response")
 
 		m.Ack()
 	}
-
 }
 
-func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
-
-	meta, err := m.Metadata()
-	if err != nil {
-		log.Errorf("Error retrieving message metadata: %v", err)
-	}
-	log.Println("Received message seq:", meta.Sequence.Stream, "msgId:", meta.Sequence.Consumer)
-
-	// Create a new instance of engine.Settings
-	var moveReq models.MoveReq
-
-	// Unmarshal the JSON data errors will be relayed to via move response
-	err = json.Unmarshal(m.Data, &moveReq)
-	if err != nil {
-		errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
-		log.Error(errMsg)
-		return models.MoveData{Err: &errMsg}, nil
-	}
-
+func handleMoveReq(moveReq models.MoveReq) (models.MoveData, error) {
 	// set logger context
 	logContext := logrus.WithFields(logrus.Fields{
 		"gameId": moveReq.GameId,
@@ -127,7 +132,6 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 		if err == nil {
 			bookMove.GameId = moveReq.GameId
 			logContext.Println("book move found:", bookMove.CoordinateMove)
-			m.Ack()
 			return bookMove, nil
 		}
 		logContext.Println("no book move found, sending move to engine")
