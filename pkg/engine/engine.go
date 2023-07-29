@@ -81,6 +81,14 @@ func GetMove(settings Settings) (MoveData, error) {
 		go stopEngine(engine, cmd, log)
 	}()
 
+	if settings.RandomIsOff {
+		settings.CmpVals.Rnd = "0"
+		log.Info("randomIsOff is set, setting cmp rnd val to 0")
+	}
+
+	// log all the cmpVals with keys
+	// fmt.Printf("%+v\n", settings.CmpVals)
+
 	// prepare all the personality setting commands to be sent to the engine
 	cmpLoaderTemplate := `cm_parm default
 	cm_parm opp={{.Opp}} opn={{.Opn}} opb={{.Opb}} opr={{.Opr}} opq={{.Opq}}

@@ -120,14 +120,18 @@ func handleMoveReq(m *nats.Msg) (models.MoveData, error) {
 	logContext.Println("playing as", cmp.Name, "using book", cmp.Book)
 
 	// attemt to get a book move, if successful return it as the move
-	bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
-	if err == nil {
-		bookMove.GameId = moveReq.GameId
-		logContext.Println("book move found:", bookMove.CoordinateMove)
-		m.Ack()
-		return bookMove, nil
+	if moveReq.ShouldSkipBook {
+		logContext.Println("shouldSkipBook is set, skipping book check")
+	} else {
+		bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
+		if err == nil {
+			bookMove.GameId = moveReq.GameId
+			logContext.Println("book move found:", bookMove.CoordinateMove)
+			m.Ack()
+			return bookMove, nil
+		}
+		logContext.Println("no book move found, sending move to engine")
 	}
-	logContext.Println("no book move found, sending move to engine")
 
 	settings := moveReq
 	settings.CmpVals = cmp.Vals

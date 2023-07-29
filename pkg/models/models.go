@@ -1,22 +1,14 @@
 package models
 
-type Settings struct {
-	Moves          []string `json:"moves"`
-	CmpVals        CmpVals  `json:"cmpVals"`
-	ClockTime      int      `json:"clockTime"`
-	SecondsPerMove *int     `json:"secondsPerMove"`
-	GameId         string   `json:"gameId"`
-}
-
 type MoveReq struct {
 	Moves          []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
 	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
 	GameId         string   `json:"gameId" binding:"required,alphanum,max=15"`
 	StopId         int      `json:"stopId" binding:"alphanum,max=15"`
-	ClockTime      int      `json:"clockTime"`
+	ClockTime      int      `json:"clockTime" binding:"alphanum,max=15"`
 	RandomIsOff    bool     `json:"randomIsOff"`
 	ShouldSkipBook bool     `json:"shouldSkipBook"`
-	CmpVals        CmpVals  `json:"cmpVals"`
+	CmpVals        CmpVals  `json:"-"`
 }
 
 type CmpVals struct {
