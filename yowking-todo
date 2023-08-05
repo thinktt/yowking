@@ -1,24 +1,31 @@
 Today
-Calibration trhough message bus
+x docalibration as cli
+new yowbot container
+  no propriatary stuff
+  no need for wine
+yowcal container made from yowbot
 
-
-
-
-
+have yowking register streams on it's own
 
 
 
 
 ...Overview...
-Featrues
-  engine module in yow now in go API
-    xx can I put go bin outside of wine? 
-    use enginewrap
-    getMoves
-    setLogLevel
+rzen setup
+  setup Docker 
+  traefik container
+  speed throttling
+  calibration containers?
+  yowking containers
+  calibrations
+  x window key backup
+  x install debian
+  x setup ssh
+  test hardware
+  setup registry?
 
-  gin endpoints for yowbot engine commands
-  basic move endpoint with personality vars
+
+Featrues
   calibrations?
     load calibration files?
     have calibrations come in trhough api
@@ -31,19 +38,6 @@ Featrues
   game moves validation??
   personalitiy move endpoints
   cli commands?
-
-rzen
-  setup Docker 
-  traefik container
-  speed throttling
-  calibration containers
-  yowking containers
-  calibrations
-  x window key backup
-  x install debian
-  x setup ssh
-  test hardware
-  setup registry?
 
 Security
   https
@@ -100,6 +94,8 @@ x create a kingworker
   x POST move-res to yowking
 x Set game context for logs in yowking
   x use loggorus wrapped in logging package
+x Calibration trhough message bus
+x add stars to init builder 
 
 
 .........stash..............
@@ -114,6 +110,7 @@ yowking log levels with silent engine option
 handle stuck engine move timeout
 yowking disallow empty jwt secret
 all containers one script
+
 
 
 
