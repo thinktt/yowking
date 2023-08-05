@@ -41,6 +41,28 @@ func main() {
 		log.Fatalf("Error creating JetStream context: %v", err)
 	}
 
+	// Create move-req-stream
+	_, err = js.AddStream(&nats.StreamConfig{
+		Name:     "move-req-stream",
+		Subjects: []string{"move-req"},
+	})
+	if err != nil {
+		log.Printf("Failed to create stream: %v", err)
+	} else {
+		log.Println("move-req-stream found or created")
+	}
+
+	// Create move-res-stream
+	_, err = js.AddStream(&nats.StreamConfig{
+		Name:     "move-res-stream",
+		Subjects: []string{"move-res.*"},
+	})
+	if err != nil {
+		log.Printf("Failed to create stream: %v", err)
+	} else {
+		log.Println("move-res-stream found or created")
+	}
+
 	sub, err := js.PullSubscribe(
 		"move-req",
 		"kingworkers",
