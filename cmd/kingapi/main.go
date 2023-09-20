@@ -87,7 +87,7 @@ func main() {
 		moveData, err := moveque.GetMove(moveReq)
 		if err != nil {
 			fmt.Println("There was ane error getting the move: ", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
+			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "queue error"})
 			return
 		}
 

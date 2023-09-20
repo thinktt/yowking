@@ -1,6 +1,7 @@
 package moveque
 
 import (
+	"encoding/json"
 	"os"
 
 	"github.com/nats-io/nats.go"
@@ -9,6 +10,7 @@ import (
 )
 
 var log = logrus.New()
+var moveStream nats.JetStreamContext
 
 func init() {
 	token := os.Getenv("NATS_TOKEN")
@@ -56,10 +58,25 @@ func init() {
 	} else {
 		log.Println("move-res-stream found or created")
 	}
+
+	moveStream = js
 }
 
 func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
 	moveRes := models.MoveData{}
+
+	// Serialize moveReq to JSON
+	data, err := json.Marshal(moveReq)
+	if err != nil {
+		return moveRes, err
+	}
+
+	// Publish it to move-req-stream
+	_, err = moveStream.Publish("move-req", data)
+	if err != nil {
+		// log.Error(err)
+		return moveRes, err
+	}
 
 	return moveRes, nil
 }
