@@ -4,8 +4,8 @@ type MoveReq struct {
 	Moves          []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
 	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
 	GameId         string   `json:"gameId" binding:"required,alphanum,max=15"`
-	StopId         int      `json:"stopId" binding:"alphanum,max=15"`
-	ClockTime      int      `json:"clockTime" binding:"alphanum,max=15"`
+	StopId         int      `json:"stopId" binding:"omitempty,alphanum,max=15"`
+	ClockTime      int      `json:"clockTime" binding:"omitempty,alphanum,max=15"`
 	RandomIsOff    bool     `json:"randomIsOff"`
 	ShouldSkipBook bool     `json:"shouldSkipBook"`
 	CmpVals        CmpVals  `json:"-"`
