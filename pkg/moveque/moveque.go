@@ -2,7 +2,9 @@ package moveque
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"time"
 
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
@@ -11,8 +13,11 @@ import (
 
 var log = logrus.New()
 var moveStream nats.JetStreamContext
+var nc *nats.Conn
 
 func init() {
+	var err error
+
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
 		log.Fatal("NATS_TOKEN environment variable is not set")
@@ -26,7 +31,7 @@ func init() {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
 
-	nc, err := nats.Connect(natsUrl, nats.Token(token))
+	nc, err = nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
 		log.Fatalf("Error connecting to NATS: %v", err)
 	}
@@ -71,10 +76,39 @@ func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
 		return moveRes, err
 	}
 
+	subject := fmt.Sprintf("move-res.%s", moveReq.GameId)
+
+	// Set up a subscription
+	sub, err := nc.SubscribeSync(subject)
+	if err != nil {
+		log.Errorf("Error subscribing to subject: %v", err)
+		return moveRes, err
+	}
+	defer sub.Unsubscribe()
+
 	// Publish it to move-req-stream
 	_, err = moveStream.Publish("move-req", data)
 	if err != nil {
 		// log.Error(err)
+		return moveRes, err
+	}
+
+	// Wait for a single message
+	msg, err := sub.NextMsg(time.Second * 10) // Waits up to 10 seconds
+	if err != nil {
+		log.Errorf("Error receiving message: %v", err)
+		return moveRes, err
+	}
+
+	// ack this message so we will not get it again
+	msg.Ack()
+
+	// Process your message here, e.g.,:
+	// fmt.Printf("Received message: %s\n", msg.Data)
+
+	// Parse the message into moveRes
+	if err := json.Unmarshal(msg.Data, &moveRes); err != nil {
+		log.Errorf("Error parsing message data: %v", err)
 		return moveRes, err
 	}
 

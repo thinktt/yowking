@@ -37,7 +37,7 @@ assets:
 	cp -r ../yeoldwiz-lnx/yowbot/dist/books assets/books
 
 push: 
-	# docker push ace:5000/yowking
+	# docker push zen:5000/yowking
 	docker push thinktt/yowking:latest
 
 test: dist
@@ -58,9 +58,9 @@ runapi:
 
 dbuild: dist
 	docker rm yowking || true
-	docker image rm ace:5000/yowking:latest || true
-	docker build -t ace:5000/yowking .
-	# docker push ace:5000/yowking  
+	docker image rm zen:5000/yowking:latest || true
+	docker build -t zen:5000/yowking .
+	# docker push zen:5000/yowking  
 
 dbuild2: 
 	docker rm yowking || true
@@ -74,20 +74,18 @@ dbuild3:
 	docker build -t thinktt/yowking:latest .
 	docker push thinktt/yowking:latest
 
-
-
 clean: 
 	rm -rf assets
 	rm -rf dist
 
 drun: 
-	# docker run --rm -it --name yowking  -p 8080:8080 ace:5000/yowking
+	# docker run --rm -it --name yowking  -p 8080:8080 zen:5000/yowking
 	# docker run --rm -it --name yowking  -p 8080:8080 thinktt/yowking:latest
-	# docker run --rm -it --env-file ./env --name yowking ace:5000/yowking
+	# docker run --rm -it --env-file ./env --name yowking zen:5000/yowking
 
 
 dexec: 
-	# docker run --rm -it --name yowking ace:5000/yowking /bin/bash
+	# docker run --rm -it --name yowking zen:5000/yowking /bin/bash
 	docker exec -it yowking /bin/bash
 
 
@@ -108,8 +106,8 @@ doservice:
 		--env-file docker.env \
 		--name ${NAME} \
 		--network=yow \
-		-it ace:5000/yowking /bin/sh
-		#-d ace:5000/yowking
+		-it zen:5000/yowking /bin/sh
+		#-d zen:5000/yowking
 		# -l "traefik.enable=true" \
 		# -l 'traefik.http.routers.yowking.rule=Host("yowking.localhost")' \
 		# -l "traefik.http.routers.yowking.entrypoints=websecure" \
