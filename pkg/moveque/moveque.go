@@ -1,48 +1,48 @@
 package moveque
 
 import (
-	"fmt"
-	"sync/atomic"
-
-	"github.com/thinktt/yowking/pkg/engine"
+	"github.com/thinktt/yowking/pkg/models"
 )
 
-type MoveRequest struct {
-	Settings engine.Settings
-	Result   chan MoveResult
+func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
+	// result := make(chan MoveResult)
+	// wating := atomic.AddInt64(&waitingRequests, 1)
+	// total := atomic.AddInt64(&totalRequests, 1)
+	// fmt.Println("total request: ", total, "waiting request: ", wating)
+	// moveRequests <- MoveRequest{Settings: settings, Result: result}
+	// res := <-result
+
+	moveRes := models.MoveData{}
+
+	return moveRes, nil
 }
 
-type MoveResult struct {
-	Data engine.MoveData
-	Err  error
-}
+// func GetQueLength() int64 {
+// 	return atomic.LoadInt64(&waitingRequests)
+// }
 
-var moveRequests = make(chan MoveRequest, 1) // Buffer size of 1
-var waitingRequests int64 = 0                // number of requests waiting to be processed
-var totalRequests int64 = 0                  // total number of requests
+// type MoveRequest struct {
+// 	Settings engine.Settings
+// 	Result   chan MoveResult
+// }
 
-func init() {
-	go processMoves()
-}
+// type MoveResult struct {
+// 	Data engine.MoveData
+// 	Err  error
+// }
 
-func processMoves() {
-	for req := range moveRequests {
-		data, err := engine.GetMove(req.Settings)
-		req.Result <- MoveResult{Data: data, Err: err}
-		atomic.AddInt64(&waitingRequests, -1)
-	}
-}
+// var moveRequests = make(chan MoveRequest, 1) // Buffer size of 1
+// var waitingRequests int64 = 0                // number of requests waiting to be processed
+// var totalRequests int64 = 0                  // total number of requests
 
-func GetMove(settings engine.Settings) (engine.MoveData, error) {
-	result := make(chan MoveResult)
-	wating := atomic.AddInt64(&waitingRequests, 1)
-	total := atomic.AddInt64(&totalRequests, 1)
-	fmt.Println("total request: ", total, "waiting request: ", wating)
-	moveRequests <- MoveRequest{Settings: settings, Result: result}
-	res := <-result
-	return res.Data, res.Err
-}
+// func init() {
+// 	go processMoves()
+// }
 
-func GetQueLength() int64 {
-	return atomic.LoadInt64(&waitingRequests)
-}
+// func processMoves() {
+// 	for req := range moveRequests {
+// 		data, err := engine.GetMove(req.Settings)
+// 		req.Result <- MoveResult{Data: data, Err: err}
+// 		atomic.AddInt64(&waitingRequests, -1)
+// 	}
+// }

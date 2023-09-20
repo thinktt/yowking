@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/models"
+	"github.com/thinktt/yowking/pkg/moveque"
 	"github.com/thinktt/yowking/pkg/personalities"
 )
 
@@ -76,45 +77,27 @@ func main() {
 			return
 		}
 
-		cmp, ok := personalities.CmpMap[moveReq.CmpName]
+		_, ok := personalities.CmpMap[moveReq.CmpName]
 		if !ok {
 			errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
 			c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
 			return
 		}
 
-		// bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
-		// // if no err we have a book move and can just return the move
-		// if err == nil {
-		// 	bookMove.GameId = moveReq.GameId
-		// 	c.JSON(http.StatusOK, bookMove)
-		// 	return
-		// }
+		moveData, err := moveque.GetMove(moveReq)
+		if err != nil {
+			fmt.Println("There was ane error getting the move: ", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
+			return
+		}
 
-		// // we were unable to get a book move, let's try the engine
-		// settings := models.Settings{
-		// 	Moves:     moveReq.Moves,
-		// 	CmpVals:   cmp.Vals,
-		// 	ClockTime: personalities.GetClockTime(cmp),
-		// }
+		// worker failed to process move requests, return a 400 error
+		if moveData.Err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": *moveData.Err})
+			return
+		}
 
-		// moveData, err := moveque.GetMove(settings)
-		// if err != nil {
-		// 	fmt.Println("There was ane error getting the move: ", err)
-		// 	c.JSON(http.StatusInternalServerError, gin.H{"messagge": "engine error"})
-		// 	return
-		// }
-
-		// // engine didn't accept the input, return a 400 error
-		// if moveData.Err != nil {
-		// 	c.JSON(http.StatusBadRequest, gin.H{"error": *moveData.Err})
-		// 	return
-		// }
-
-		// moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
-		// moveData.Type = "engine"
-		// moveData.GameId = moveReq.GameId
-		c.JSON(http.StatusOK, cmp)
+		c.JSON(http.StatusOK, moveData)
 	})
 
 	if port == "8443" {
@@ -187,3 +170,18 @@ func CheckRole(allowedRole string) gin.HandlerFunc {
 		c.Abort()
 	}
 }
+
+// bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
+// // if no err we have a book move and can just return the move
+// if err == nil {
+// 	bookMove.GameId = moveReq.GameId
+// 	c.JSON(http.StatusOK, bookMove)
+// 	return
+// }
+
+// // we were unable to get a book move, let's try the engine
+// settings := models.Settings{
+// 	Moves:     moveReq.Moves,
+// 	CmpVals:   cmp.Vals,
+// 	ClockTime: personalities.GetClockTime(cmp),
+// }
