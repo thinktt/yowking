@@ -3,6 +3,12 @@
 
 SHELL := /bin/bash
 
+certs:
+	mkdir certs
+	openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+		-subj "/C=US/O=ACME/CN=yeoldwiz.localhost" \
+		-keyout certs/key.pem -out certs/cert.pem
+
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
 	getassets test startk8 dbuild2 dbuild3 dodcal doservice  \
@@ -43,8 +49,12 @@ test: dist
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
 	GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker  ./cmd/kingworker
-	# GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
 
+buildapi:
+	GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
+
+runapi:
+	cd dist && go run ../cmd/kingapi
 
 dbuild: dist
 	docker rm yowking || true
