@@ -112,6 +112,23 @@ func main() {
 		c.JSON(http.StatusOK, result)
 	})
 
+	r.DELETE("/users/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		result, err := db.DeleteUser(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No user found with given ID"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	})
+
 	r.Use(PullToken())
 
 	// get a yow jwt token by sending a lichess token

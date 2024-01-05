@@ -106,3 +106,10 @@ func GetAllUsers() (UserIDsResponse, error) {
 		IDs:   ids,
 	}, nil
 }
+
+func DeleteUser(id string) (*mongo.DeleteResult, error) {
+	usersCollection := yowDatabase.Collection("users")
+
+	filter := bson.M{"id": id}
+	return usersCollection.DeleteOne(context.Background(), filter)
+}
