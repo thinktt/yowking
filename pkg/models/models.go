@@ -1,5 +1,17 @@
 package models
 
+type UserRequest struct {
+	ID                    string `json:"id"`
+	KingBlob              string `json:"kingBlob"`
+	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer"`
+}
+
+type User struct {
+	ID                    string `json:"id"`
+	KingCmVersion         string `json:"kingCmVersion"`
+	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer"`
+}
+
 type MoveReq struct {
 	Moves          []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
 	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
