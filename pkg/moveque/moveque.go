@@ -94,7 +94,7 @@ func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
 	}
 
 	// Wait for a single message
-	msg, err := sub.NextMsg(time.Second * 10) // Waits up to 10 seconds
+	msg, err := sub.NextMsg(time.Second * 60) // Waits up to 10 seconds
 	if err != nil {
 		log.Errorf("Error receiving message: %v", err)
 		return moveRes, err
