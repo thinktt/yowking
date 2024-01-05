@@ -1,9 +1,9 @@
 package models
 
 type UserRequest struct {
-	ID                    string `json:"id"`
-	KingBlob              string `json:"kingBlob"`
-	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer"`
+	ID                    string `json:"id" binding:"required,alphanum,min=1,max=30"`
+	KingBlob              string `json:"kingBlob" binding:"required"`
+	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer" binding:"required"`
 }
 
 type User struct {
