@@ -20,6 +20,10 @@ type UserIDsResponse struct {
 	IDs   []string `json:"ids"`
 }
 
+type AllGames struct {
+	Count int `json:"count"`
+}
+
 func init() {
 	// Connect to MongoDB
 	mongoHost := os.Getenv("MONGO_HOST")
@@ -148,4 +152,22 @@ func GetGame(id string) (bson.M, error) {
 	delete(result, "_id")
 
 	return result, nil
+}
+
+func GetAllGames() (AllGames, error) {
+	gamesCollection := yowDatabase.Collection("games")
+
+	count, err := gamesCollection.CountDocuments(context.Background(), bson.M{})
+	if err != nil {
+		return AllGames{}, err
+	}
+
+	return AllGames{Count: int(count)}, nil
+}
+
+func DeleteGame(id string) (*mongo.DeleteResult, error) {
+	gamesCollection := yowDatabase.Collection("games")
+
+	filter := bson.M{"id": id}
+	return gamesCollection.DeleteOne(context.Background(), filter)
 }

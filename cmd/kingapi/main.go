@@ -182,6 +182,33 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
+	r.GET("/games", func(c *gin.Context) {
+		allGames, err := db.GetAllGames()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, allGames)
+	})
+
+	r.DELETE("/games/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		result, err := db.DeleteGame(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+	})
+
 	r.Use(PullToken())
 
 	// get a yow jwt token by sending a lichess token
