@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/kingcheck"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
 	"github.com/thinktt/yowking/pkg/personalities"
@@ -55,11 +56,11 @@ func main() {
 			return
 		}
 
-		kingCmVersion := "B"
-		// if err != nil || kingCmVersion == "" {
-		// 	c.JSON(http.StatusBadRequest, gin.H{"message": "king blob is not valid"})
-		// 	return
-		// }
+		kingCmVersion, err := kingcheck.GetVersion(userReq.KingBlob)
+		if err != nil || kingCmVersion == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "king blob is not valid"})
+			return
+		}
 
 		user := models.User{
 			ID:                    userReq.ID,
