@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/gin-contrib/cors"
@@ -53,6 +54,11 @@ func main() {
 		var userReq models.UserRequest
 		if err := c.ShouldBindJSON(&userReq); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if !userIsValid(userReq.ID) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid user ID, does not match user regex"})
 			return
 		}
 
@@ -128,6 +134,52 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	})
+
+	r.POST("/games", func(c *gin.Context) {
+		var game models.Game
+
+		// Binding and validation
+		if err := c.ShouldBindJSON(&game); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if !userIsValid(game.User) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid user ID, does not match user regex"})
+			return
+		}
+
+		result, err := db.CreateGame(game)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			return
+		}
+
+		// MongoDB already had this ID in the DB, so it didn't create a new one
+		if result.MatchedCount > 0 {
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("game %s already exist, no new creation", game.ID)})
+			return
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
+	})
+
+	r.GET("/games/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		game, err := db.GetGame(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if game == nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
+			return
+		}
+
+		c.JSON(http.StatusOK, game)
 	})
 
 	r.Use(PullToken())
@@ -252,6 +304,12 @@ func CheckRole(allowedRole string) gin.HandlerFunc {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect role for this action"})
 		c.Abort()
 	}
+}
+
+func userIsValid(userId string) bool {
+	regexPattern := `^[a-zA-Z0-9][a-zA-Z0-9_-]{0,28}[a-zA-Z0-9]$`
+	matched, _ := regexp.MatchString(regexPattern, userId)
+	return matched
 }
 
 // bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
