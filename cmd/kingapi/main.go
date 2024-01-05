@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
+	"github.com/thinktt/yowking/pkg/db"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
 	"github.com/thinktt/yowking/pkg/personalities"
@@ -44,6 +45,20 @@ func main() {
 		healthWasCalled = true
 		c.JSON(http.StatusOK, gin.H{
 			"message": "API is healthy",
+		})
+	})
+
+	r.GET("/users", func(c *gin.Context) {
+		usersResponse, err := db.GetAllUsers()
+		if err != nil {
+			// Handle the error appropriately
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve users"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"count": usersResponse.Count,
+			"ids":   usersResponse.IDs,
 		})
 	})
 

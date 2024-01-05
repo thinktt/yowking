@@ -24,8 +24,8 @@ dist:
 run: export IS_WSL=true
 run: dist
 	source .env; \
-	cd dist && go run ../cmd/kingworker
-	# cd dist && go run ../cmd/kingapi
+	# cd dist && go run ../cmd/kingworker
+	cd dist && go run ../cmd/kingapi
 
 assets:
 	mkdir assets

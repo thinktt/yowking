@@ -1,0 +1,7 @@
+export IS_WSL=
+export JWT_KEY=
+export NATS_TOKEN=
+export NATS_AUTH_TOKEN=
+export NATS_URL=
+export PORT=
+# export GIN_MODE=
