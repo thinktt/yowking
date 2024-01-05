@@ -48,6 +48,41 @@ func main() {
 		})
 	})
 
+	r.POST("/users", func(c *gin.Context) {
+		var userReq models.UserRequest
+		if err := c.BindJSON(&userReq); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+			return
+		}
+
+		// Here you would add your validation logic
+
+		kingCmVersion := "B"
+		// if err != nil || kingCmVersion == "" {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"message": "king blob is not valid"})
+		// 	return
+		// }
+
+		user := models.User{
+			ID:                    userReq.ID,
+			KingCmVersion:         kingCmVersion,
+			HasAcceptedDisclaimer: userReq.HasAcceptedDisclaimer,
+		}
+
+		result, err := db.CreateUser(user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			return
+		}
+
+		if result.MatchedCount > 0 {
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("user %s already exist, no new creation", user.ID)})
+			return
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("user %s successfully added", user.ID)})
+	})
+
 	r.GET("/users", func(c *gin.Context) {
 		usersResponse, err := db.GetAllUsers()
 		if err != nil {
@@ -60,6 +95,23 @@ func main() {
 			"count": usersResponse.Count,
 			"ids":   usersResponse.IDs,
 		})
+	})
+
+	r.GET("/users/:id", func(c *gin.Context) {
+		userID := c.Param("id")
+
+		result, err := db.GetUser(userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+			return
+		}
+
+		if result == nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no user found for id %s", userID)})
+			return
+		}
+
+		c.JSON(http.StatusOK, result)
 	})
 
 	r.Use(PullToken())

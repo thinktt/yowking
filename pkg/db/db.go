@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/thinktt/yowking/pkg/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -34,6 +35,40 @@ func init() {
 	}
 
 	yowDatabase = client.Database("yow")
+}
+
+func CreateUser(user models.User) (*mongo.UpdateResult, error) {
+	usersCollection := yowDatabase.Collection("users")
+
+	// Manually create a bson.M map from the User struct
+	userMap := bson.M{
+		"id":                    user.ID,
+		"kingCmVersion":         user.KingCmVersion,
+		"hasAcceptedDisclaimer": user.HasAcceptedDisclaimer,
+	}
+
+	filter := bson.M{"id": userMap["id"]}
+	update := bson.M{"$setOnInsert": userMap}
+	options := options.Update().SetUpsert(true)
+
+	return usersCollection.UpdateOne(context.Background(), filter, update, options)
+}
+
+func GetUser(id string) (bson.M, error) {
+	usersCollection := yowDatabase.Collection("users")
+
+	filter := bson.M{"id": id}
+	var result bson.M
+	err := usersCollection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil // No user found, return nil without error
+		}
+		return nil, err // An error occurred during the query
+	}
+
+	delete(result, "_id") // Remove the MongoDB _id field
+	return result, nil
 }
 
 // GetAllUsers retrieves all user IDs
