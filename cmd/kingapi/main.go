@@ -50,12 +50,10 @@ func main() {
 
 	r.POST("/users", func(c *gin.Context) {
 		var userReq models.UserRequest
-		if err := c.BindJSON(&userReq); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		if err := c.ShouldBindJSON(&userReq); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		// Here you would add your validation logic
 
 		kingCmVersion := "B"
 		// if err != nil || kingCmVersion == "" {
