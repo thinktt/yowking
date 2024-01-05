@@ -113,3 +113,39 @@ func DeleteUser(id string) (*mongo.DeleteResult, error) {
 	filter := bson.M{"id": id}
 	return usersCollection.DeleteOne(context.Background(), filter)
 }
+
+// CreateGame creates or updates a game entry in the database
+func CreateGame(game models.Game) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games")
+
+	filter := bson.M{"id": game.ID}
+	update := bson.M{"$setOnInsert": game}
+	upsert := true
+	opts := options.UpdateOptions{Upsert: &upsert}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update, &opts)
+}
+
+// GetGame retrieves a game by its ID
+func GetGame(id string) (bson.M, error) {
+	gamesCollection := yowDatabase.Collection("games")
+
+	filter := bson.M{"id": id}
+	var result bson.M
+	err := gamesCollection.FindOne(context.Background(), filter).Decode(&result)
+
+	// No game found, return nil without error
+	if err != nil && err == mongo.ErrNoDocuments {
+		return nil, nil
+	}
+
+	// return any other errors
+	if err != nil {
+		return nil, err
+	}
+
+	// Remove the MongoDB _id field
+	delete(result, "_id")
+
+	return result, nil
+}

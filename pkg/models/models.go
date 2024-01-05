@@ -1,15 +1,29 @@
 package models
 
+//userRegex match=^[a-zA-Z0-9][a-zA-Z0-9_-]{0,28}[a-zA-Z0-9]$"
+
+// var userIDValidator validator.Func = func(fl validator.FieldLevel) bool {
+// 	regex := regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]{0,28}[a-zA-Z0-9]$`)
+// 	userID, ok := fl.Field().Interface().(string)
+// 	return ok && regex.MatchString(userID)
+// }
+
 type UserRequest struct {
-	ID                    string `json:"id" binding:"required,alphanum,min=1,max=30"`
+	ID                    string `json:"user" binding:"required,min=1,max=30"`
 	KingBlob              string `json:"kingBlob" binding:"required"`
 	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer" binding:"required"`
 }
 
 type User struct {
-	ID                    string `json:"id"`
+	ID                    string `json:"user" binding:"required,min=1,max=30"`
 	KingCmVersion         string `json:"kingCmVersion"`
 	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer"`
+}
+
+type Game struct {
+	ID       string `json:"id" binding:"required,alphanum,min=8,max=8"`
+	User     string `json:"user" binding:"required,min=1,max=30"`
+	Opponent string `json:"opponent" binding:"required,alphanum"`
 }
 
 type MoveReq struct {
