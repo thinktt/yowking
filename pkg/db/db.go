@@ -171,3 +171,27 @@ func DeleteGame(id string) (*mongo.DeleteResult, error) {
 	filter := bson.M{"id": id}
 	return gamesCollection.DeleteOne(context.Background(), filter)
 }
+
+func UpdateSettings(settings models.Settings) error {
+	settingsCollection := yowDatabase.Collection("settings")
+
+	_, err := settingsCollection.UpdateOne(
+		context.Background(),
+		bson.M{}, // Empty filter matches any document
+		bson.M{"$set": settings},
+		options.Update().SetUpsert(true), // Upsert: true creates a new document if none exists
+	)
+	return err
+}
+
+func GetSettings() (models.Settings, error) {
+	settingsCollection := yowDatabase.Collection("settings")
+
+	var settings models.Settings
+	err := settingsCollection.FindOne(context.Background(), bson.M{}).Decode(&settings)
+	if err != nil {
+		return models.Settings{}, err
+	}
+
+	return settings, nil
+}

@@ -26,6 +26,11 @@ type Game struct {
 	Opponent string `json:"opponent" binding:"required,alphanum"`
 }
 
+type Settings struct {
+	UserLimit      int  `bson:"userLimit" json:"userLimit"`
+	KingIsRequired bool `bson:"kingIsRequired" json:"kingIsRequired"`
+}
+
 type MoveReq struct {
 	Moves          []string `json:"moves" binding:"required,dive,alphanum,min=4,max=5"`
 	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
