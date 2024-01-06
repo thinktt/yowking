@@ -77,7 +77,7 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		"iss":   "yeoldwizard.com",
 		"sub":   account.Id,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
-		"roles": []string{"mover"},
+		"roles": []string{"mover", "admin"},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenStr, err := token.SignedString([]byte(jwtKey))
