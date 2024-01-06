@@ -62,10 +62,38 @@ func main() {
 			return
 		}
 
-		kingCmVersion, err := kingcheck.GetVersion(userReq.KingBlob)
-		if err != nil || kingCmVersion == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"message": "king blob is not valid"})
+		// checking settings for user count limit and king requirement
+		settings, err := db.GetSettings()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
 			return
+		}
+
+		users, err := db.GetAllUsers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		if users.Count >= settings.UserLimit {
+			c.JSON(http.StatusForbidden, gin.H{
+				"message": "user limit reached, no new users can be added at this time",
+			})
+			return
+		}
+
+		kingIsRequired := settings.KingIsRequired
+
+		var kingCmVersion string
+		if kingIsRequired {
+			kingCmVersion, err = kingcheck.GetVersion(userReq.KingBlob)
+			if err != nil || kingCmVersion == "" {
+				c.JSON(http.StatusBadRequest, gin.H{"message": "king blob is not valid"})
+				return
+			}
+		} else {
+			// king is not required, we will set this user as Beta user
+			kingCmVersion = "B"
 		}
 
 		user := models.User{
@@ -76,7 +104,7 @@ func main() {
 
 		result, err := db.CreateUser(user)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -93,7 +121,7 @@ func main() {
 
 		result, err := db.GetUser(userID)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -121,7 +149,7 @@ func main() {
 
 		result, err := db.CreateGame(game)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -139,7 +167,7 @@ func main() {
 
 		game, err := db.GetGame(id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -197,7 +225,7 @@ func main() {
 
 		result, err := db.DeleteUser(id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -212,7 +240,7 @@ func main() {
 	r.GET("/games", CheckRole("admin"), func(c *gin.Context) {
 		allGames, err := db.GetAllGames()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -224,7 +252,7 @@ func main() {
 
 		result, err := db.DeleteGame(id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -239,12 +267,12 @@ func main() {
 	r.POST("/settings", CheckRole("admin"), func(c *gin.Context) {
 		var settings models.Settings
 		if err := c.ShouldBindJSON(&settings); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
 		if err := db.UpdateSettings(settings); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
@@ -254,7 +282,7 @@ func main() {
 	r.GET("/settings", CheckRole("admin"), func(c *gin.Context) {
 		settings, err := db.GetSettings()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
