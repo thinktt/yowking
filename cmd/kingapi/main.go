@@ -209,6 +209,31 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
 	})
 
+	r.POST("/settings", func(c *gin.Context) {
+		var settings models.Settings
+		if err := c.ShouldBindJSON(&settings); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if err := db.UpdateSettings(settings); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Settings updated successfully"})
+	})
+
+	r.GET("/settings", func(c *gin.Context) {
+		settings, err := db.GetSettings()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, settings)
+	})
+
 	r.Use(PullToken())
 
 	// get a yow jwt token by sending a lichess token
