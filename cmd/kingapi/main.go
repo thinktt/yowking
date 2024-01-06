@@ -252,7 +252,9 @@ func main() {
 	})
 
 	r.GET("/games", CheckRole("admin"), func(c *gin.Context) {
-		allGames, err := db.GetAllGames()
+		userId := c.Query("userId")
+
+		allGames, err := db.GetAllGames(userId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
