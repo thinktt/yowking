@@ -88,20 +88,6 @@ func main() {
 		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("user %s successfully added", user.ID)})
 	})
 
-	r.GET("/users", func(c *gin.Context) {
-		usersResponse, err := db.GetAllUsers()
-		if err != nil {
-			// Handle the error appropriately
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve users"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"count": usersResponse.Count,
-			"ids":   usersResponse.IDs,
-		})
-	})
-
 	r.GET("/users/:id", func(c *gin.Context) {
 		userID := c.Param("id")
 
@@ -117,23 +103,6 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, result)
-	})
-
-	r.DELETE("/users/:id", func(c *gin.Context) {
-		id := c.Param("id")
-
-		result, err := db.DeleteUser(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		if result.DeletedCount == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"message": "No user found with given ID"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 	})
 
 	r.POST("/games", func(c *gin.Context) {
@@ -182,58 +151,6 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
-	r.GET("/games", func(c *gin.Context) {
-		allGames, err := db.GetAllGames()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, allGames)
-	})
-
-	r.DELETE("/games/:id", func(c *gin.Context) {
-		id := c.Param("id")
-
-		result, err := db.DeleteGame(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		if result.DeletedCount == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
-	})
-
-	r.POST("/settings", func(c *gin.Context) {
-		var settings models.Settings
-		if err := c.ShouldBindJSON(&settings); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		if err := db.UpdateSettings(settings); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": "Settings updated successfully"})
-	})
-
-	r.GET("/settings", func(c *gin.Context) {
-		settings, err := db.GetSettings()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, settings)
-	})
-
 	r.Use(PullToken())
 
 	// get a yow jwt token by sending a lichess token
@@ -255,7 +172,94 @@ func main() {
 		c.JSON(http.StatusOK, tokenRes)
 	})
 
+	//......................................
+	// ..... Authed routes start here......
+	//.....................................
+
 	r.Use(Auth())
+
+	r.GET("/users", CheckRole("admin"), func(c *gin.Context) {
+		usersResponse, err := db.GetAllUsers()
+		if err != nil {
+			// Handle the error appropriately
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve users"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"count": usersResponse.Count,
+			"ids":   usersResponse.IDs,
+		})
+	})
+
+	r.DELETE("/users/:id", CheckRole("admin"), func(c *gin.Context) {
+		id := c.Param("id")
+
+		result, err := db.DeleteUser(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No user found with given ID"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	})
+
+	r.GET("/games", CheckRole("admin"), func(c *gin.Context) {
+		allGames, err := db.GetAllGames()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, allGames)
+	})
+
+	r.DELETE("/games/:id", CheckRole("admin"), func(c *gin.Context) {
+		id := c.Param("id")
+
+		result, err := db.DeleteGame(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+	})
+
+	r.POST("/settings", CheckRole("admin"), func(c *gin.Context) {
+		var settings models.Settings
+		if err := c.ShouldBindJSON(&settings); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if err := db.UpdateSettings(settings); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Settings updated successfully"})
+	})
+
+	r.GET("/settings", CheckRole("admin"), func(c *gin.Context) {
+		settings, err := db.GetSettings()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, settings)
+	})
 
 	r.POST("/move-req", CheckRole("mover"), func(c *gin.Context) {
 		var moveReq models.MoveReq
