@@ -31,6 +31,20 @@ func main() {
 	r := gin.New()
 	r.Use(cors.New(config))
 
+	// catch and remove trailing slashes on routes and start router again
+	// this let's us handle trailing slashes without redirecting
+	r.RedirectTrailingSlash = false
+	r.Use(func(c *gin.Context) {
+		path := c.Request.URL.Path
+		if len(path) > 1 && path[len(path)-1] == '/' {
+			c.Request.URL.Path = path[:len(path)-1]
+			r.HandleContext(c)
+			c.Abort()
+			return
+		}
+		c.Next()
+	})
+
 	healthWasCalled := false
 	r.Use(func(c *gin.Context) {
 		if c.Request.URL.Path == "/health" && healthWasCalled {
@@ -319,6 +333,10 @@ func main() {
 		c.JSON(http.StatusOK, moveData)
 	})
 
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{"messagge": "404 Not Found"})
+	})
+
 	if port == "8443" {
 		r.RunTLS(":8443", "../certs/cert.pem", "../certs/key.pem")
 		return
@@ -395,18 +413,3 @@ func userIsValid(userId string) bool {
 	matched, _ := regexp.MatchString(regexPattern, userId)
 	return matched
 }
-
-// bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
-// // if no err we have a book move and can just return the move
-// if err == nil {
-// 	bookMove.GameId = moveReq.GameId
-// 	c.JSON(http.StatusOK, bookMove)
-// 	return
-// }
-
-// // we were unable to get a book move, let's try the engine
-// settings := models.Settings{
-// 	Moves:     moveReq.Moves,
-// 	CmpVals:   cmp.Vals,
-// 	ClockTime: personalities.GetClockTime(cmp),
-// }
