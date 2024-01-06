@@ -21,7 +21,8 @@ type UserIDsResponse struct {
 }
 
 type AllGames struct {
-	Count int `json:"count"`
+	Count   int      `json:"count"`
+	GameIDs []string `json:"ids"`
 }
 
 func init() {
@@ -154,15 +155,52 @@ func GetGame(id string) (bson.M, error) {
 	return result, nil
 }
 
-func GetAllGames() (AllGames, error) {
+func GetAllGames(userId string) (AllGames, error) {
 	gamesCollection := yowDatabase.Collection("games")
 
-	count, err := gamesCollection.CountDocuments(context.Background(), bson.M{})
+	var filter bson.M
+	if userId == "" {
+		filter = bson.M{}
+	} else {
+		filter = bson.M{"user": userId}
+	}
+
+	count, err := gamesCollection.CountDocuments(context.Background(), filter)
 	if err != nil {
 		return AllGames{}, err
 	}
 
-	return AllGames{Count: int(count)}, nil
+	// Define the projection to include only the id field
+	projection := bson.M{"id": 1, "_id": 0}
+
+	// Retrieve the first 1000 game IDs
+	cursor, err := gamesCollection.Find(
+		context.Background(),
+		filter,
+		options.Find().SetLimit(1000).SetProjection(projection),
+	)
+	if err != nil {
+		return AllGames{}, err
+	}
+	defer cursor.Close(context.Background())
+
+	var results []bson.M
+	if err = cursor.All(context.Background(), &results); err != nil {
+		return AllGames{}, err
+	}
+
+	// Extract IDs from results
+	var ids []string
+	for _, result := range results {
+		if id, ok := result["id"].(string); ok {
+			ids = append(ids, id)
+		}
+	}
+
+	return AllGames{
+		Count:   int(count),
+		GameIDs: ids,
+	}, nil
 }
 
 func DeleteGame(id string) (*mongo.DeleteResult, error) {
