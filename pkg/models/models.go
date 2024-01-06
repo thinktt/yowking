@@ -9,13 +9,13 @@ package models
 // }
 
 type UserRequest struct {
-	ID                    string `json:"user" binding:"required,min=1,max=30"`
+	ID                    string `json:"id" binding:"required,min=1,max=30"`
 	KingBlob              string `json:"kingBlob" binding:"required"`
 	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer" binding:"required"`
 }
 
 type User struct {
-	ID                    string `json:"user" binding:"required,min=1,max=30"`
+	ID                    string `json:"id" binding:"required,min=1,max=30"`
 	KingCmVersion         string `json:"kingCmVersion"`
 	HasAcceptedDisclaimer bool   `json:"hasAcceptedDisclaimer"`
 }
