@@ -62,6 +62,13 @@ dbuild: dist
 	docker build -t zen:5000/yowking .
 	# docker push zen:5000/yowking  
 
+dbuildapi: dist/kingapi
+	docker image rm zen:5000/kingapi:latest || true
+	docker build -t zen:5000/kingapi:latest -f cmd/kingapi/Dockerfile .
+
+drunapi:
+	docker run --rm -it --name kingapi  -p 8080:8080 zen:5000/kingapi
+
 dbuild2: 
 	docker rm yowking || true
 	docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true

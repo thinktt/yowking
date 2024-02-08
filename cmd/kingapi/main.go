@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,10 +15,10 @@ import (
 	"github.com/thinktt/yowking/pkg/kingcheck"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
-	"github.com/thinktt/yowking/pkg/personalities"
 )
 
 func main() {
+	loadCmps()
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"}
@@ -312,7 +313,7 @@ func main() {
 			return
 		}
 
-		_, ok := personalities.CmpMap[moveReq.CmpName]
+		_, ok := cmpMap[moveReq.CmpName]
 		if !ok {
 			errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
 			c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
@@ -414,4 +415,20 @@ func userIsValid(userId string) bool {
 	regexPattern := `^[a-zA-Z0-9][a-zA-Z0-9_-]{0,28}[a-zA-Z0-9]$`
 	matched, _ := regexp.MatchString(regexPattern, userId)
 	return matched
+}
+
+var cmpMap = make(map[string]models.Cmp)
+
+func loadCmps() {
+	file, err := os.Open("personalities.json")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	err = json.NewDecoder(file).Decode(&cmpMap)
+	if err != nil {
+		fmt.Println("Error decoding JSON:", err)
+	}
 }
