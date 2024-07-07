@@ -3,6 +3,12 @@
 
 SHELL := /bin/bash
 
+certs:
+	mkdir certs
+	openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+		-subj "/C=US/O=ACME/CN=yeoldwiz.localhost" \
+		-keyout certs/key.pem -out certs/cert.pem
+
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
 	getassets test startk8 dbuild2 dbuild3 dodcal doservice  \
@@ -18,8 +24,8 @@ dist:
 run: export IS_WSL=true
 run: dist
 	source .env; \
-	cd dist && go run ../cmd/kingworker
-	# cd dist && go run ../cmd/kingapi
+	# cd dist && go run ../cmd/kingworker
+	cd dist && go run ../cmd/kingapi
 
 assets:
 	mkdir assets
@@ -31,7 +37,7 @@ assets:
 	cp -r ../yeoldwiz-lnx/yowbot/dist/books assets/books
 
 push: 
-	# docker push ace:5000/yowking
+	# docker push zen:5000/yowking
 	docker push thinktt/yowking:latest
 
 test: dist
@@ -43,14 +49,25 @@ test: dist
 gobuild:
 	GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe  ./cmd/enginewrap 
 	GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker  ./cmd/kingworker
-	# GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
 
+buildapi:
+	GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
+
+runapi:
+	cd dist && go run ../cmd/kingapi
 
 dbuild: dist
 	docker rm yowking || true
-	docker image rm ace:5000/yowking:latest || true
-	docker build -t ace:5000/yowking .
-	# docker push ace:5000/yowking  
+	docker image rm zen:5000/yowking:latest || true
+	docker build -t zen:5000/yowking .
+	# docker push zen:5000/yowking  
+
+dbuildapi: dist/kingapi
+	docker image rm zen:5000/kingapi:latest || true
+	docker build -t zen:5000/kingapi:latest -f cmd/kingapi/Dockerfile .
+
+drunapi:
+	docker run --rm -it --name kingapi  -p 8080:8080 zen:5000/kingapi
 
 dbuild2: 
 	docker rm yowking || true
@@ -64,20 +81,18 @@ dbuild3:
 	docker build -t thinktt/yowking:latest .
 	docker push thinktt/yowking:latest
 
-
-
 clean: 
 	rm -rf assets
 	rm -rf dist
 
 drun: 
-	# docker run --rm -it --name yowking  -p 8080:8080 ace:5000/yowking
+	# docker run --rm -it --name yowking  -p 8080:8080 zen:5000/yowking
 	# docker run --rm -it --name yowking  -p 8080:8080 thinktt/yowking:latest
-	# docker run --rm -it --env-file ./env --name yowking ace:5000/yowking
+	# docker run --rm -it --env-file ./env --name yowking zen:5000/yowking
 
 
 dexec: 
-	# docker run --rm -it --name yowking ace:5000/yowking /bin/bash
+	# docker run --rm -it --name yowking zen:5000/yowking /bin/bash
 	docker exec -it yowking /bin/bash
 
 
@@ -98,8 +113,8 @@ doservice:
 		--env-file docker.env \
 		--name ${NAME} \
 		--network=yow \
-		-it ace:5000/yowking /bin/sh
-		#-d ace:5000/yowking
+		-it zen:5000/yowking /bin/sh
+		#-d zen:5000/yowking
 		# -l "traefik.enable=true" \
 		# -l 'traefik.http.routers.yowking.rule=Host("yowking.localhost")' \
 		# -l "traefik.http.routers.yowking.entrypoints=websecure" \
