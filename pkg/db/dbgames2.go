@@ -45,3 +45,10 @@ func GetGame2(id string) (models.Game2, error) {
 
 	return game, nil
 }
+
+func DeleteGame2(id string) (*mongo.DeleteResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": id}
+	return gamesCollection.DeleteOne(context.Background(), filter)
+}

@@ -332,6 +332,23 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
 	})
 
+	r.DELETE("/games2/:id", CheckRole("admin"), func(c *gin.Context) {
+		id := c.Param("id")
+
+		result, err := db.DeleteGame2(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+	})
+
 	r.POST("/settings", CheckRole("admin"), func(c *gin.Context) {
 		var settings models.Settings
 		if err := c.ShouldBindJSON(&settings); err != nil {
