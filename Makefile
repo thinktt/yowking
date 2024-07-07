@@ -66,9 +66,6 @@ dbuildapi: dist/kingapi
 	docker image rm zen:5000/kingapi:latest || true
 	docker build -t zen:5000/kingapi:latest -f cmd/kingapi/Dockerfile .
 
-drunapi:
-	docker run --rm -it --name kingapi  -p 8080:8080 zen:5000/kingapi
-
 dbuild2: 
 	docker rm yowking || true
 	docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true
@@ -90,6 +87,13 @@ drun:
 	# docker run --rm -it --name yowking  -p 8080:8080 thinktt/yowking:latest
 	# docker run --rm -it --env-file ./env --name yowking zen:5000/yowking
 
+drunapi:
+	docker rm kingapi || true
+	docker run --rm -it --name kingapi -p 8080:8080 \
+		-e JWT_KEY=XG6paWLxhsCiVcOMDF3YXWYZLeb8oyrYjyPKqbld \
+	 	-e NATS_TOKEN=tYlZBeYnAEfAJofInCML53ot3ibrFJWWCpdaIYRx \
+		-e NATS_URL=nats:4222 \
+	 	zen:5000/kingapi /bin/ash
 
 dexec: 
 	# docker run --rm -it --name yowking zen:5000/yowking /bin/bash
