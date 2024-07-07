@@ -1,29 +1,19 @@
 Today
-x docalibration as cli
-new yowbot container
-  no propriatary stuff
-  no need for wine
-yowcal container made from yowbot
+  setup registry?
+  traefik container
 
-have yowking register streams on it's own
+
+
+
+
+
+
+
 
 
 
 
 ...Overview...
-rzen setup
-  setup Docker 
-  traefik container
-  speed throttling
-  calibration containers?
-  yowking containers
-  calibrations
-  x window key backup
-  x install debian
-  x setup ssh
-  test hardware
-  setup registry?
-
 
 Featrues
   calibrations?
@@ -96,6 +86,22 @@ x Set game context for logs in yowking
   x use loggorus wrapped in logging package
 x Calibration trhough message bus
 x add stars to init builder 
+x docalibration as cli
+x new yowbot container
+  x no propriatary stuff
+  x no need for wine
+x yowcal container made from yowbot
+x have yowking register streams on it's own
+zen setup
+  x window key backup
+  x install debian
+  x setup Docker 
+  x speed throttling
+  x calibration containers?
+  x yowking containers
+  x calibrations
+  x setup ssh
+  x ?test hardware
 
 
 .........stash..............
