@@ -17,8 +17,12 @@ import (
 	"github.com/thinktt/yowking/pkg/moveque"
 )
 
+var cmpMap = make(map[string]models.Cmp)
+
 func main() {
 	loadCmps()
+	fmt.Println(cmpMap["Ash"])
+
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"}
@@ -80,13 +84,13 @@ func main() {
 		// checking settings for user count limit and king requirement
 		settings, err := db.GetSettings()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error getting settings: " + err.Error()})
 			return
 		}
 
 		users, err := db.GetAllUsers()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error getting user count: " + err.Error()})
 			return
 		}
 
@@ -187,6 +191,53 @@ func main() {
 		}
 
 		if game == nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
+			return
+		}
+
+		c.JSON(http.StatusOK, game)
+	})
+
+	r.POST("/games2", func(c *gin.Context) {
+		var game models.Game2
+
+		// Binding and validation
+		if err := c.ShouldBindJSON(&game); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		// if !userIsValid(game.User) {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"message": "invalid user ID, does not match user regex"})
+		// 	return
+		// }
+
+		result, err := db.CreateGame2(game)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		// MongoDB already had this ID in the DB, so it didn't create a new one
+		if result.MatchedCount > 0 {
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("game %s already exist, no new creation", game.ID)})
+			return
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
+	})
+
+	r.GET("/games2/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		game, err := db.GetGame2(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
+			return
+		}
+
+		emptyGame := models.Game2{}
+		if game == emptyGame {
 			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
 			return
 		}
@@ -416,8 +467,6 @@ func userIsValid(userId string) bool {
 	matched, _ := regexp.MatchString(regexPattern, userId)
 	return matched
 }
-
-var cmpMap = make(map[string]models.Cmp)
 
 func loadCmps() {
 	file, err := os.Open("personalities.json")
