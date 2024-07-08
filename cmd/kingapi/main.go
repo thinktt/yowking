@@ -392,6 +392,43 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "game deleted successfully"})
 	})
 
+	r.POST("/games2/historical", CheckRole("admin"), func(c *gin.Context) {
+		var game models.Game2Historical
+
+		// Binding and validation
+		if err := c.ShouldBindJSON(&game); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		moves := strings.Fields(game.Moves)
+
+		err := games.CheckMoves(moves)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		game.MoveList = moves
+		game.Moves = ""
+
+		dbGame := models.Game2(game)
+
+		result, err := db.CreateGame2(dbGame)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		// MongoDB already had this ID in the DB, so it didn't create a new one
+		if result.MatchedCount > 0 {
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("game %s already exist, no new creation", game.ID)})
+			return
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
+	})
+
 	r.DELETE("/games2/:id", CheckRole("admin"), func(c *gin.Context) {
 		id := c.Param("id")
 
