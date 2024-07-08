@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/thinktt/yowking/pkg/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -55,4 +56,20 @@ func DeleteGame2(id string) (*mongo.DeleteResult, error) {
 
 	filter := bson.M{"id": id}
 	return gamesCollection.DeleteOne(context.Background(), filter)
+}
+
+func CreateMove(gameID string, move string) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	update := bson.M{
+		"$push": bson.M{
+			"moveList": move,
+		},
+		"$set": bson.M{
+			"lastMoveAt": time.Now().UnixMilli(),
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
 }

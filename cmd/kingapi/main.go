@@ -7,12 +7,13 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/notnil/chess"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/games"
 	"github.com/thinktt/yowking/pkg/kingcheck"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
@@ -208,27 +209,24 @@ func main() {
 			return
 		}
 
-		// if !userIsValid(game.User) {
-		// 	c.JSON(http.StatusBadRequest, gin.H{"message": "invalid user ID, does not match user regex"})
-		// 	return
-		// }
+		now := time.Now().UnixMilli()
+
+		game.CreatedAt = now
+		game.LastMoveAt = now
+		game.Status = "started"
+		game.Winner = "pending"
+		game.Moves = ""
 
 		moves := strings.Fields(game.Moves)
-		// fmt.Printf("Moves slice: %v\n", moves)
 
-		gameParser := chess.NewGame()
-		for i, move := range moves {
-			// fmt.Println(i, move)
-			err := gameParser.MoveStr(move)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Invalid move at index %d: %s, error: %v", i, move, err)})
-				return
-			}
+		err := games.CheckMoves(moves)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
 		game.MoveList = moves
 		game.Moves = ""
-		// fmt.Println(gameParser.MoveHistory())
 
 		result, err := db.CreateGame2(game)
 		if err != nil {
@@ -260,6 +258,51 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, game)
+	})
+
+	r.POST("/games2/:id/moves", func(c *gin.Context) {
+		id := c.Param("id")
+
+		game, err := db.GetGame2(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
+			return
+		}
+
+		if game.ID == "" {
+			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
+			return
+		}
+
+		var moveData models.MoveData2
+		if err := c.ShouldBindJSON(&moveData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		moves := strings.Fields(game.Moves)
+
+		if len(moves) != moveData.Index {
+			msg := fmt.Sprintf("invalid move index, next move index is %d", len(moves))
+			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
+			return
+		}
+
+		moves = append(moves, moveData.Move)
+
+		err = games.CheckMoves(moves)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, err = db.CreateMove(id, moveData.Move)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
 	})
 
 	r.Use(PullToken())
@@ -342,11 +385,11 @@ func main() {
 		}
 
 		if result.DeletedCount == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "game not found"})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+		c.JSON(http.StatusOK, gin.H{"message": "game deleted successfully"})
 	})
 
 	r.DELETE("/games2/:id", CheckRole("admin"), func(c *gin.Context) {
@@ -359,11 +402,11 @@ func main() {
 		}
 
 		if result.DeletedCount == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"message": "Game not found"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "game not found"})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Game deleted successfully"})
+		c.JSON(http.StatusOK, gin.H{"message": "game deleted successfully"})
 	})
 
 	r.POST("/settings", CheckRole("admin"), func(c *gin.Context) {
