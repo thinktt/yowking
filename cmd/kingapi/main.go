@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/notnil/chess"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/db"
 	"github.com/thinktt/yowking/pkg/kingcheck"
@@ -212,6 +213,23 @@ func main() {
 		// 	return
 		// }
 
+		moves := strings.Fields(game.Moves)
+		// fmt.Printf("Moves slice: %v\n", moves)
+
+		gameParser := chess.NewGame()
+		for i, move := range moves {
+			// fmt.Println(i, move)
+			err := gameParser.MoveStr(move)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Invalid move at index %d: %s, error: %v", i, move, err)})
+				return
+			}
+		}
+
+		game.MoveList = moves
+		game.Moves = ""
+		// fmt.Println(gameParser.MoveHistory())
+
 		result, err := db.CreateGame2(game)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
@@ -236,8 +254,7 @@ func main() {
 			return
 		}
 
-		emptyGame := models.Game2{}
-		if game == emptyGame {
+		if game.ID == "" {
 			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
 			return
 		}
