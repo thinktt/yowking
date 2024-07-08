@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"strings"
 
 	"github.com/thinktt/yowking/pkg/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -42,6 +43,9 @@ func GetGame2(id string) (models.Game2, error) {
 
 	// // Remove the MongoDB _id field
 	// delete(result, "_id")
+
+	game.Moves = strings.Join(game.MoveList, " ")
+	game.MoveList = nil
 
 	return game, nil
 }
