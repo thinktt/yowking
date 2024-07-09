@@ -22,6 +22,7 @@ import (
 var cmpMap = make(map[string]models.Cmp)
 
 func main() {
+
 	loadCmps()
 	fmt.Println(cmpMap["Ash"])
 
@@ -211,6 +212,7 @@ func main() {
 
 		now := time.Now().UnixMilli()
 
+		game.ID, _ = games.GetGameID()
 		game.CreatedAt = now
 		game.LastMoveAt = now
 		game.Status = "started"
