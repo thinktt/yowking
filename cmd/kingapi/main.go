@@ -202,33 +202,29 @@ func main() {
 	})
 
 	r.POST("/games2", func(c *gin.Context) {
-		var game models.Game2
+		var newGame models.Game2New
 
 		// Binding and validation
-		if err := c.ShouldBindJSON(&game); err != nil {
+		if err := c.ShouldBindJSON(&newGame); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		now := time.Now().UnixMilli()
+		id, _ := games.GetGameID()
 
-		game.ID, _ = games.GetGameID()
-		game.CreatedAt = now
-		game.LastMoveAt = now
-		game.Status = "started"
-		game.Winner = "pending"
-		game.Moves = ""
-
-		moves := strings.Fields(game.Moves)
-
-		err := games.CheckMoves(moves)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+		game := models.Game2{
+			ID:          id,
+			LichessID:   "",
+			CreatedAt:   now,
+			LastMoveAt:  now,
+			Status:      "started",
+			Winner:      "pending",
+			Moves:       "",
+			MoveList:    []string{},
+			WhitePlayer: newGame.WhitePlayer,
+			BlackPlayer: newGame.BlackPlayer,
 		}
-
-		game.MoveList = moves
-		game.Moves = ""
 
 		result, err := db.CreateGame2(game)
 		if err != nil {
@@ -242,7 +238,8 @@ func main() {
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
+		// c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
+		c.JSON(http.StatusOK, game)
 	})
 
 	r.GET("/games2/:id", func(c *gin.Context) {
@@ -395,7 +392,7 @@ func main() {
 	})
 
 	r.POST("/games2/historical", CheckRole("admin"), func(c *gin.Context) {
-		var game models.Game2Historical
+		var game models.Game2
 
 		// Binding and validation
 		if err := c.ShouldBindJSON(&game); err != nil {
@@ -414,9 +411,7 @@ func main() {
 		game.MoveList = moves
 		game.Moves = ""
 
-		dbGame := models.Game2(game)
-
-		result, err := db.CreateGame2(dbGame)
+		result, err := db.CreateGame2(game)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
 			return
