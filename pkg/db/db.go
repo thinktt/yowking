@@ -40,6 +40,18 @@ func init() {
 	}
 
 	yowDatabase = client.Database("yow")
+
+	// make sure games2 collection has unique index for its ids
+	gamesCollection := yowDatabase.Collection("games2")
+	indexModel := mongo.IndexModel{
+		Keys:    bson.M{"id": 1}, // Index on the `id` field
+		Options: options.Index().SetUnique(true),
+	}
+	_, err = gamesCollection.Indexes().CreateOne(context.Background(), indexModel)
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func CreateUser(user models.User) (*mongo.UpdateResult, error) {
