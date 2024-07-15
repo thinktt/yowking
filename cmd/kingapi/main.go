@@ -259,6 +259,26 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
+	r.GET("/games2/:id/stream", func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "text/event-stream")
+		c.Writer.Header().Set("Cache-Control", "no-cache")
+		c.Writer.Header().Set("Connection", "keep-alive")
+
+		game := models.Game2MutableFields{
+			LastMoveAt: 1721003524666,
+			Status:     "started",
+			Winner:     "",
+			Moves:      "",
+		}
+
+		for {
+			jsonData, _ := json.Marshal(game)
+			c.Writer.Write([]byte("data: " + string(jsonData) + "\n\n"))
+			c.Writer.(http.Flusher).Flush()
+			time.Sleep(1 * time.Second)
+		}
+	})
+
 	r.POST("/games2/:id/moves", func(c *gin.Context) {
 		id := c.Param("id")
 
