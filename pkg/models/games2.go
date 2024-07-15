@@ -15,13 +15,24 @@ type Game2 struct {
 	LichessID   string   `json:"lichessId" bson:"lichessId"  binding:"alphanum,min=8,max=8"`
 	CreatedAt   int64    `json:"createdAt" bson:"createdAt" binding:"required"`
 	LastMoveAt  int64    `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
-	Status      string   `json:"status" bson:"status" binding:"required,oneof=created mate resign stalemate draw"`
+	Status      string   `json:"status" bson:"status" binding:"required,oneof=created started mate resign stalemate draw"`
 	Winner      string   `json:"winner,omitempty" bson:"winner" binding:"required,oneof=none white black"`
 	Moves       string   `json:"moves" bson:"moves,omitempty" binding:"required"`
 	MoveList    []string `json:"moveList,omitempty" bson:"moveList"`
 	WhitePlayer Player   `json:"whitePlayer" bson:"whitePlayer" binding:"required"`
 	BlackPlayer Player   `json:"blackPlayer" bson:"blackPlayer" binding:"required"`
 }
+
+type Game2MutableFields struct {
+	LastMoveAt int64  `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
+	Status     string `json:"status" bson:"status" binding:"required,oneof=started mate resign draw"`
+	Winner     string `json:"winner,omitempty" bson:"winner" binding:"required,oneof=white black"`
+	Moves      string `json:"moves" bson:"moves,omitempty" binding:"required"`
+}
+
+// DrawType   string `json:"drawType" bson:"drawType,omitempty" binding:"required,oneof=mutual fifty stalemate material"`
+// LichessID   string   `json:"lichessId" bson:"lichessId"  binding:"alphanum,min=8,max=8"`
+// MoveList    []string `json:"moveList,omitempty" bson:"moveList"`
 
 type MoveData2 struct {
 	Index int    `json:"index"`
