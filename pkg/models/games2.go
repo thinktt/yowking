@@ -24,10 +24,11 @@ type Game2 struct {
 }
 
 type Game2MutableFields struct {
+	ID         string `json:"id" bson:"id" binding:"required,alphanum,min=8,max=8"`
 	LastMoveAt int64  `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
-	Status     string `json:"status" bson:"status" binding:"required,oneof=started mate resign draw"`
+	Moves      string `json:"moves" binding:"required"`
+	Status     string `json:"status,omitempty" bson:"status" binding:"required,oneof=started mate resign draw"`
 	Winner     string `json:"winner,omitempty" bson:"winner" binding:"required,oneof=white black"`
-	Moves      string `json:"moves" bson:"moves,omitempty" binding:"required"`
 }
 
 // DrawType   string `json:"drawType" bson:"drawType,omitempty" binding:"required,oneof=mutual fifty stalemate material"`

@@ -266,13 +266,6 @@ func main() {
 		c.Writer.Header().Set("Transfer-Encoding", "chunked")
 		c.Writer.Flush()
 
-		// game := models.Game2MutableFields{
-		// 	LastMoveAt: 1721003524666,
-		// 	Status:     "started",
-		// 	Winner:     "",
-		// 	Moves:      "",
-		// }
-
 		id := c.Param("id")
 		gameStream := games.GetStream(id)
 
@@ -286,7 +279,7 @@ func main() {
 				fmt.Println("client dropped SSE")
 				return
 			case gameData := <-gameStream:
-				c.Writer.Write([]byte("event: gameUpdate\n"))
+				c.Writer.Write([]byte("event: movesUpdate\n"))
 				c.Writer.Write([]byte("data: " + gameData + "\n\n"))
 				c.Writer.Flush()
 			}
