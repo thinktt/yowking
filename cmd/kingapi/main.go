@@ -263,21 +263,53 @@ func main() {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
 		c.Writer.Header().Set("Connection", "keep-alive")
+		c.Writer.Header().Set("Transfer-Encoding", "chunked")
+		c.Writer.Flush()
 
-		game := models.Game2MutableFields{
-			LastMoveAt: 1721003524666,
-			Status:     "started",
-			Winner:     "",
-			Moves:      "",
-		}
+		// game := models.Game2MutableFields{
+		// 	LastMoveAt: 1721003524666,
+		// 	Status:     "started",
+		// 	Winner:     "",
+		// 	Moves:      "",
+		// }
+
+		id := c.Param("id")
+		gameStream := games.GetStream(id)
+
+		clientClosed := c.Writer.CloseNotify()
+		pingTicker := time.NewTicker(1 * time.Second)
+		defer pingTicker.Stop()
 
 		for {
-			jsonData, _ := json.Marshal(game)
-			c.Writer.Write([]byte("data: " + string(jsonData) + "\n\n"))
-			c.Writer.(http.Flusher).Flush()
-			time.Sleep(1 * time.Second)
+			select {
+			case <-clientClosed:
+				fmt.Println("client dropped SSE")
+				return
+			case gameData := <-gameStream:
+				c.Writer.Write([]byte("event: gameUpdate\n"))
+				c.Writer.Write([]byte("data: " + gameData + "\n\n"))
+				c.Writer.Flush()
+			}
 		}
 	})
+
+	// case <-pingTicker.C:
+	// 	c.Writer.Write([]byte("event: ping\n\n"))
+	// 	c.Writer.Flush()
+	// 	if i == 5 {
+	// 		return
+	// 	}
+	// 	i++
+	// default:
+	// if i == 5 {
+	// 	return
+	// }
+	// jsonData, _ := json.Marshal(game)
+	// c.Writer.Write([]byte("event: gameUpdate\n"))
+	// c.Writer.Write([]byte("data: " + string(jsonData) + "\n\n"))
+	// c.Writer.Flush()
+	// time.Sleep(1 * time.Second)
+	// i++
 
 	r.POST("/games2/:id/moves", func(c *gin.Context) {
 		id := c.Param("id")
@@ -320,6 +352,8 @@ func main() {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
 			return
 		}
+
+		games.SendStreamUpdate(game.ID)
 
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
 	})
