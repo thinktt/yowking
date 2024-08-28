@@ -9,6 +9,7 @@ import (
 	"github.com/akamensky/base58"
 	"github.com/notnil/chess"
 	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/models"
 )
 
 var streams = make(map[string][]chan string)
@@ -44,7 +45,15 @@ func SendStreamUpdate(gameID string) error {
 		return err
 	}
 
-	jsonData, _ := json.Marshal(game)
+	gameMuation := models.Game2MutableFields{
+		ID:         game.ID,
+		LastMoveAt: game.LastMoveAt,
+		Moves:      game.Moves,
+		// Status:     game.Status,
+		// Winner:     game.Winner,
+	}
+
+	jsonData, _ := json.Marshal(gameMuation)
 	if channels, exists := streams[gameID]; exists {
 		for _, ch := range channels {
 			ch <- string(jsonData)
