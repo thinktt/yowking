@@ -334,7 +334,7 @@ func main() {
 
 		moves = append(moves, moveData.Move)
 
-		err = games.CheckMoves(moves)
+		_, err = games.CheckMoves(moves)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -449,7 +449,7 @@ func main() {
 
 		moves := strings.Fields(game.Moves)
 
-		err := games.CheckMoves(moves)
+		_, err := games.CheckMoves(moves)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
