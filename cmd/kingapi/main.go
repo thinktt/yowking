@@ -259,53 +259,6 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
-	r.POST("/games2/:id/moves", func(c *gin.Context) {
-		id := c.Param("id")
-
-		game, err := db.GetGame2(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
-			return
-		}
-
-		if game.ID == "" {
-			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
-			return
-		}
-
-		var moveData models.MoveData2
-		if err := c.ShouldBindJSON(&moveData); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		moves := strings.Fields(game.Moves)
-
-		if len(moves) != moveData.Index {
-			msg := fmt.Sprintf("invalid move index, next move index is %d", len(moves))
-			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
-			return
-		}
-
-		moves = append(moves, moveData.Move)
-
-		_, err = games.CheckMoves(moves)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		_, err = db.CreateMove(id, moveData.Move)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
-			return
-		}
-
-		games.SendStreamUpdate(game.ID)
-
-		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
-	})
-
 	r.GET("/streams/:ids", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
@@ -362,6 +315,80 @@ func main() {
 	//.....................................
 
 	r.Use(Auth())
+
+	r.POST("/games2/:id/moves", func(c *gin.Context) {
+		id := c.Param("id")
+
+		game, err := db.GetGame2(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
+			return
+		}
+
+		if game.ID == "" {
+			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
+			return
+		}
+
+		var moveData models.MoveData2
+		if err := c.ShouldBindJSON(&moveData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		userColor := ""
+		if user == game.WhitePlayer.ID {
+			userColor = "white"
+		}
+		if user == game.BlackPlayer.ID {
+			userColor = "black"
+		}
+
+		// check if user is playing this game
+		if userColor == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "not your game"})
+			return
+		}
+
+		moves := strings.Fields(game.Moves)
+
+		if len(moves) != moveData.Index {
+			msg := fmt.Sprintf("invalid move index, next move index is %d", len(moves))
+			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
+			return
+		}
+
+		// check if this is users turn
+		turnColor := games.GetTurnColor(moveData.Index)
+		if turnColor != userColor {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "not your turn"})
+			return
+		}
+
+		moves = append(moves, moveData.Move)
+
+		_, err = games.CheckMoves(moves)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, err = db.CreateMove(id, moveData.Move)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		games.SendStreamUpdate(game.ID)
+
+		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
+	})
 
 	r.GET("/users", CheckRole("admin"), func(c *gin.Context) {
 		usersResponse, err := db.GetAllUsers()
@@ -585,6 +612,7 @@ func Auth() gin.HandlerFunc {
 		}
 
 		c.Set("roles", claims.Roles)
+		c.Set("user", claims.Subject)
 		c.Next()
 	}
 }
@@ -603,6 +631,20 @@ func CheckRole(allowedRole string) gin.HandlerFunc {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect role for this action"})
 		c.Abort()
 	}
+}
+
+func GetUser(c *gin.Context) (string, error) {
+	u, exists := c.Get("user")
+	if !exists {
+		return "", fmt.Errorf("user not found in context")
+	}
+
+	user, ok := u.(string)
+	if !ok {
+		return "", fmt.Errorf("user in context is not a string")
+	}
+
+	return user, nil
 }
 
 func userIsValid(userId string) bool {

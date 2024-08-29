@@ -138,3 +138,11 @@ func GetGameID() (string, error) {
 	}
 	return encoded, nil
 }
+
+// GetTurnColor given a move index returns the color that move belongs to
+func GetTurnColor(moveIndex int) string {
+	if moveIndex%2 == 0 {
+		return "white"
+	}
+	return "black"
+}

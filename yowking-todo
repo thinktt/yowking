@@ -1,6 +1,19 @@
 Today
-  setup registry?
-  traefik container
+....api....
+restrict move to authed player of game
+offer draw
+resign game
+abort game
+wire up engine to respond to moves
+wire engine to respond to draws
+game conclusion events
+better error handling
+better endpoint validations
+
+x create game
+x make move
+x get stream
+x post historical games
 
 
 
@@ -14,7 +27,6 @@ Today
 
 
 ...Overview...
-
 Featrues
   calibrations?
     load calibration files?
