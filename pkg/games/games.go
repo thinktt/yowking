@@ -15,26 +15,37 @@ import (
 
 var streams = make(map[string][]chan string)
 
-func GetStream(gameID string) chan string {
+// GetStream takes a comma separated list of IDs, creates and event stream
+// channel, and places the channel in the stream map, mapping the channel
+// to it's game ids, so events from those games will be sent to the channel
+func GetStream(gameIDs string) chan string {
 	ch := make(chan string)
-	if _, exists := streams[gameID]; !exists {
-		streams[gameID] = []chan string{}
+	ids := strings.Split(gameIDs, ",")
+	for _, gameID := range ids {
+		if _, exists := streams[gameID]; !exists {
+			streams[gameID] = []chan string{}
+		}
+		streams[gameID] = append(streams[gameID], ch)
 	}
-	streams[gameID] = append(streams[gameID], ch)
 	return ch
 }
 
-func RemoveStream(gameID string, ch chan string) {
-	if channels, exists := streams[gameID]; exists {
-		for i, c := range channels {
-			if c == ch {
-				close(c)
-				// rebuild list of this game's streams removing this channel
-				streams[gameID] = append(channels[:i], channels[i+1:]...)
-				if len(streams[gameID]) == 0 {
-					delete(streams, gameID)
+// RemoveStream takes a comma separated list of IDs, and a previously created
+// channel and searches the stream map for that channel, removing the channel
+// from any mapped games, and closing the channel
+func RemoveStream(gameIDs string, ch chan string) {
+	ids := strings.Split(gameIDs, ",")
+	for _, gameID := range ids {
+		if channels, exists := streams[gameID]; exists {
+			for i, c := range channels {
+				if c == ch {
+					close(c)
+					streams[gameID] = append(channels[:i], channels[i+1:]...)
+					if len(streams[gameID]) == 0 {
+						delete(streams, gameID)
+					}
+					break
 				}
-				break
 			}
 		}
 	}
