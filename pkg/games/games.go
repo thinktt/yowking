@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/akamensky/base58"
 	"github.com/notnil/chess"
@@ -63,16 +64,48 @@ func SendStreamUpdate(gameID string) error {
 	return nil
 }
 
-func CheckMoves(moves []string) error {
+func CheckMoves(moves []string) (string, error) {
 	gameParser := chess.NewGame()
 	for i, move := range moves {
 		err := gameParser.MoveStr(move)
 		if err != nil {
 			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
-			return errors.New(errMsg)
+			return "", errors.New(errMsg)
 		}
 	}
-	return nil
+
+	// fmt.Print(gameParser.Moves())
+	// fmt.Println(gameParser.MoveHistory())
+
+	moveList := gameParser.String()
+	algebraMoves := strings.Split(moveList, " ")
+
+	// find the last move in the list of moves, this loop fixes issue
+	// when there are extra spaces
+	lastMove := ""
+	for i := len(algebraMoves) - 2; i >= 0; i-- {
+		if algebraMoves[i] != "" {
+			lastMove = algebraMoves[i]
+			break
+		}
+	}
+
+	lastOriginalMove := moves[len(moves)-1]
+
+	// fmt.Println(moveList)
+	// fmt.Println(lastOriginalMove)
+	// fmt.Println(lastMove)
+
+	if lastMove != lastOriginalMove {
+		err := fmt.Errorf(
+			"strict move notation enforced: wanted %s, got %s",
+			lastMove, lastOriginalMove,
+		)
+		return "", err
+	}
+
+	return lastOriginalMove, nil
+
 }
 
 func GetGameID() (string, error) {
