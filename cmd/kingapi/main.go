@@ -24,7 +24,7 @@ var cmpMap = make(map[string]models.Cmp)
 func main() {
 
 	loadCmps()
-	fmt.Println(cmpMap["Ash"])
+	// fmt.Println(cmpMap["Ash"])
 
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
@@ -240,6 +240,16 @@ func main() {
 
 		// c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
 		c.JSON(http.StatusOK, game)
+	})
+
+	r.GET("/games2/live", func(c *gin.Context) {
+		gameIDs, err := db.GetAllLiveGameIDs()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gameIDs)
 	})
 
 	r.GET("/games2/:id", func(c *gin.Context) {

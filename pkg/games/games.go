@@ -15,6 +15,18 @@ import (
 
 var streams = make(map[string][]chan string)
 
+func GetLiveGameStream() (chan string, error) {
+	liveGameIDs, err := db.GetAllLiveGameIDs()
+	if err != nil {
+		return nil, err
+	}
+
+	idString := strings.Join(liveGameIDs, ",")
+	stream := GetStream(idString)
+
+	return stream, nil
+}
+
 // GetStream takes a comma separated list of IDs, creates and event stream
 // channel, and places the channel in the stream map, mapping the channel
 // to it's game ids, so events from those games will be sent to the channel

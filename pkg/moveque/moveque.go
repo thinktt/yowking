@@ -67,6 +67,10 @@ func init() {
 	moveStream = js
 }
 
+// GetMove works with NATS in a request and response fashion, it sends a
+// move to NATS and waits to hear back a response from that particular move
+// it eventually fails or times out, it can be used to treat the king workers
+// and NATS pub sub like an old school server
 func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
 	moveRes := models.MoveData{}
 
@@ -115,39 +119,42 @@ func GetMove(moveReq models.MoveReq) (models.MoveData, error) {
 	return moveRes, nil
 }
 
-// result := make(chan MoveResult)
-// wating := atomic.AddInt64(&waitingRequests, 1)
-// total := atomic.AddInt64(&totalRequests, 1)
-// fmt.Println("total request: ", total, "waiting request: ", wating)
-// moveRequests <- MoveRequest{Settings: settings, Result: result}
-// res := <-result
+// PushMove takes a move request and sents it to the move-req NATS stream
+// if it's unable to send the move the the NATS it will respond with an error
+func PushMove(moveReq models.MoveReq) error {
+	data, err := json.Marshal(moveReq)
+	if err != nil {
+		return err
+	}
 
-// func GetQueLength() int64 {
-// 	return atomic.LoadInt64(&waitingRequests)
-// }
+	_, err = moveStream.Publish("move-req", data)
+	return err
+}
 
-// type MoveRequest struct {
-// 	Settings engine.Settings
-// 	Result   chan MoveResult
-// }
+// GetMoveResChan returns a channel that streams move responses from
+// NATs and the King workers
+func GetMoveResChan() (<-chan models.MoveData, error) {
+	resChan := make(chan models.MoveData)
+	subject := "move-res.*"
 
-// type MoveResult struct {
-// 	Data engine.MoveData
-// 	Err  error
-// }
+	// Subscribe to the move response subject
+	sub, err := nc.Subscribe(subject, func(msg *nats.Msg) {
+		var moveRes models.MoveData
+		if err := json.Unmarshal(msg.Data, &moveRes); err != nil {
+			log.Errorf("Error unmarshaling move response: %v", err)
+			return
+		}
+		resChan <- moveRes
+	})
+	if err != nil {
+		return nil, err
+	}
 
-// var moveRequests = make(chan MoveRequest, 1) // Buffer size of 1
-// var waitingRequests int64 = 0                // number of requests waiting to be processed
-// var totalRequests int64 = 0                  // total number of requests
+	// Set up a handler for when the connection closes
+	nc.SetClosedHandler(func(_ *nats.Conn) {
+		sub.Unsubscribe()
+		close(resChan)
+	})
 
-// func init() {
-// 	go processMoves()
-// }
-
-// func processMoves() {
-// 	for req := range moveRequests {
-// 		data, err := engine.GetMove(req.Settings)
-// 		req.Result <- MoveResult{Data: data, Err: err}
-// 		atomic.AddInt64(&waitingRequests, -1)
-// 	}
-// }
+	return resChan, nil
+}
