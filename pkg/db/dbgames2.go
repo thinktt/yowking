@@ -23,6 +23,43 @@ func CreateGame2(game models.Game2) (*mongo.UpdateResult, error) {
 	return gamesCollection.UpdateOne(context.Background(), filter, update, &opts)
 }
 
+// GetAllLiveGameIDs find sall the games in the database that have game.Status
+// started and returns a list of all of their IDs
+func GetAllLiveGameIDs() ([]string, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	// Define the filter to find games with status "started"
+	filter := bson.M{"status": "started"}
+
+	// Define a projection to return only the "id" field
+	projection := bson.M{"id": 1}
+
+	// Find all matching games
+	cursor, err := gamesCollection.Find(context.Background(), filter, options.Find().SetProjection(projection))
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	// Collect all game IDs
+	var gameIDs []string
+	for cursor.Next(context.Background()) {
+		var result struct {
+			ID string `bson:"id"`
+		}
+		if err := cursor.Decode(&result); err != nil {
+			return nil, err
+		}
+		gameIDs = append(gameIDs, result.ID)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return gameIDs, nil
+}
+
 // GetGame retrieves a game by its ID
 func GetGame2(id string) (models.Game2, error) {
 	gamesCollection := yowDatabase.Collection("games2")
