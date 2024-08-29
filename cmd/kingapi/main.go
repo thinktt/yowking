@@ -306,15 +306,15 @@ func main() {
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
 	})
 
-	r.GET("/streams/:id", func(c *gin.Context) {
+	r.GET("/streams/:ids", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
 		c.Writer.Header().Set("Connection", "keep-alive")
 		c.Writer.Header().Set("Transfer-Encoding", "chunked")
 		c.Writer.Flush()
 
-		id := c.Param("id")
-		gameStream := games.GetStream(id)
+		ids := c.Param("ids")
+		gameStream := games.GetStream(ids)
 
 		clientClosed := c.Writer.CloseNotify()
 		// pingTicker := time.NewTicker(1 * time.Second)
