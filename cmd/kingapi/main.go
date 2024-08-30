@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thinktt/yowking/pkg/auth"
 	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/events"
 	"github.com/thinktt/yowking/pkg/games"
 	"github.com/thinktt/yowking/pkg/kingcheck"
 	"github.com/thinktt/yowking/pkg/models"
@@ -277,7 +278,7 @@ func main() {
 		c.Writer.Flush()
 
 		ids := c.Param("ids")
-		gameStream := games.GetStream(ids)
+		gameStream := events.NewSubscriptionSet(ids)
 
 		clientClosed := c.Writer.CloseNotify()
 		// pingTicker := time.NewTicker(1 * time.Second)
@@ -288,7 +289,7 @@ func main() {
 			case <-clientClosed:
 				fmt.Println("client dropped SSE")
 				return
-			case gameData := <-gameStream:
+			case gameData := <-gameStream.Channel:
 				c.Writer.Write([]byte("event: movesUpdate\n"))
 				c.Writer.Write([]byte("data: " + gameData + "\n\n"))
 				c.Writer.Flush()
@@ -395,7 +396,7 @@ func main() {
 			return
 		}
 
-		games.SendStreamUpdate(game.ID)
+		games.PublishGameUpdates(game.ID)
 
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
 	})
