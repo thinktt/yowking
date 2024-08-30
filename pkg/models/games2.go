@@ -23,6 +23,13 @@ type Game2 struct {
 	BlackPlayer Player   `json:"blackPlayer" bson:"blackPlayer" binding:"required"`
 }
 
+func (g *Game2) TurnColor() string {
+	if len(g.MoveList)%2 == 0 {
+		return "white"
+	}
+	return "black"
+}
+
 type Game2MutableFields struct {
 	ID         string `json:"id" bson:"id" binding:"required,alphanum,min=8,max=8"`
 	LastMoveAt int64  `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`

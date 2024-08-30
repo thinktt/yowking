@@ -13,6 +13,7 @@ import (
 	"github.com/thinktt/yowking/pkg/db"
 	"github.com/thinktt/yowking/pkg/events"
 	"github.com/thinktt/yowking/pkg/models"
+	"github.com/thinktt/yowking/pkg/moveque"
 	"github.com/thinktt/yowking/pkg/utils"
 )
 
@@ -33,7 +34,151 @@ func PublishGameUpdates(gameID string) error {
 	jsonData, _ := json.Marshal(gameMuation)
 	events.Pub.PublishMessage(game.ID, string(jsonData))
 
+	go CheckForEngineMove(game)
+
 	return nil
+}
+
+func CheckForEngineMove(game models.Game2) {
+	var cmpName string
+	// turnColor := game.TurnColor()
+	if game.TurnColor() == "white" && game.WhitePlayer.Type == "cmp" {
+		cmpName = game.WhitePlayer.ID
+	}
+	if game.TurnColor() == "black" && game.BlackPlayer.Type == "cmp" {
+		cmpName = game.BlackPlayer.ID
+	}
+
+	// no cmp found for this turn, nothing needs to be done
+	if cmpName == "" {
+		fmt.Println("not a cmp turn")
+		return
+	}
+
+	chessGame, err := parseToChessGame(game.MoveList)
+	if err != nil {
+		fmt.Println("Error parsing game: ", err.Error())
+	}
+
+	uciMoves, err := getUCIMovesFromChessGame(chessGame)
+	if err != nil {
+		fmt.Println("Error parsing UCI moves: ", err.Error())
+	}
+
+	moveReq := models.MoveReq{
+		Moves:   uciMoves,
+		CmpName: cmpName,
+		GameId:  game.ID,
+	}
+
+	// get the next move from the engine workers
+	moveData, err := moveque.GetMove(moveReq)
+	if err != nil {
+		fmt.Println("Error getting engine move: ", err.Error())
+		return
+	}
+
+	fmt.Println(moveData)
+
+	// if there is not an Algebra move we will need to translate the coordinate move
+	algebraMove := moveData.AlgebraMove
+	if algebraMove == "" {
+		algebraMove, err = getAlgebraMoveFromChessGame(chessGame, moveData.CoordinateMove)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+	}
+
+	fmt.Println(algebraMove)
+	// moves := append(game.MoveList, algebraMove)
+	err = AddMove(game.ID, cmpName,
+		models.MoveData2{Index: len(game.Moves), Move: algebraMove})
+	if err != nil {
+		fmt.Println("error Adding engine move: ", err.Error())
+	}
+}
+
+// var uciRegex = regexp.MustCompile(`[a-h][1-8][a-h][1-8][qrbn]?`)
+
+func getAlgebraMoveFromChessGame(chessGame *chess.Game, newUciMove string) (string, error) {
+	err := chessGame.MoveStr(newUciMove)
+	if err != nil {
+		err := fmt.Errorf("error adding coordinate move to chessGame: %s", err.Error())
+		return "", err
+	}
+
+	chess.UseNotation(chess.AlgebraicNotation{})(chessGame)
+	pgn := chessGame.String()
+	pgnSlice := strings.Fields(pgn)
+	if len(pgnSlice) < 3 {
+		err := fmt.Errorf("unable parse algebra move from chessGame: PGN too short")
+		return "", err
+	}
+
+	algebraMove := pgnSlice[len(pgnSlice)-2]
+	return algebraMove, nil
+}
+
+func getUCIMovesFromChessGame(chessGame *chess.Game) ([]string, error) {
+	chess.UseNotation(chess.UCINotation{})(chessGame)
+	moves := make([]string, 0, len(chessGame.Moves()))
+
+	for _, move := range chessGame.Moves() {
+		moves = append(moves, move.String())
+	}
+
+	return moves, nil
+}
+
+func parseToChessGame(moves []string) (*chess.Game, error) {
+	chessGame := chess.NewGame()
+	for i, move := range moves {
+		err := chessGame.MoveStr(move)
+		if err != nil {
+			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
+			return nil, errors.New(errMsg)
+		}
+	}
+	return chessGame, nil
+}
+
+// func GetUCINotation(algebraMoves []string) ([]string, error) {
+// 	gameParser := chess.NewGame()
+// 	for i, move := range algebraMoves {
+// 		err := gameParser.MoveStr(move)
+// 		if err != nil {
+// 			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
+// 			return nil, errors.New(errMsg)
+// 		}
+// 	}
+
+// 	chess.UseNotation(chess.UCINotation{})(gameParser)
+// 	fmt.Println(gameParser.Moves()[0].String())
+// 	chess.UseNotation(chess.AlgebraicNotation{})(gameParser)
+// 	fmt.Println(gameParser.Moves()[0].String())
+
+// 	moveStr := gameParser.String()
+// 	moves := uciRegex.FindAllString(moveStr, -1)
+
+// 	return moves, nil
+// }
+
+func GetAlgebraicNotation(uciMoves []string) ([]string, error) {
+	gameParser := chess.NewGame(chess.UseNotation(chess.UCINotation{}))
+	algebraicMoves := make([]string, 0, len(uciMoves))
+
+	for i, move := range uciMoves {
+		err := gameParser.MoveStr(move)
+		if err != nil {
+			errMsg := fmt.Sprintf("Invalid UCI move at index %d: %v", i, err)
+			return nil, errors.New(errMsg)
+		}
+		algebraicMove := gameParser.Moves()[i].String()
+		algebraicMoves = append(algebraicMoves, algebraicMove)
+	}
+
+	return algebraicMoves, nil
 }
 
 func CheckMoves(moves []string) (string, error) {
@@ -140,17 +285,17 @@ func AddMove(id, user string, moveData models.MoveData2) error {
 
 	moves := strings.Fields(game.Moves)
 
-	if len(moves) != moveData.Index {
-		err = utils.NewHTTPError(http.StatusBadRequest,
-			fmt.Sprintf("invalid move index, next move index is %d", len(moves)))
-		return err
-	}
+	// if len(moves) != moveData.Index {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest,
+	// 		fmt.Sprintf("invalid move index, next move index is %d", len(moves)))
+	// 	return err
+	// }
 
-	turnColor := GetTurnColor(moveData.Index)
-	if turnColor != userColor {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
-		return err
-	}
+	// turnColor := GetTurnColor(moveData.Index)
+	// if turnColor != userColor {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
+	// 	return err
+	// }
 
 	moves = append(moves, moveData.Move)
 

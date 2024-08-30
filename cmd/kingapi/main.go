@@ -258,6 +258,7 @@ func main() {
 		id := c.Param("id")
 
 		game, err := db.GetGame2(id)
+		game.MoveList = nil
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
@@ -278,8 +279,10 @@ func main() {
 		c.Writer.Header().Set("Transfer-Encoding", "chunked")
 		c.Writer.Flush()
 
+		// this needs validation of gameIDs
 		ids := c.Param("ids")
-		gameStream := events.NewSubscriptionSet(ids)
+		gameIDs := strings.Split(ids, ",")
+		gameStream := events.NewSubscription(gameIDs)
 
 		clientClosed := c.Writer.CloseNotify()
 		// pingTicker := time.NewTicker(1 * time.Second)
