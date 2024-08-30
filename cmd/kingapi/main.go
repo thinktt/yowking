@@ -18,6 +18,7 @@ import (
 	"github.com/thinktt/yowking/pkg/kingcheck"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
+	"github.com/thinktt/yowking/pkg/utils"
 )
 
 var cmpMap = make(map[string]models.Cmp)
@@ -330,17 +331,6 @@ func main() {
 	r.POST("/games2/:id/moves", func(c *gin.Context) {
 		id := c.Param("id")
 
-		game, err := db.GetGame2(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
-			return
-		}
-
-		if game.ID == "" {
-			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no game found for id %s", id)})
-			return
-		}
-
 		var moveData models.MoveData2
 		if err := c.ShouldBindJSON(&moveData); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -353,52 +343,21 @@ func main() {
 			return
 		}
 
-		userColor := ""
-		if user == game.WhitePlayer.ID {
-			userColor = "white"
-		}
-		if user == game.BlackPlayer.ID {
-			userColor = "black"
-		}
-
-		// check if user is playing this game
-		if userColor == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "not your game"})
-			return
-		}
-
-		moves := strings.Fields(game.Moves)
-
-		if len(moves) != moveData.Index {
-			msg := fmt.Sprintf("invalid move index, next move index is %d", len(moves))
-			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
-			return
-		}
-
-		// check if this is users turn
-		turnColor := games.GetTurnColor(moveData.Index)
-		if turnColor != userColor {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "not your turn"})
-			return
-		}
-
-		moves = append(moves, moveData.Move)
-
-		_, err = games.CheckMoves(moves)
+		err = games.AddMove(id, user, moveData)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			httpErr, ok := err.(*utils.HTTPError)
+			if ok {
+				c.JSON(httpErr.StatusCode, gin.H{"error": httpErr.Message})
+				return
+			}
+
+			// for some reason we weren't able to type cast to the HTTPError type
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-
-		_, err = db.CreateMove(id, moveData.Move)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
-			return
-		}
-
-		games.PublishGameUpdates(game.ID)
 
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
+
 	})
 
 	r.GET("/users", CheckRole("admin"), func(c *gin.Context) {

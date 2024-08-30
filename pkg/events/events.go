@@ -16,7 +16,13 @@ func (p *Publisher) RemoveSubSet(s *SubscriptionSet) {
 
 func (p *Publisher) PublishMessage(gameID, msg string) {
 	for s := range p.subSets {
-		if _, exist := s.gameIDs[gameID]; exist {
+		if s.willAcceptAll {
+			s.Channel <- msg
+			continue
+		}
+
+		_, exist := s.gameIDs[gameID]
+		if exist {
 			s.Channel <- msg
 		}
 	}
@@ -27,8 +33,9 @@ var Pub = &Publisher{
 }
 
 type SubscriptionSet struct {
-	gameIDs map[string]struct{}
-	Channel chan string
+	gameIDs       map[string]struct{}
+	willAcceptAll bool
+	Channel       chan string
 }
 
 // PublishMessage allows you to directly publish messages ot this subscription
@@ -51,8 +58,14 @@ func (s *SubscriptionSet) Destroy() {
 
 func NewSubscriptionSet(gameIDs string) SubscriptionSet {
 	subSet := SubscriptionSet{
-		gameIDs: make(map[string]struct{}),
-		Channel: make(chan string),
+		gameIDs:       make(map[string]struct{}),
+		willAcceptAll: false,
+		Channel:       make(chan string),
+	}
+
+	if gameIDs == "" {
+		subSet.willAcceptAll = true
+		return subSet
 	}
 
 	ids := strings.Split(gameIDs, ",")

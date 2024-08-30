@@ -158,3 +158,7 @@ func GetMoveResChan() (<-chan models.MoveData, error) {
 
 	return resChan, nil
 }
+
+func InitMoveRelay() {
+
+}
