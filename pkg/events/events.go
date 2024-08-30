@@ -1,21 +1,19 @@
 package events
 
-import "strings"
-
 type Publisher struct {
-	subSets map[*SubscriptionSet]struct{}
+	subscriptions map[*Subscription]struct{}
 }
 
-func (p *Publisher) AddSubSet(s *SubscriptionSet) {
-	p.subSets[s] = struct{}{}
+func (p *Publisher) AddSub(s *Subscription) {
+	p.subscriptions[s] = struct{}{}
 }
 
-func (p *Publisher) RemoveSubSet(s *SubscriptionSet) {
-	delete(p.subSets, s)
+func (p *Publisher) RemoveSub(s *Subscription) {
+	delete(p.subscriptions, s)
 }
 
 func (p *Publisher) PublishMessage(gameID, msg string) {
-	for s := range p.subSets {
+	for s := range p.subscriptions {
 		if s.willAcceptAll {
 			s.Channel <- msg
 			continue
@@ -29,52 +27,54 @@ func (p *Publisher) PublishMessage(gameID, msg string) {
 }
 
 var Pub = &Publisher{
-	subSets: make(map[*SubscriptionSet]struct{}),
+	subscriptions: make(map[*Subscription]struct{}),
 }
 
-type SubscriptionSet struct {
+type Subscription struct {
 	gameIDs       map[string]struct{}
 	willAcceptAll bool
 	Channel       chan string
 }
 
 // PublishMessage allows you to directly publish messages ot this subscription
-func (s *SubscriptionSet) PublishMessage(msg string) {
+func (s *Subscription) PublishMessage(msg string) {
 	s.Channel <- msg
 }
 
-func (s *SubscriptionSet) AddGameID(gameID string) {
+func (s *Subscription) AddGameID(gameID string) {
 	s.gameIDs[gameID] = struct{}{}
 }
 
-func (s *SubscriptionSet) RemoveGameID(gameID string) {
+func (s *Subscription) RemoveGameID(gameID string) {
 	delete(s.gameIDs, gameID)
 }
 
-func (s *SubscriptionSet) Destroy() {
+func (s *Subscription) Destroy() {
 	close(s.Channel)
-	Pub.RemoveSubSet(s)
+	Pub.RemoveSub(s)
 }
 
-func NewSubscriptionSet(gameIDs string) SubscriptionSet {
-	subSet := SubscriptionSet{
+// NewSubscrition creates a subscription to game events. It will filter events
+// by GameIDs, if GammeIDs list is empty it will all game messages will be
+// published to the subscription
+func NewSubscription(gameIDs []string) Subscription {
+	sub := Subscription{
 		gameIDs:       make(map[string]struct{}),
 		willAcceptAll: false,
 		Channel:       make(chan string),
 	}
 
-	if gameIDs == "" {
-		subSet.willAcceptAll = true
-		return subSet
+	if len(gameIDs) == 0 {
+		sub.willAcceptAll = true
+		return sub
 	}
 
-	ids := strings.Split(gameIDs, ",")
-	for _, gameID := range ids {
-		subSet.gameIDs[gameID] = struct{}{}
+	for _, gameID := range gameIDs {
+		sub.gameIDs[gameID] = struct{}{}
 	}
 
 	// Add the subscription set to the package global publisher
-	Pub.AddSubSet(&subSet)
+	Pub.AddSub(&sub)
 
-	return subSet
+	return sub
 }

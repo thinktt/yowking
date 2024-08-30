@@ -83,7 +83,7 @@ func GetGame2(id string) (models.Game2, error) {
 	// delete(result, "_id")
 
 	game.Moves = strings.Join(game.MoveList, " ")
-	game.MoveList = nil
+	// game.MoveList = nil
 
 	return game, nil
 }
