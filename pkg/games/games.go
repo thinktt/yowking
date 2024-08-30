@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/akamensky/base58"
@@ -12,6 +13,7 @@ import (
 	"github.com/thinktt/yowking/pkg/db"
 	"github.com/thinktt/yowking/pkg/events"
 	"github.com/thinktt/yowking/pkg/models"
+	"github.com/thinktt/yowking/pkg/utils"
 )
 
 func PublishGameUpdates(gameID string) error {
@@ -104,4 +106,65 @@ func GetTurnColor(moveIndex int) string {
 		return "white"
 	}
 	return "black"
+}
+
+// AddMove validates and adds a move to the game, and then triggers an event
+// message that moves were added, it returns cutsom HTTPErrors so errors can
+// play nicely with an http routers
+func AddMove(id, user string, moveData models.MoveData2) error {
+	game, err := db.GetGame2(id)
+	if err != nil {
+		err = utils.NewHTTPError(
+			http.StatusInternalServerError, "DB Error: "+err.Error())
+		return err
+	}
+
+	if game.ID == "" {
+		err = utils.NewHTTPError(
+			http.StatusNotFound,
+			fmt.Sprintf("no game found for id %s", id))
+		return err
+	}
+
+	userColor := ""
+	if user == game.WhitePlayer.ID {
+		userColor = "white"
+	} else if user == game.BlackPlayer.ID {
+		userColor = "black"
+	}
+
+	if userColor == "" {
+		err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
+		return err
+	}
+
+	moves := strings.Fields(game.Moves)
+
+	if len(moves) != moveData.Index {
+		err = utils.NewHTTPError(http.StatusBadRequest,
+			fmt.Sprintf("invalid move index, next move index is %d", len(moves)))
+		return err
+	}
+
+	turnColor := GetTurnColor(moveData.Index)
+	if turnColor != userColor {
+		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
+		return err
+	}
+
+	moves = append(moves, moveData.Move)
+
+	if _, err := CheckMoves(moves); err != nil {
+		err = utils.NewHTTPError(http.StatusBadRequest, err.Error())
+		return err
+	}
+
+	if _, err := db.CreateMove(id, moveData.Move); err != nil {
+		err = utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
+		return err
+	}
+
+	PublishGameUpdates(game.ID)
+
+	return nil
 }
