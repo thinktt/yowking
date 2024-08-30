@@ -10,60 +10,11 @@ import (
 	"github.com/akamensky/base58"
 	"github.com/notnil/chess"
 	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/events"
 	"github.com/thinktt/yowking/pkg/models"
 )
 
-var streams = make(map[string][]chan string)
-
-func GetLiveGameStream() (chan string, error) {
-	liveGameIDs, err := db.GetAllLiveGameIDs()
-	if err != nil {
-		return nil, err
-	}
-
-	idString := strings.Join(liveGameIDs, ",")
-	stream := GetStream(idString)
-
-	return stream, nil
-}
-
-// GetStream takes a comma separated list of IDs, creates and event stream
-// channel, and places the channel in the stream map, mapping the channel
-// to it's game ids, so events from those games will be sent to the channel
-func GetStream(gameIDs string) chan string {
-	ch := make(chan string)
-	ids := strings.Split(gameIDs, ",")
-	for _, gameID := range ids {
-		if _, exists := streams[gameID]; !exists {
-			streams[gameID] = []chan string{}
-		}
-		streams[gameID] = append(streams[gameID], ch)
-	}
-	return ch
-}
-
-// RemoveStream takes a comma separated list of IDs, and a previously created
-// channel and searches the stream map for that channel, removing the channel
-// from any mapped games, and closing the channel
-func RemoveStream(gameIDs string, ch chan string) {
-	ids := strings.Split(gameIDs, ",")
-	for _, gameID := range ids {
-		if channels, exists := streams[gameID]; exists {
-			for i, c := range channels {
-				if c == ch {
-					close(c)
-					streams[gameID] = append(channels[:i], channels[i+1:]...)
-					if len(streams[gameID]) == 0 {
-						delete(streams, gameID)
-					}
-					break
-				}
-			}
-		}
-	}
-}
-
-func SendStreamUpdate(gameID string) error {
+func PublishGameUpdates(gameID string) error {
 	game, err := db.GetGame2(gameID)
 	if err != nil {
 		return err
@@ -78,11 +29,7 @@ func SendStreamUpdate(gameID string) error {
 	}
 
 	jsonData, _ := json.Marshal(gameMuation)
-	if channels, exists := streams[gameID]; exists {
-		for _, ch := range channels {
-			ch <- string(jsonData)
-		}
-	}
+	events.Pub.PublishMessage(game.ID, string(jsonData))
 
 	return nil
 }
