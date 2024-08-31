@@ -2,6 +2,7 @@ package games
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
@@ -52,8 +53,6 @@ func CheckForEngineMove(game models.Game2) {
 		return
 	}
 
-	fmt.Println(engineMove)
-
 	// if there is not an Algebra move we will need to translate the coordinate move
 	algebraMove := engineMove.AlgebraMove
 	if algebraMove == "" {
@@ -65,18 +64,14 @@ func CheckForEngineMove(game models.Game2) {
 	}
 
 	// fix the king's quirky castling notation
-	if algebraMove == "0-0" {
-		algebraMove = "O-O"
-	}
-	if algebraMove == "0-0-0" {
+	if strings.Contains(algebraMove, "0-0-0") {
 		algebraMove = "O-O-O"
+	} else if strings.Contains(algebraMove, "0-0-0") {
+		algebraMove = "O-O"
 	}
 
 	// fix kings non standard promotion notation
 	algebraMove = fixPromotionMove(algebraMove)
-
-	fmt.Println(algebraMove)
-	// moves := append(game.MoveList, algebraMove)
 
 	moveData := models.MoveData2{
 		Index: len(game.MoveList),
