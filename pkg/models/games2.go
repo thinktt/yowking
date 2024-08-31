@@ -32,11 +32,11 @@ func (g *Game2) TurnColor() string {
 }
 
 type Game2MutableFields struct {
-	ID         string `json:"id" bson:"id" binding:"required,alphanum,min=8,max=8"`
-	LastMoveAt int64  `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
+	ID         string `json:"id" binding:"required,alphanum,min=8,max=8"`
+	LastMoveAt int64  `json:"lastMoveAt" binding:"required"`
 	Moves      string `json:"moves" binding:"required"`
-	Status     string `json:"status,omitempty" bson:"status" binding:"required,oneof=started mate resign draw"`
-	Winner     string `json:"winner,omitempty" bson:"winner" binding:"required,oneof=white black"`
+	Status     string `json:"status,omitempty" binding:"required,oneof=started mate resign draw"`
+	Winner     string `json:"winner,omitempty" binding:"required,oneof=white black"`
 }
 
 // DrawType   string `json:"drawType" bson:"drawType,omitempty" binding:"required,oneof=mutual fifty stalemate material"`

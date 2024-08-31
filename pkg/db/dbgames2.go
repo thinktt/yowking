@@ -110,3 +110,21 @@ func CreateMove(gameID string, move string) (*mongo.UpdateResult, error) {
 
 	return gamesCollection.UpdateOne(context.Background(), filter, update)
 }
+
+func UpdateGame(gameID, move, status, winner string) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	update := bson.M{
+		"$push": bson.M{
+			"moveList": move,
+		},
+		"$set": bson.M{
+			"lastMoveAt": time.Now().UnixMilli(),
+			"status":     status,
+			"winner":     winner,
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
+}

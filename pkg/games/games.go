@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/akamensky/base58"
@@ -14,7 +13,6 @@ import (
 	"github.com/thinktt/yowking/pkg/events"
 	"github.com/thinktt/yowking/pkg/models"
 	"github.com/thinktt/yowking/pkg/moveque"
-	"github.com/thinktt/yowking/pkg/utils"
 )
 
 func PublishGameUpdates(gameID string) error {
@@ -23,12 +21,20 @@ func PublishGameUpdates(gameID string) error {
 		return err
 	}
 
+	// if status hasn't change omit status and winner from update
+	status := ""
+	winner := ""
+	if game.Status != "started" {
+		status = game.Status
+		winner = game.Winner
+	}
+
 	gameMuation := models.Game2MutableFields{
 		ID:         game.ID,
 		LastMoveAt: game.LastMoveAt,
 		Moves:      game.Moves,
-		// Status:     game.Status,
-		// Winner:     game.Winner,
+		Status:     status,
+		Winner:     winner,
 	}
 
 	jsonData, _ := json.Marshal(gameMuation)
@@ -186,62 +192,6 @@ func GetAlgebraicNotation(uciMoves []string) ([]string, error) {
 	return algebraicMoves, nil
 }
 
-func CheckMoves(moves []string) (string, error) {
-	chessGame := chess.NewGame()
-	for i, move := range moves {
-		err := chessGame.MoveStr(move)
-		if err != nil {
-			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
-			return "", errors.New(errMsg)
-		}
-	}
-
-	drawMethods := chessGame.EligibleDraws()
-	ending := chessGame.Method()
-
-	// switch ending {
-	// case chess.Checkmate:
-	// 	game.Status = "mate"
-	// case chess.Stalemate:
-	// 	game.Status = "stalemate"
-	// case chess.InsufficientMaterial:
-	// 	game.Status = "draw"
-	// }
-
-	fmt.Println("Ways to draw:", drawMethods)
-	fmt.Println("Game ended as: ", ending)
-
-	moveList := chessGame.String()
-	algebraMoves := strings.Fields(moveList)
-	lastMove := algebraMoves[len(algebraMoves)-1]
-	fmt.Println(moves)
-	fmt.Println()
-	fmt.Println(algebraMoves)
-
-	// // find the last move in the list of moves, this loop fixes issue
-	// // when there are extra spaces
-	// lastMove := ""
-	// for i := len(algebraMoves) - 2; i >= 0; i-- {
-	// 	if algebraMoves[i] != "" {
-	// 		lastMove = algebraMoves[i]
-	// 		break
-	// 	}
-	// }
-
-	// lastOriginalMove := moves[len(moves)-1]
-
-	// if lastMove != lastOriginalMove {
-	// 	err := fmt.Errorf(
-	// 		"strict move notation enforced: wanted %s, got %s",
-	// 		lastMove, lastOriginalMove,
-	// 	)
-	// 	return "", err
-	// }
-
-	return lastMove, nil
-
-}
-
 func GetGameID() (string, error) {
 	// Create a byte array of length 6
 	b := make([]byte, 6)
@@ -260,73 +210,4 @@ func GetGameID() (string, error) {
 		encoded = encoded[1:]
 	}
 	return encoded, nil
-}
-
-// GetTurnColor given a move index returns the color that move belongs to
-func GetTurnColor(moveIndex int) string {
-	if moveIndex%2 == 0 {
-		return "white"
-	}
-	return "black"
-}
-
-// AddMove validates and adds a move to the game, and then triggers an event
-// message that moves were added, it returns cutsom HTTPErrors so errors can
-// play nicely with an http routers
-func AddMove(id, user string, moveData models.MoveData2) error {
-	game, err := db.GetGame2(id)
-	if err != nil {
-		err = utils.NewHTTPError(
-			http.StatusInternalServerError, "DB Error: "+err.Error())
-		return err
-	}
-
-	if game.ID == "" {
-		err = utils.NewHTTPError(
-			http.StatusNotFound,
-			fmt.Sprintf("no game found for id %s", id))
-		return err
-	}
-
-	// userColor := ""
-	// if user == game.WhitePlayer.ID {
-	// 	userColor = "white"
-	// } else if user == game.BlackPlayer.ID {
-	// 	userColor = "black"
-	// }
-
-	// if userColor == "" {
-	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
-	// 	return err
-	// }
-
-	moves := strings.Fields(game.Moves)
-
-	// if len(moves) != moveData.Index {
-	// 	err = utils.NewHTTPError(http.StatusBadRequest,
-	// 		fmt.Sprintf("invalid move index, next move index is %d", len(moves)))
-	// 	return err
-	// }
-
-	// turnColor := GetTurnColor(moveData.Index)
-	// if turnColor != userColor {
-	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
-	// 	return err
-	// }
-
-	moves = append(moves, moveData.Move)
-
-	if _, err := CheckMoves(moves); err != nil {
-		err = utils.NewHTTPError(http.StatusBadRequest, err.Error())
-		return err
-	}
-
-	if _, err := db.CreateMove(id, moveData.Move); err != nil {
-		err = utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
-		return err
-	}
-
-	PublishGameUpdates(game.ID)
-
-	return nil
 }
