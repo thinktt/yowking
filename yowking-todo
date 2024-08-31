@@ -1,15 +1,22 @@
 Today
 ....api....
-restrict move to authed player of game
+x fix 0-0 issue
+fix promotion issue
+game conclusion events
+
+validate proper user when making a game
+restrict lichess user to 1 game at a time 
+let admin bypass restriction
+
 offer draw
 resign game
 abort game
-wire up engine to respond to moves
 wire engine to respond to draws
-game conclusion events
 better error handling
 better endpoint validations
 
+x wire up engine to respond to moves
+x restrict move to authed player of game
 x create game
 x make move
 x get stream
