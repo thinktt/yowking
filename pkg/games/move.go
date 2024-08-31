@@ -36,26 +36,26 @@ func AddMove(id, user string, moveData models.MoveData2) error {
 		return err
 	}
 
-	// check if user is playing this game
-	userColor := GetUsercolor(game, user)
-	if userColor == "" {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
-		return err
-	}
+	// // check if user is playing this game
+	// userColor := GetUsercolor(game, user)
+	// if userColor == "" {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
+	// 	return err
+	// }
 
-	// check if the move is at valid index
-	if len(game.MoveList) != moveData.Index {
-		err = utils.NewHTTPError(http.StatusBadRequest,
-			fmt.Sprintf("invalid move index, next move index is %d", len(game.MoveList)))
-		return err
-	}
+	// // check if the move is at valid index
+	// if len(game.MoveList) != moveData.Index {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest,
+	// 		fmt.Sprintf("invalid move index, next move index is %d", len(game.MoveList)))
+	// 	return err
+	// }
 
-	// check if it is this user's turn
-	turnColor := GetTurnColor(moveData.Index)
-	if turnColor != userColor {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
-		return err
-	}
+	// // check if it is this user's turn
+	// turnColor := GetTurnColor(moveData.Index)
+	// if turnColor != userColor {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
+	// 	return err
+	// }
 
 	// parse the db game into chessGame object
 	chessGame, err := ParseGame(game)
@@ -96,6 +96,8 @@ func AddMove(id, user string, moveData models.MoveData2) error {
 	}
 
 	PublishGameUpdates(game.ID)
+
+	fmt.Println(properMove)
 
 	return nil
 }
