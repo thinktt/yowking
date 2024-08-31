@@ -16,11 +16,12 @@ type Game2 struct {
 	CreatedAt   int64    `json:"createdAt" bson:"createdAt" binding:"required"`
 	LastMoveAt  int64    `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
 	Status      string   `json:"status" bson:"status" binding:"required,oneof=created started mate resign stalemate draw"`
-	Winner      string   `json:"winner,omitempty" bson:"winner" binding:"required,oneof=none white black"`
+	Winner      string   `json:"winner,omitempty" bson:"winner" binding:"required,oneof=pending none white black"`
 	Moves       string   `json:"moves" bson:"moves,omitempty" binding:"required"`
 	MoveList    []string `json:"moveList,omitempty" bson:"moveList"`
 	WhitePlayer Player   `json:"whitePlayer" bson:"whitePlayer" binding:"required"`
 	BlackPlayer Player   `json:"blackPlayer" bson:"blackPlayer" binding:"required"`
+	// DrawType    string   `json:"drawType,omitempty" bson:"drawType" binding:"omitempty,oneof=material stalemate threefold fiftyMove mutual"`
 }
 
 func (g *Game2) TurnColor() string {

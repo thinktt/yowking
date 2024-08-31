@@ -90,12 +90,38 @@ func CheckForEngineMove(game models.Game2) {
 		}
 	}
 
+	// fix the king's quirky castling notation
+	if algebraMove == "0-0" {
+		algebraMove = "O-O"
+	}
+	if algebraMove == "0-0-0" {
+		algebraMove = "O-O-O"
+	}
+
+	// fix kings non standard promotion notation
+	algebraMove = fixPromotionMove(algebraMove)
+
 	fmt.Println(algebraMove)
 	// moves := append(game.MoveList, algebraMove)
 	err = AddMove(game.ID, cmpName,
 		models.MoveData2{Index: len(game.Moves), Move: algebraMove})
 	if err != nil {
 		fmt.Println("error Adding engine move: ", err.Error())
+	}
+}
+
+func fixPromotionMove(algebraMove string) string {
+	if len(algebraMove) == 0 {
+		return algebraMove
+	}
+
+	lastChar := algebraMove[len(algebraMove)-1]
+
+	switch lastChar {
+	case 'N', 'Q', 'B', 'R':
+		return algebraMove[:len(algebraMove)-1] + "=" + string(lastChar)
+	default:
+		return algebraMove
 	}
 }
 
@@ -143,27 +169,6 @@ func parseToChessGame(moves []string) (*chess.Game, error) {
 	return chessGame, nil
 }
 
-// func GetUCINotation(algebraMoves []string) ([]string, error) {
-// 	gameParser := chess.NewGame()
-// 	for i, move := range algebraMoves {
-// 		err := gameParser.MoveStr(move)
-// 		if err != nil {
-// 			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
-// 			return nil, errors.New(errMsg)
-// 		}
-// 	}
-
-// 	chess.UseNotation(chess.UCINotation{})(gameParser)
-// 	fmt.Println(gameParser.Moves()[0].String())
-// 	chess.UseNotation(chess.AlgebraicNotation{})(gameParser)
-// 	fmt.Println(gameParser.Moves()[0].String())
-
-// 	moveStr := gameParser.String()
-// 	moves := uciRegex.FindAllString(moveStr, -1)
-
-// 	return moves, nil
-// }
-
 func GetAlgebraicNotation(uciMoves []string) ([]string, error) {
 	gameParser := chess.NewGame(chess.UseNotation(chess.UCINotation{}))
 	algebraicMoves := make([]string, 0, len(uciMoves))
@@ -182,46 +187,58 @@ func GetAlgebraicNotation(uciMoves []string) ([]string, error) {
 }
 
 func CheckMoves(moves []string) (string, error) {
-	gameParser := chess.NewGame()
+	chessGame := chess.NewGame()
 	for i, move := range moves {
-		err := gameParser.MoveStr(move)
+		err := chessGame.MoveStr(move)
 		if err != nil {
 			errMsg := fmt.Sprintf("Invalid move at index %d: %v", i, err)
 			return "", errors.New(errMsg)
 		}
 	}
 
-	// fmt.Print(gameParser.Moves())
-	// fmt.Println(gameParser.MoveHistory())
+	drawMethods := chessGame.EligibleDraws()
+	ending := chessGame.Method()
 
-	moveList := gameParser.String()
-	algebraMoves := strings.Split(moveList, " ")
+	// switch ending {
+	// case chess.Checkmate:
+	// 	game.Status = "mate"
+	// case chess.Stalemate:
+	// 	game.Status = "stalemate"
+	// case chess.InsufficientMaterial:
+	// 	game.Status = "draw"
+	// }
 
-	// find the last move in the list of moves, this loop fixes issue
-	// when there are extra spaces
-	lastMove := ""
-	for i := len(algebraMoves) - 2; i >= 0; i-- {
-		if algebraMoves[i] != "" {
-			lastMove = algebraMoves[i]
-			break
-		}
-	}
+	fmt.Println("Ways to draw:", drawMethods)
+	fmt.Println("Game ended as: ", ending)
 
-	lastOriginalMove := moves[len(moves)-1]
+	moveList := chessGame.String()
+	algebraMoves := strings.Fields(moveList)
+	lastMove := algebraMoves[len(algebraMoves)-1]
+	fmt.Println(moves)
+	fmt.Println()
+	fmt.Println(algebraMoves)
 
-	// fmt.Println(moveList)
-	// fmt.Println(lastOriginalMove)
-	// fmt.Println(lastMove)
+	// // find the last move in the list of moves, this loop fixes issue
+	// // when there are extra spaces
+	// lastMove := ""
+	// for i := len(algebraMoves) - 2; i >= 0; i-- {
+	// 	if algebraMoves[i] != "" {
+	// 		lastMove = algebraMoves[i]
+	// 		break
+	// 	}
+	// }
 
-	if lastMove != lastOriginalMove {
-		err := fmt.Errorf(
-			"strict move notation enforced: wanted %s, got %s",
-			lastMove, lastOriginalMove,
-		)
-		return "", err
-	}
+	// lastOriginalMove := moves[len(moves)-1]
 
-	return lastOriginalMove, nil
+	// if lastMove != lastOriginalMove {
+	// 	err := fmt.Errorf(
+	// 		"strict move notation enforced: wanted %s, got %s",
+	// 		lastMove, lastOriginalMove,
+	// 	)
+	// 	return "", err
+	// }
+
+	return lastMove, nil
 
 }
 
@@ -271,17 +288,17 @@ func AddMove(id, user string, moveData models.MoveData2) error {
 		return err
 	}
 
-	userColor := ""
-	if user == game.WhitePlayer.ID {
-		userColor = "white"
-	} else if user == game.BlackPlayer.ID {
-		userColor = "black"
-	}
+	// userColor := ""
+	// if user == game.WhitePlayer.ID {
+	// 	userColor = "white"
+	// } else if user == game.BlackPlayer.ID {
+	// 	userColor = "black"
+	// }
 
-	if userColor == "" {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
-		return err
-	}
+	// if userColor == "" {
+	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
+	// 	return err
+	// }
 
 	moves := strings.Fields(game.Moves)
 

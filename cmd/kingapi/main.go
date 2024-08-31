@@ -38,6 +38,16 @@ func main() {
 		port = "8080"
 	}
 
+	// liveGamesIDs, err := db.GetAllLiveGameIDs()
+	// if err != nil {
+	// 	fmt.Errorf("Not able to get live games: %s", err.Error())
+	// }
+
+	// // make moves for any games that ar waiting for the engine
+	// for _, id := range liveGamesIDs {
+	// 	go games.PublishGameUpdates(id)
+	// }
+
 	r := gin.New()
 	r.Use(cors.New(config))
 
@@ -240,8 +250,9 @@ func main() {
 			return
 		}
 
-		// c.JSON(http.StatusCreated, gin.H{"message": fmt.Sprintf("game %s successfully added", game.ID)})
 		c.JSON(http.StatusOK, game)
+
+		games.PublishGameUpdates(game.ID)
 	})
 
 	r.GET("/games2/live", func(c *gin.Context) {
