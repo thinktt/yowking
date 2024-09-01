@@ -213,48 +213,6 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
-	r.POST("/games2", func(c *gin.Context) {
-		var newGame models.Game2New
-
-		// Binding and validation
-		if err := c.ShouldBindJSON(&newGame); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		now := time.Now().UnixMilli()
-		id, _ := games.GetGameID()
-
-		game := models.Game2{
-			ID:          id,
-			LichessID:   "",
-			CreatedAt:   now,
-			LastMoveAt:  now,
-			Status:      "started",
-			Winner:      "pending",
-			Moves:       "",
-			MoveList:    []string{},
-			WhitePlayer: newGame.WhitePlayer,
-			BlackPlayer: newGame.BlackPlayer,
-		}
-
-		result, err := db.CreateGame2(game)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
-			return
-		}
-
-		// MongoDB already had this ID in the DB, so it didn't create a new one
-		if result.MatchedCount > 0 {
-			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("game %s already exist, no new creation", game.ID)})
-			return
-		}
-
-		c.JSON(http.StatusOK, game)
-
-		games.PublishGameUpdates(game.ID)
-	})
-
 	r.GET("/games2/live", func(c *gin.Context) {
 		gameIDs, err := db.GetAllLiveGameIDs()
 		if err != nil {
@@ -341,6 +299,67 @@ func main() {
 	//.....................................
 
 	r.Use(Auth())
+
+	r.POST("/games2", func(c *gin.Context) {
+		var newGame models.Game2New
+
+		// Binding and validation
+		if err := c.ShouldBindJSON(&newGame); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		now := time.Now().UnixMilli()
+		id, _ := games.GetGameID()
+
+		game := models.Game2{
+			ID:          id,
+			LichessID:   "",
+			CreatedAt:   now,
+			LastMoveAt:  now,
+			Status:      "started",
+			Winner:      "pending",
+			Moves:       "",
+			MoveList:    []string{},
+			WhitePlayer: newGame.WhitePlayer,
+			BlackPlayer: newGame.BlackPlayer,
+		}
+
+		err := checkHasValidCMP(game)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		ok := gameHasUser(game, user)
+		if !ok {
+			c.JSON(http.StatusUnauthorized,
+				gin.H{"error": fmt.Sprintf("only authororized to make games for %s", user)})
+			return
+		}
+
+		result, err := db.CreateGame2(game)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "DB Error: " + err.Error()})
+			return
+		}
+
+		// MongoDB already had this ID in the DB, so it didn't create a new one
+		if result.MatchedCount > 0 {
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("game %s already exist, no new creation", game.ID)})
+			return
+		}
+
+		c.JSON(http.StatusOK, game)
+
+		games.PublishGameUpdates(game.ID)
+	})
 
 	r.POST("/games2/:id/moves", func(c *gin.Context) {
 		id := c.Param("id")
@@ -649,4 +668,39 @@ func loadCmps() {
 	if err != nil {
 		fmt.Println("Error decoding JSON:", err)
 	}
+}
+
+func checkHasValidCMP(game models.Game2) error {
+
+	hasCMP := game.WhitePlayer.Type == "cmp" || game.BlackPlayer.Type == "cmp"
+	if !hasCMP {
+		return fmt.Errorf("at least one player must be type cmp")
+	}
+
+	ok := true
+	if game.WhitePlayer.Type == "cmp" {
+		_, ok = cmpMap[game.WhitePlayer.ID]
+	}
+	if !ok {
+		return fmt.Errorf("%s is not a valid personality", game.WhitePlayer.ID)
+	}
+
+	if game.BlackPlayer.Type == "cmp" {
+		_, ok = cmpMap[game.BlackPlayer.ID]
+	}
+	if !ok {
+		return fmt.Errorf("%s is not a valid personality", game.BlackPlayer.ID)
+	}
+
+	return nil
+}
+
+func gameHasUser(game models.Game2, user string) bool {
+	if game.WhitePlayer.Type == "lichess" && game.WhitePlayer.ID == user {
+		return true
+	}
+	if game.BlackPlayer.Type == "lichess" && game.BlackPlayer.ID == user {
+		return true
+	}
+	return false
 }
