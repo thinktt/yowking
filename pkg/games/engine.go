@@ -57,16 +57,16 @@ func CheckForEngineMove(game models.Game2) {
 	algebraMove := engineMove.AlgebraMove
 	if algebraMove == "" {
 		algebraMove, err = getAlgebraMoveFromChessGame(chessGame, engineMove.CoordinateMove)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
+	}
+	if err != nil {
+		fmt.Println(err.Error())
+		return
 	}
 
 	// fix the king's quirky castling notation
 	if strings.Contains(algebraMove, "0-0-0") {
 		algebraMove = "O-O-O"
-	} else if strings.Contains(algebraMove, "0-0-0") {
+	} else if strings.Contains(algebraMove, "0-0") {
 		algebraMove = "O-O"
 	}
 

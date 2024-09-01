@@ -12,14 +12,13 @@ import (
 // AddMove validates and adds a move to the game, and then triggers an event
 // message that moves were added, it returns cutsom HTTPErrors so errors can
 // play nicely with an http routers
-func AddMove(id, user string, moveData models.MoveData2) error {
+func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) error {
 
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
 	if err != nil {
 		err = utils.NewHTTPError(
-			http.StatusInternalServerError,
-			"DB Error: "+err.Error())
+			http.StatusInternalServerError, "DB Error: "+err.Error())
 		return err
 	}
 	if game.ID == "" {
