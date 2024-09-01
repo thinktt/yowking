@@ -220,6 +220,10 @@ func main() {
 			return
 		}
 
+		if gameIDs == nil {
+			gameIDs = []string{}
+		}
+
 		c.JSON(http.StatusOK, gameIDs)
 	})
 
