@@ -1,3 +1,7 @@
+const fs = require('fs')
+const crypto = require('crypto')
+
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 const token = process.env.YOW_TOKEN 
 console.log(token)
@@ -6,9 +10,12 @@ const whitePlayers = ["Capablanca", "Wizard", "Fischer"]
 // const blackPlayers = ["Tex", "Ben", "Stanley"]
 const blackPlayers = ["Lacey"] 
 
-function getRandomPlayer(players) {
-  return players[Math.floor(Math.random() * players.length)]
-}
+
+const cmps = JSON.parse(fs.readFileSync('./dist/personalities.json', 'utf8'))
+
+const cmpNames = Object.keys(cmps)
+
+
 
 async function startGame(whitePlayerId, blackPlayerId) {
   try {
@@ -25,17 +32,39 @@ async function startGame(whitePlayerId, blackPlayerId) {
     })
 
     const gameData = await response.json()
-    // Call your async function here
-    console.log(gameData)
+        
     return gameData
 
   } catch (error) {
     console.error('Error starting game:', error)
     return
   }
-
  
 }
+
+async function startGames() {
+  while (true) {
+    // const whitePlayer = getRandomPlayer(whitePlayers)
+    // const blackPlayer = getRandomPlayer(blackPlayers)
+    const whitePlayer = selectRandomCMP(whitePlayers)
+    const blackPlayer = selectRandomCMP(blackPlayers)
+
+    const game = await startGame(whitePlayer, blackPlayer)
+    if (!game) {
+      console.error(`unalbe to start game ${whitePlayer} vs ${blackPlayer}`)
+      break
+    }
+    console.log(`\x1b[31mstarted game ${game.whitePlayer.id} vs ${game.blackPlayer.id}\x1b[0m`)
+    
+    const result = await waitForGameEnd(game.id)
+    console.log()
+    if (result) {
+      console.error(result)
+      break
+    }
+  }
+}
+
 async function waitForGameEnd(gameID) {
   const controller = new AbortController()
   const signal = controller.signal
@@ -53,7 +82,9 @@ async function waitForGameEnd(gameID) {
       const event = parseSSE(eventStr)
       const data = JSON.parse(event.data) 
 
-      console.log(data)
+      const move = data.moves.split(' ').pop()
+
+      process.stdout.write(`${move} `)
 
       if (data.status) {
         console.log("closing stream ", data.id)
@@ -65,22 +96,18 @@ async function waitForGameEnd(gameID) {
     return error
   }
 }
-async function startGames() {
-  while (true) {
-    const whitePlayer = getRandomPlayer(whitePlayers)
-    const blackPlayer = getRandomPlayer(blackPlayers)
 
-    console.log(`starting ${whitePlayer} vs ${blackPlayer}`)
 
-    const game = await startGame(whitePlayer, blackPlayer)
-    if (!game) break
+// .................helpers......................
+function selectRandomCMP() {
+  // completly unesseary crypto random, just to make sure it's really random!
+  const randomIndex = crypto.randomInt(0, cmpNames.length)
+  const cmpName = cmpNames.splice(randomIndex, 1)[0]
+  return cmpName 
+}
 
-    const result = await waitForGameEnd(game.id)
-    if (result) {
-      console.error(result)
-      break
-    }
-  }
+function getRandomPlayer(players) {
+  return players[Math.floor(Math.random() * players.length)]
 }
 
 function parseSSE(eventString) {
