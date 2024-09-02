@@ -96,7 +96,7 @@ func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) e
 
 	PublishGameUpdates(game.ID)
 
-	fmt.Println(properMove)
+	fmt.Print(properMove + " ")
 
 	return nil
 }

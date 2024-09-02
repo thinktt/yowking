@@ -50,14 +50,14 @@ func (s *Subscription) RemoveGameID(gameID string) {
 }
 
 func (s *Subscription) Destroy() {
-	close(s.Channel)
 	Pub.RemoveSub(s)
+	close(s.Channel)
 }
 
 // NewSubscrition creates a subscription to game events. It will filter events
 // by GameIDs, if GammeIDs list is empty it will all game messages will be
 // published to the subscription
-func NewSubscription(gameIDs []string) Subscription {
+func NewSubscription(gameIDs []string) *Subscription {
 	sub := Subscription{
 		gameIDs:       make(map[string]struct{}),
 		willAcceptAll: false,
@@ -66,7 +66,7 @@ func NewSubscription(gameIDs []string) Subscription {
 
 	if len(gameIDs) == 0 {
 		sub.willAcceptAll = true
-		return sub
+		return &sub
 	}
 
 	for _, gameID := range gameIDs {
@@ -76,5 +76,5 @@ func NewSubscription(gameIDs []string) Subscription {
 	// Add the subscription set to the package global publisher
 	Pub.AddSub(&sub)
 
-	return sub
+	return &sub
 }
