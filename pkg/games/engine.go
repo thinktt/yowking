@@ -8,7 +8,7 @@ import (
 	"github.com/thinktt/yowking/pkg/moveque"
 )
 
-func CheckForEngineMove(game models.Game2) {
+func PlayEngineMove(game models.Game2) {
 
 	// the game is over, get out of here
 	if game.Status != "started" {
@@ -54,32 +54,42 @@ func CheckForEngineMove(game models.Game2) {
 	}
 
 	// if there is not an Algebra move we will need to translate the coordinate move
-	algebraMove := engineMove.AlgebraMove
-	if algebraMove == "" {
-		algebraMove, err = getAlgebraMoveFromChessGame(chessGame, engineMove.CoordinateMove)
+	move := engineMove.AlgebraMove
+	if move == "" {
+		move, err = getAlgebraMoveFromChessGame(chessGame, engineMove.CoordinateMove)
 	}
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	// fix the king's quirky castling notation
-	if strings.Contains(algebraMove, "0-0-0") {
-		algebraMove = "O-O-O"
-	} else if strings.Contains(algebraMove, "0-0") {
-		algebraMove = "O-O"
-	}
-
-	// fix kings non standard promotion notation
-	algebraMove = fixPromotionMove(algebraMove)
+	move = normalizeEngineMove(move)
 
 	moveData := models.MoveData2{
 		Index: len(game.MoveList),
-		Move:  algebraMove,
+		Move:  move,
 	}
 
 	err = AddMove(game.ID, cmpName, moveData)
 	if err != nil {
 		fmt.Println("error Adding engine move: ", err.Error())
 	}
+}
+
+func normalizeEngineMove(move string) string {
+
+	// fix weird casling notation
+	if strings.Contains(move, "0-0-0") {
+		return "O-O-O"
+	} else if strings.Contains(move, "0-0") {
+		return "O-O"
+	}
+
+	// add = sign to promition moves
+	for i := 1; i < len(move); i++ {
+		if strings.ContainsRune("QNRB", rune(move[i])) {
+			return move[:i] + "=" + move[i:]
+		}
+	}
+	return move
 }
