@@ -29,7 +29,7 @@ func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) e
 	}
 
 	//check that game is still live
-	if game.Status != "started" {
+	if game.Winner != "pending" {
 		err = utils.NewHTTPError(
 			http.StatusBadRequest, "no moves allowed, game is finished")
 		return err
@@ -81,13 +81,16 @@ func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) e
 	}
 
 	// check if new move has changed the game status
-	status, winner := GetGameStatus(chessGame)
+	winner, method := GetGameStatus(chessGame)
+
+	// fmt.Println("winner: ", winner)
+	// fmt.Println("method: ", method)
 
 	// choose db update method based on what needs to be updated
-	if status == "started" {
+	if winner == "pending" {
 		_, err = db.CreateMove(id, properMove)
 	} else {
-		_, err = db.UpdateGame(id, properMove, status, winner)
+		_, err = db.UpdateGame(id, properMove, winner, method)
 	}
 	if err != nil {
 		err = utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())

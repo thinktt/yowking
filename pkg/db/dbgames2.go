@@ -23,13 +23,13 @@ func CreateGame2(game models.Game2) (*mongo.UpdateResult, error) {
 	return gamesCollection.UpdateOne(context.Background(), filter, update, &opts)
 }
 
-// GetAllLiveGameIDs find sall the games in the database that have game.Status
-// started and returns a list of all of their IDs
+// GetAllLiveGameIDs find sall the games in the database that have game.Winner
+// pending and returns a list of all of their IDs
 func GetAllLiveGameIDs() ([]string, error) {
 	gamesCollection := yowDatabase.Collection("games2")
 
 	// Define the filter to find games with status "started"
-	filter := bson.M{"status": "started"}
+	filter := bson.M{"winner": "pending"}
 
 	// Define a projection to return only the "id" field
 	projection := bson.M{"id": 1}
@@ -111,7 +111,7 @@ func CreateMove(gameID string, move string) (*mongo.UpdateResult, error) {
 	return gamesCollection.UpdateOne(context.Background(), filter, update)
 }
 
-func UpdateGame(gameID, move, status, winner string) (*mongo.UpdateResult, error) {
+func UpdateGame(gameID, move, winner, method string) (*mongo.UpdateResult, error) {
 	gamesCollection := yowDatabase.Collection("games2")
 
 	filter := bson.M{"id": gameID}
@@ -121,8 +121,8 @@ func UpdateGame(gameID, move, status, winner string) (*mongo.UpdateResult, error
 		},
 		"$set": bson.M{
 			"lastMoveAt": time.Now().UnixMilli(),
-			"status":     status,
 			"winner":     winner,
+			"method":     method,
 		},
 	}
 
