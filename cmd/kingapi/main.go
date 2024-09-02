@@ -256,6 +256,7 @@ func main() {
 		ids := c.Param("ids")
 		gameIDs := strings.Split(ids, ",")
 		gameStream := events.NewSubscription(gameIDs)
+		defer gameStream.Destroy()
 
 		clientClosed := c.Writer.CloseNotify()
 		// pingTicker := time.NewTicker(1 * time.Second)
@@ -700,6 +701,12 @@ func checkHasValidCMP(game models.Game2) error {
 }
 
 func gameHasUser(game models.Game2, user string) bool {
+
+	// bad form in a function called gameHasuser user but whatev
+	if game.WhitePlayer.Type == "cmp" && game.BlackPlayer.Type == "cmp" {
+		return true
+	}
+
 	if game.WhitePlayer.Type == "lichess" && game.WhitePlayer.ID == user {
 		return true
 	}

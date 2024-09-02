@@ -39,24 +39,9 @@ func PublishGameUpdates(gameID string) error {
 	jsonData, _ := json.Marshal(gameMuation)
 	events.Pub.PublishMessage(game.ID, string(jsonData))
 
-	go CheckForEngineMove(game)
+	go PlayEngineMove(game)
 
 	return nil
-}
-
-func fixPromotionMove(algebraMove string) string {
-	if len(algebraMove) == 0 {
-		return algebraMove
-	}
-
-	lastChar := algebraMove[len(algebraMove)-1]
-
-	switch lastChar {
-	case 'N', 'Q', 'B', 'R':
-		return algebraMove[:len(algebraMove)-1] + "=" + string(lastChar)
-	default:
-		return algebraMove
-	}
 }
 
 // var uciRegex = regexp.MustCompile(`[a-h][1-8][a-h][1-8][qrbn]?`)
