@@ -1,12 +1,14 @@
 Today
 ....api....
-fix stream stopping when one stream closes
-
 offer draw
 resign game
 abort game
-wire engine to respond to draws
+
+add method for how game ended
+
+
 better error handling
+wire engine to respond to draws
 
 restrict lichess user to 1 game at a time 
 let admin bypass restriction
@@ -18,6 +20,7 @@ x game conclusion events
 
 x validate proper user when making a game
 
+x fix stream stopping when one stream closes
 x wire up engine to respond to moves
 x restrict move to authed player of game
 x create game

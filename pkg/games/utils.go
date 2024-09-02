@@ -43,34 +43,36 @@ func ParseGame(game models.Game2) (*chess.Game, error) {
 
 }
 
-func GetGameStatus(chessGame *chess.Game) (status string, winner string) {
+func GetGameStatus(chessGame *chess.Game) (winner, method string) {
 
 	chessGame.Draw(chess.FiftyMoveRule)
 	chessGame.Draw(chess.ThreefoldRepetition)
 
 	ending := chessGame.Method()
 
-	status = "started"
+	// oneof=mate resign material mutual stalemate threefold fiftyMove
+	winner = "pending"
+	method = ""
 	switch ending {
 	case chess.Checkmate:
-		status = "mate"
+		method = "mate"
 		if chessGame.Outcome() == chess.WhiteWon {
 			winner = "white"
 		} else {
 			winner = "black"
 		}
 	case chess.Stalemate:
-		status = "stalemate"
-		winner = "none"
+		winner = "draw"
+		method = "stalemate"
 	case chess.InsufficientMaterial:
-		status = "draw"
-		winner = "none"
-	case chess.FiftyMoveRule:
-		status = "draw"
-		winner = "none"
+		winner = "draw"
+		method = "material"
 	case chess.ThreefoldRepetition:
-		status = "draw"
-		winner = "none"
+		winner = "draw"
+		method = "threefold"
+	case chess.FiftyMoveRule:
+		winner = "draw"
+		method = "fiftyMove"
 	}
 
 	return

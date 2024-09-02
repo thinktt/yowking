@@ -11,7 +11,7 @@ import (
 func PlayEngineMove(game models.Game2) {
 
 	// the game is over, get out of here
-	if game.Status != "started" {
+	if game.Winner != "pending" {
 		return
 	}
 

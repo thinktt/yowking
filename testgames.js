@@ -46,8 +46,10 @@ async function startGames() {
   while (true) {
     // const whitePlayer = getRandomPlayer(whitePlayers)
     // const blackPlayer = getRandomPlayer(blackPlayers)
-    const whitePlayer = selectRandomCMP(whitePlayers)
-    const blackPlayer = selectRandomCMP(blackPlayers)
+    // const whitePlayer = selectRandomCMP(whitePlayers)
+    // const blackPlayer = selectRandomCMP(blackPlayers)
+    const whitePlayer = "Morphy"
+    const blackPlayer = "Stanley"
 
     const game = await startGame(whitePlayer, blackPlayer)
     if (!game) {
