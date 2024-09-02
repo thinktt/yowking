@@ -3,23 +3,19 @@ Today
 offer draw
 resign game
 abort game
-
-add method for how game ended
-
+yow unique ids?
 
 better error handling
 wire engine to respond to draws
-
 restrict lichess user to 1 game at a time 
 let admin bypass restriction
-
 better endpoint validations
+
 x fix 0-0 issue
 x fix promotion issue
 x game conclusion events
-
 x validate proper user when making a game
-
+x add method for how game ended
 x fix stream stopping when one stream closes
 x wire up engine to respond to moves
 x restrict move to authed player of game

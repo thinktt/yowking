@@ -122,5 +122,9 @@ func GetGameID() (string, error) {
 	if len(encoded) == 9 {
 		encoded = encoded[1:]
 	}
-	return encoded, nil
+
+	// add a y on the end to distinguish from lichess id
+	id := encoded + "y"
+
+	return id, nil
 }

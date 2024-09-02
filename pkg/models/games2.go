@@ -11,7 +11,7 @@ type Game2New struct {
 }
 
 type Game2 struct {
-	ID          string   `json:"id" bson:"id" binding:"required,alphanum,min=8,max=8"`
+	ID          string   `json:"id" bson:"id" binding:"required,alphanum,min=8,max=9"`
 	LichessID   string   `json:"lichessId" bson:"lichessId"  binding:"alphanum,min=8,max=8"`
 	CreatedAt   int64    `json:"createdAt" bson:"createdAt" binding:"required"`
 	LastMoveAt  int64    `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
