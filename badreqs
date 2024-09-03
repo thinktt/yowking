@@ -1,3 +1,12 @@
 king seems to freeze up when sent these messages
 
 {"moves":["e2e4","c7c5","g1f3","e7e6","d2d4","c5d4","f1b5","d8a5","e1f1","a5b5","f1g1","f8d6","e4e5","d6e5","c2c4","d4c3","b1c3","e5c3","b2c3","g8f6","f3g5","b5e5","g5f3","e5a5","c1g5","f6e4","g5h4","e4c3","d1c2","b8c6","a1c1","c3a2","c1a1","c6b4","c2b2","h8g8","h4g5","a5d5","g5d2","a7a5","h2h4","d7d6","b2b1","g7g6","b1b2","e6e5","f3g5","g8h8","h4h5","c8f5","h5g6","f7g6","h1h7","h8h7","g5h7","e8c8","h7f6","d5c4","d2b4","a2b4","a1a5","b4d3","b2a3","c4d4","a5a8","c8c7","a3a5","c7c6","a8d8","d3f2","g1h2","e5e4","d8e8","e4e3","e8e3","d4e3","a5a4","c6c5","a4a5","c5d4","a5b6","d4d3","b6b7","e3h6","h2g1","f2h3","g2h3","h6e3","g1h1","e3h3","h1g1","h3g3","b7g2","g3e3","g2f2","e3g5","f2g2","g5f6","g2f1","d3c2","f1g2","c2c1","g2f1","c1b2","f1f2","b2b3","f2b6","b3c3","b6c6","c3d4","c6b6","d4d3","b6b1","d3d2","b1b4","f6c3","b4d6","d2c2","d6h2","c2b3","h2f4","c3c5","g1g2","b3a3","f4f3","a3b2","f3f4","g6g5","f4f3","c5c2","g2g1","c2c1","g1g2","c1d2","g2g3","d2c3"],"cmpName":"Mateo","gameId":"3zkwMx6r","stopId":0,"clockTime":0,"randomIsOff":false,"shouldSkipBook":false}
+
+
+yowking45  | time="2024-09-02T19:52:18Z" level=info msg="playing as Chigorin using book ChigorinM.bin" gameId=Mh5qZVkEy moveNo=272
+yowking45  | time="2024-09-02T19:52:19Z" level=info msg="no book move found, sending move to engine" gameId=Mh5qZVkEy moveNo=272
+yowking45  | time="2024-09-02T19:52:19Z" level=info msg="using calibrated clock time: 11000" gameId=Mh5qZVkEy moveNo=272
+yowking45  | time="2024-09-02T19:52:19Z" level=info msg="engine accepted the settings witouth error" gameId=Mh5qZVkEy moveNo=272
+
+Bb8 Bc5 e2 Bf2 Be5 Kh3 Kf3 Bh4 Bf4 Be1 Bd6 Kh4 Kg2 Kg4 Bh2 Kf5 Kf1 Ba5 Kf2 Ke6 Bf4 Bb4 Bc7 Ke7 Kf1 Kd7 Be5 Kc8 Kf2 Bd2 Bd6 Kd7 Bh2 Ba5 Kf1 Kc6 Be5 Bd2 Bb8 Kd7 Bh2 Ke6 Bc7 Bc3 Bf4 Kd7 Kf2 Ke7 Bb8 Kd8 Kf1 Kd7 Bf4 Ke6 Bc7 Kd5 Bb8 Bd2 Bg3 Ke4 e1=Q+ Bxe1 Kxe1 Kf3 Be5 Ke3 Bd6 Kd4 Bc7 Kd5 Bb8 Kc6 Be5 Kd7 Bf4 Kc8 Be5 Kd8 Bd6 Ke8 Bc7 Kf8 Bb8 Kf7 Ba7 Ke6 Bb8 Kd5
+ Ba7 Kd6 Bb8+ Kc5 Ba7+ Kb5 Bb8 Kb6 Bd6 Ka5 Bc7+ Kb4 Bb8 Kb5 Ba7 Ka5 Bb8 Kb4 Ba7 Kc3 Bb8 Kd3 Ba7 Ke4 Bb8 Kf5 Ba7 Ke5 Bb8+ Ke6 Ba7 Kf5 Bb8 Kf6 Ba7 Kf7 Bb8 Kg7 Ba7 Kg6 Bb8 Kg5 Ba7 Kf6 Bb8 Kg6 Ba7 Kg5 Bb8 Kh6 Ba7 Kg7 Bb8 Kf8 Ba7 Kg8 Bb8

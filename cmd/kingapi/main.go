@@ -318,16 +318,18 @@ func main() {
 		id, _ := games.GetGameID()
 
 		game := models.Game2{
-			ID:          id,
-			LichessID:   "",
-			CreatedAt:   now,
-			LastMoveAt:  now,
-			Winner:      "pending",
-			Method:      "",
-			Moves:       "",
-			MoveList:    []string{},
-			WhitePlayer: newGame.WhitePlayer,
-			BlackPlayer: newGame.BlackPlayer,
+			ID:            id,
+			LichessID:     "",
+			CreatedAt:     now,
+			LastMoveAt:    now,
+			Winner:        "pending",
+			Method:        "",
+			Moves:         "",
+			MoveList:      []string{},
+			WhiteWillDraw: false,
+			BlackWillDraw: false,
+			WhitePlayer:   newGame.WhitePlayer,
+			BlackPlayer:   newGame.BlackPlayer,
 		}
 
 		err := checkHasValidCMP(game)
@@ -381,7 +383,7 @@ func main() {
 			return
 		}
 
-		err = games.AddMove(id, user, moveData)
+		err = games.AddMove(id, user, moveData, false)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {

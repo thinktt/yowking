@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -123,6 +124,28 @@ func UpdateGame(gameID, move, winner, method string) (*mongo.UpdateResult, error
 			"lastMoveAt": time.Now().UnixMilli(),
 			"winner":     winner,
 			"method":     method,
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
+}
+
+func UpdateWillDraw(gameID, color string, state bool) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	updateField := ""
+	if color == "white" {
+		updateField = "whiteWillDraw"
+	} else if color == "black" {
+		updateField = "blackWillDraw"
+	} else {
+		return nil, fmt.Errorf("invalid color specified")
+	}
+
+	update := bson.M{
+		"$set": bson.M{
+			updateField: state,
 		},
 	}
 
