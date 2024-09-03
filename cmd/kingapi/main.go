@@ -397,7 +397,102 @@ func main() {
 		}
 
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
+	})
 
+	r.POST("/games2/:id/draw", func(c *gin.Context) {
+		id := c.Param("id")
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = games.OfferDraw(id, user)
+		if err != nil {
+			httpErr, ok := err.(*utils.HTTPError)
+			if ok {
+				c.JSON(httpErr.StatusCode, gin.H{"error": httpErr.Message})
+				return
+			}
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "draw offer made"})
+	})
+
+	r.DELETE("/games2/:id/draw", func(c *gin.Context) {
+		id := c.Param("id")
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = games.ClearDrawOffer(id, user)
+		if err != nil {
+			httpErr, ok := err.(*utils.HTTPError)
+			if ok {
+				c.JSON(httpErr.StatusCode, gin.H{"error": httpErr.Message})
+				return
+			}
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "draw offer cleared"})
+	})
+
+	r.POST("/games2/:id/resign", func(c *gin.Context) {
+		id := c.Param("id")
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = games.Resign(id, user)
+		if err != nil {
+			httpErr, ok := err.(*utils.HTTPError)
+			if ok {
+				c.JSON(httpErr.StatusCode, gin.H{"error": httpErr.Message})
+				return
+			}
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "game resigned"})
+	})
+
+	r.POST("/games2/:id/abort", func(c *gin.Context) {
+		id := c.Param("id")
+
+		user, err := GetUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err = games.Abort(id, user)
+		if err != nil {
+			httpErr, ok := err.(*utils.HTTPError)
+			if ok {
+				c.JSON(httpErr.StatusCode, gin.H{"error": httpErr.Message})
+				return
+			}
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "game aborted"})
 	})
 
 	r.GET("/users", CheckRole("admin"), func(c *gin.Context) {
