@@ -195,3 +195,48 @@ func ResignGame(gameID, userColor string) (*mongo.UpdateResult, error) {
 
 	return gamesCollection.UpdateOne(context.Background(), filter, update)
 }
+
+// GetGameIDs retrieves a comma-separated string of game IDs for a given user
+// for games created since the specified timestamp
+func GetGameIDs(user string, createdAt int64) (map[string]string, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	// Define filter to match games where the user is either the white or black
+	// player, and the createdAt timestamp is greater than or equal to the
+	// provided value
+	filter := bson.M{
+		"createdAt": bson.M{"$gte": createdAt},
+		"$or": []bson.M{
+			{"whitePlayer.id": user},
+			{"blackPlayer.id": user},
+		},
+	}
+
+	// Projection to only include the ID field in the results
+	projection := bson.M{
+		"id": 1,
+	}
+
+	cursor, err := gamesCollection.Find(context.Background(), filter, options.Find().SetProjection(projection))
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	var ids []string
+	for cursor.Next(context.Background()) {
+		var result struct {
+			ID string `bson:"id"`
+		}
+		if err := cursor.Decode(&result); err != nil {
+			return nil, err
+		}
+		ids = append(ids, result.ID)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return map[string]string{"ids": strings.Join(ids, ",")}, nil
+}
