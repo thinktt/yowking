@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -225,6 +226,25 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, gameIDs)
+	})
+
+	r.GET("/ids/:user", func(c *gin.Context) {
+		user := c.Param("user")
+
+		createdAtParam := c.Query("createdAt")
+		createdAt, err := strconv.ParseInt(createdAtParam, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid createdAt parameter"})
+			return
+		}
+
+		ids, err := db.GetGameIDs(user, createdAt)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, ids)
 	})
 
 	r.GET("/games2/:id", func(c *gin.Context) {
