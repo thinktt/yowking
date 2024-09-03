@@ -36,7 +36,7 @@ func AddMove(id string, user string, moveData models.MoveData2, willDraw bool) e
 	}
 
 	// // check if user is playing this game
-	// userColor := GetUsercolor(game, user)
+	userColor := GetUsercolor(game, user)
 	// if userColor == "" {
 	// 	err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	// 	return err
@@ -85,7 +85,7 @@ func AddMove(id string, user string, moveData models.MoveData2, willDraw bool) e
 
 	// choose db update method based on what needs to be updated
 	if winner == "pending" {
-		_, err = db.CreateMove(id, properMove)
+		_, err = db.CreateMove(id, properMove, userColor)
 	} else {
 		_, err = db.UpdateGame(id, properMove, winner, method)
 	}
