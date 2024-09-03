@@ -29,6 +29,16 @@ func GetUsercolor(game models.Game2, user string) string {
 	return ""
 }
 
+func GetOpponentColor(userColor string) string {
+	if userColor == "white" {
+		return "black"
+	}
+	if userColor == "black" {
+		return "white"
+	}
+	return ""
+}
+
 func ParseGame(game models.Game2) (*chess.Game, error) {
 	chessGame := chess.NewGame()
 	for i, move := range game.MoveList {

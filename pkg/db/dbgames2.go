@@ -96,8 +96,14 @@ func DeleteGame2(id string) (*mongo.DeleteResult, error) {
 	return gamesCollection.DeleteOne(context.Background(), filter)
 }
 
-func CreateMove(gameID string, move string) (*mongo.UpdateResult, error) {
+func CreateMove(gameID, move, userColor string) (*mongo.UpdateResult, error) {
 	gamesCollection := yowDatabase.Collection("games2")
+
+	// when we create a move we also clear any draws offers of the opponent
+	opponentDrawField := "whiteWillDraw"
+	if userColor == "white" {
+		opponentDrawField = "blackWillDraw"
+	}
 
 	filter := bson.M{"id": gameID}
 	update := bson.M{
@@ -105,7 +111,8 @@ func CreateMove(gameID string, move string) (*mongo.UpdateResult, error) {
 			"moveList": move,
 		},
 		"$set": bson.M{
-			"lastMoveAt": time.Now().UnixMilli(),
+			"lastMoveAt":      time.Now().UnixMilli(),
+			opponentDrawField: false,
 		},
 	}
 
@@ -146,6 +153,20 @@ func UpdateWillDraw(gameID, color string, state bool) (*mongo.UpdateResult, erro
 	update := bson.M{
 		"$set": bson.M{
 			updateField: state,
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
+}
+
+func DrawGame(gameID string, method string) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	update := bson.M{
+		"$set": bson.M{
+			"winner": "draw",
+			"method": method,
 		},
 	}
 
