@@ -53,6 +53,14 @@ func PlayEngineMove(game models.Game2) {
 		return
 	}
 
+	// have cmp set willDraw if the engine is willing to accept one
+	if engineMove.WillAcceptDraw && game.TurnColor() == "white" {
+		err = OfferDraw(game.ID, cmpName)
+	}
+	if engineMove.WillAcceptDraw && game.TurnColor() == "black" {
+		err = OfferDraw(game.ID, cmpName)
+	}
+
 	// if there is not an Algebra move we will need to translate the coordinate move
 	move := engineMove.AlgebraMove
 	if move == "" {

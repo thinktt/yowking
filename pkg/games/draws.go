@@ -8,29 +8,43 @@ import (
 	"github.com/thinktt/yowking/pkg/utils"
 )
 
+// OfferDraw NEED TO CHECK THIS. Things could go wrong if cmp is playing both sides
 func OfferDraw(id, user string) error {
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
 	if err != nil {
-		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
+		err = utils.NewHTTPError(
+			http.StatusInternalServerError, "DB Error: "+err.Error())
+		return err
 	}
 	if game.ID == "" {
-		return utils.NewHTTPError(http.StatusNotFound, fmt.Sprintf("no game found for id %s", id))
+		err = utils.NewHTTPError(
+			http.StatusNotFound,
+			fmt.Sprintf("no game found for id %s", id))
+		return err
 	}
 
-	// check that game is still live
+	//check that game is still live
 	if game.Winner != "pending" {
-		return utils.NewHTTPError(http.StatusBadRequest, "no draws allowed, game is finished")
+		err = utils.NewHTTPError(
+			http.StatusBadRequest, "no moves allowed, game is finished")
+		return err
 	}
-
 	// check if user is playing this game
 	userColor := GetUsercolor(game, user)
 	if userColor == "" {
 		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	}
 
+	// check if it is this user's turn
+	turnColor := GetTurnColor(len(game.MoveList))
+	if turnColor != userColor {
+		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
+		return err
+	}
+
 	// check if the other player has a draw offer
-	opponentColor := GetOpponentColor(userColor)
+	opponentColor := GetOpponentColor(turnColor)
 	opponentWillDraw := false
 	if opponentColor == "white" {
 		opponentWillDraw = game.WhiteWillDraw
@@ -49,10 +63,12 @@ func OfferDraw(id, user string) error {
 	}
 
 	// update will draw state
-	_, err = db.UpdateWillDraw(id, userColor, true)
+	_, err = db.UpdateWillDraw(id, turnColor, true)
 	if err != nil {
 		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 	}
+
+	fmt.Println(userColor, " offered a draw")
 
 	return nil
 }
