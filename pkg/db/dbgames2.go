@@ -172,3 +172,26 @@ func DrawGame(gameID string, method string) (*mongo.UpdateResult, error) {
 
 	return gamesCollection.UpdateOne(context.Background(), filter, update)
 }
+
+func ResignGame(gameID, userColor string) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	var winner string
+	if userColor == "white" {
+		winner = "black"
+	} else if userColor == "black" {
+		winner = "white"
+	} else {
+		return nil, fmt.Errorf("invalid color specified")
+	}
+
+	update := bson.M{
+		"$set": bson.M{
+			"winner": winner,
+			"method": "resign",
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
+}
