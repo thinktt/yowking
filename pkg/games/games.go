@@ -23,17 +23,20 @@ func PublishGameUpdates(gameID string) error {
 	// if winner hasn't change omit winner and method from update
 	winner := ""
 	method := ""
+
 	if game.Winner != "pending" {
 		winner = game.Winner
 		method = game.Method
 	}
 
 	gameMuation := models.Game2MutableFields{
-		ID:         game.ID,
-		LastMoveAt: game.LastMoveAt,
-		Moves:      game.Moves,
-		Winner:     winner,
-		Method:     method,
+		ID:            game.ID,
+		LastMoveAt:    game.LastMoveAt,
+		Moves:         game.Moves,
+		Winner:        winner,
+		Method:        method,
+		WhiteWillDraw: game.WhiteWillDraw,
+		BlackWillDraw: game.BlackWillDraw,
 	}
 
 	jsonData, _ := json.Marshal(gameMuation)

@@ -70,7 +70,7 @@ func PlayEngineMove(game models.Game2) {
 		Move:  move,
 	}
 
-	err = AddMove(game.ID, cmpName, moveData)
+	err = AddMove(game.ID, cmpName, moveData, engineMove.WillAcceptDraw)
 	if err != nil {
 		fmt.Println("error Adding engine move: ", err.Error())
 	}

@@ -12,7 +12,7 @@ import (
 // AddMove validates and adds a move to the game, and then triggers an event
 // message that moves were added, it returns cutsom HTTPErrors so errors can
 // play nicely with an http routers
-func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) error {
+func AddMove(id string, user string, moveData models.MoveData2, willDraw bool) error {
 
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
@@ -82,9 +82,6 @@ func AddMove(id string, user string, moveData models.MoveData2, flags ...bool) e
 
 	// check if new move has changed the game status
 	winner, method := GetGameStatus(chessGame)
-
-	// fmt.Println("winner: ", winner)
-	// fmt.Println("method: ", method)
 
 	// choose db update method based on what needs to be updated
 	if winner == "pending" {

@@ -84,9 +84,9 @@ async function waitForGameEnd(gameID) {
       const event = parseSSE(eventStr)
       const data = JSON.parse(event.data) 
 
-      const move = data.moves.split(' ').pop()
-
-      process.stdout.write(`${move} `)
+      // const move = data.moves.split(' ').pop()
+      // process.stdout.write(`${move} `)
+      
 
       if (data.winner) {
         console.log("closing stream ", data.id)
