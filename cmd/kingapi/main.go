@@ -403,7 +403,7 @@ func main() {
 			return
 		}
 
-		err = games.AddMove(id, user, moveData, false)
+		err = games.AddMove(id, user, moveData)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {

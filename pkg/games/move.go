@@ -12,7 +12,7 @@ import (
 // AddMove validates and adds a move to the game, and then triggers an event
 // message that moves were added, it returns cutsom HTTPErrors so errors can
 // play nicely with an http routers
-func AddMove(id string, userID string, moveData models.MoveData2, willDraw bool) error {
+func AddMove(id string, userID string, moveData models.MoveData2) error {
 
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
@@ -35,11 +35,9 @@ func AddMove(id string, userID string, moveData models.MoveData2, willDraw bool)
 		return err
 	}
 
-	// check if user is playing this game and get userColor
-	userColor, err := game.GetUsercolor(userID)
-	if err != nil {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
-		return err
+	// check if user is playing this game
+	if !game.HasPlayer(userID) {
+		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	}
 
 	// check if the move is at valid index
@@ -50,8 +48,7 @@ func AddMove(id string, userID string, moveData models.MoveData2, willDraw bool)
 	}
 
 	// check if it is this user's turn
-	turnColor := GetTurnColor(moveData.Index)
-	if turnColor != userColor {
+	if game.IsUsersTurn(userID) {
 		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
 		return err
 	}
@@ -85,7 +82,7 @@ func AddMove(id string, userID string, moveData models.MoveData2, willDraw bool)
 
 	// choose db update method based on what needs to be updated
 	if winner == "pending" {
-		_, err = db.CreateMove(id, properMove, userColor)
+		_, err = db.CreateMove(id, properMove, game.TurnColor())
 	} else {
 		_, err = db.UpdateGame(id, properMove, winner, method)
 	}
