@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Player struct {
 	ID   string `json:"id" binding:"required"` //needs lichess id validation
 	Type string `json:"type" binding:"required,oneof=cmp lichess"`
@@ -32,6 +34,35 @@ func (g *Game2) TurnColor() string {
 		return "white"
 	}
 	return "black"
+}
+func (g *Game2) HasPlayer(userID string) bool {
+	if g.WhitePlayer.ID == userID || g.BlackPlayer.ID == userID {
+		return true
+	}
+	return false
+}
+
+func (g *Game2) UserIsColor(userID, color string) bool {
+	if color == "white" && g.WhitePlayer.ID == userID {
+		return true
+	}
+	if color == "black" && g.BlackPlayer.ID == userID {
+		return true
+	}
+	return false
+}
+
+func (g *Game2) GetUsercolor(userID string) (string, error) {
+	if userID == g.WhitePlayer.ID {
+		return "white", nil
+	}
+
+	if userID == g.BlackPlayer.ID {
+		return "black", nil
+	}
+
+	// this user is not playing this game
+	return "", fmt.Errorf("user not found in game")
 }
 
 type Game2MutableFields struct {

@@ -419,16 +419,22 @@ func main() {
 		c.JSON(http.StatusCreated, gin.H{"message": "move successfully added"})
 	})
 
-	r.POST("/games2/:id/draw", func(c *gin.Context) {
+	r.POST("/games2/:id/:color/draw", func(c *gin.Context) {
 		id := c.Param("id")
+		color := c.Param("color")
+		// not proper route, color should be black or white
+		if color != "white" || color != "black" {
+			c.JSON(http.StatusNotFound, "")
+			return
+		}
 
-		user, err := GetUser(c)
+		userID, err := GetUser(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err = games.OfferDraw(id, user)
+		err = games.OfferDraw(id, userID, color)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {
@@ -443,16 +449,22 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "draw offer made"})
 	})
 
-	r.DELETE("/games2/:id/draw", func(c *gin.Context) {
+	r.DELETE("/games2/:id/:color/draw", func(c *gin.Context) {
 		id := c.Param("id")
+		color := c.Param("color")
+		// not proper route, color should be black or white
+		if color != "white" || color != "black" {
+			c.JSON(http.StatusNotFound, "")
+			return
+		}
 
-		user, err := GetUser(c)
+		userID, err := GetUser(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err = games.ClearDrawOffer(id, user)
+		err = games.ClearDrawOffer(id, userID, color)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {
@@ -467,16 +479,22 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "draw offer cleared"})
 	})
 
-	r.POST("/games2/:id/resign", func(c *gin.Context) {
+	r.POST("/games2/:id/:color/resign", func(c *gin.Context) {
 		id := c.Param("id")
+		color := c.Param("color")
+		// not proper route, color should be black or white
+		if color != "white" || color != "black" {
+			c.JSON(http.StatusNotFound, "")
+			return
+		}
 
-		user, err := GetUser(c)
+		userID, err := GetUser(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err = games.Resign(id, user)
+		err = games.Resign(id, userID, color)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {
@@ -491,16 +509,22 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "game resigned"})
 	})
 
-	r.POST("/games2/:id/abort", func(c *gin.Context) {
+	r.POST("/games2/:id/:color/abort", func(c *gin.Context) {
 		id := c.Param("id")
+		color := c.Param("color")
+		// not proper route, color should be black or white
+		if color != "white" || color != "black" {
+			c.JSON(http.StatusNotFound, "")
+			return
+		}
 
-		user, err := GetUser(c)
+		userID, err := GetUser(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err = games.Abort(id, user)
+		err = games.Abort(id, userID, color)
 		if err != nil {
 			httpErr, ok := err.(*utils.HTTPError)
 			if ok {

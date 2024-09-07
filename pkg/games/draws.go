@@ -9,7 +9,7 @@ import (
 )
 
 // OfferDraw NEED TO CHECK THIS. Things could go wrong if cmp is playing both sides
-func OfferDraw(id, user string) error {
+func OfferDraw(id, userID, color string) error {
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
 	if err != nil {
@@ -30,21 +30,20 @@ func OfferDraw(id, user string) error {
 			http.StatusBadRequest, "no moves allowed, game is finished")
 		return err
 	}
+
 	// check if user is playing this game
-	userColor := GetUsercolor(game, user)
-	if userColor == "" {
+	if !game.HasPlayer(userID) {
 		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	}
 
-	// check if it is this user's turn
-	turnColor := GetTurnColor(len(game.MoveList))
-	if turnColor != userColor {
-		err = utils.NewHTTPError(http.StatusBadRequest, "not your turn")
-		return err
+	// check if user is proper color
+	if !game.UserIsColor(userID, color) {
+		return utils.NewHTTPError(http.StatusBadRequest,
+			fmt.Sprintf("you are not playing as %s", color))
 	}
 
 	// check if the other player has a draw offer
-	opponentColor := GetOpponentColor(turnColor)
+	opponentColor := GetOpponentColor(color)
 	opponentWillDraw := false
 	if opponentColor == "white" {
 		opponentWillDraw = game.WhiteWillDraw
@@ -63,17 +62,17 @@ func OfferDraw(id, user string) error {
 	}
 
 	// update will draw state
-	_, err = db.UpdateWillDraw(id, turnColor, true)
+	_, err = db.UpdateWillDraw(id, color, true)
 	if err != nil {
 		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 	}
 
-	fmt.Println(userColor, " offered a draw")
+	fmt.Println(color, " offered a draw")
 
 	return nil
 }
 
-func ClearDrawOffer(id, user string) error {
+func ClearDrawOffer(id, userID, color string) error {
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
 	if err != nil {
@@ -87,15 +86,19 @@ func ClearDrawOffer(id, user string) error {
 	if game.Winner != "pending" {
 		return utils.NewHTTPError(http.StatusBadRequest, "cannot clear draw offer, game is finished")
 	}
-
 	// check if user is playing this game
-	userColor := GetUsercolor(game, user)
-	if userColor == "" {
+	if !game.HasPlayer(userID) {
 		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	}
 
+	// check if user is proper color
+	if !game.UserIsColor(userID, color) {
+		return utils.NewHTTPError(http.StatusBadRequest,
+			fmt.Sprintf("you are not playing as %s", color))
+	}
+
 	// clear the draw offer
-	_, err = db.UpdateWillDraw(id, userColor, false)
+	_, err = db.UpdateWillDraw(id, color, false)
 	if err != nil {
 		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 	}
