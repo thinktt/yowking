@@ -8,6 +8,16 @@ import (
 	"github.com/thinktt/yowking/pkg/models"
 )
 
+func UserIsColor(game models.Game2, user, color string) bool {
+	if color == "white" && game.WhitePlayer.ID == user {
+		return true
+	}
+	if color == "black" && game.BlackPlayer.ID == user {
+		return true
+	}
+	return false
+}
+
 // GetTurnColor given a move index returns the color that move belongs to
 func GetTurnColor(moveIndex int) string {
 	if moveIndex%2 == 0 {

@@ -8,7 +8,7 @@ import (
 	"github.com/thinktt/yowking/pkg/utils"
 )
 
-func Resign(id, user string) error {
+func Resign(id, userID, color string) error {
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
 	if err != nil {
@@ -24,13 +24,18 @@ func Resign(id, user string) error {
 	}
 
 	// check if user is playing this game
-	userColor := GetUsercolor(game, user)
-	if userColor == "" {
+	if !game.HasPlayer(userID) {
 		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
 	}
 
+	// check if user is proper color
+	if !game.UserIsColor(userID, color) {
+		return utils.NewHTTPError(http.StatusBadRequest,
+			fmt.Sprintf("you are not playing as %s", color))
+	}
+
 	// update the game to reflect the resignation
-	_, err = db.ResignGame(id, userColor)
+	_, err = db.ResignGame(id, color)
 	if err != nil {
 		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 	}

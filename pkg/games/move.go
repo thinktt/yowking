@@ -12,7 +12,7 @@ import (
 // AddMove validates and adds a move to the game, and then triggers an event
 // message that moves were added, it returns cutsom HTTPErrors so errors can
 // play nicely with an http routers
-func AddMove(id string, user string, moveData models.MoveData2, willDraw bool) error {
+func AddMove(id string, userID string, moveData models.MoveData2, willDraw bool) error {
 
 	// get the current game from the DB
 	game, err := db.GetGame2(id)
@@ -35,9 +35,9 @@ func AddMove(id string, user string, moveData models.MoveData2, willDraw bool) e
 		return err
 	}
 
-	// check if user is playing this game
-	userColor := GetUsercolor(game, user)
-	if userColor == "" {
+	// check if user is playing this game and get userColor
+	userColor, err := game.GetUsercolor(userID)
+	if err != nil {
 		err = utils.NewHTTPError(http.StatusBadRequest, "not your game")
 		return err
 	}
