@@ -423,7 +423,7 @@ func main() {
 		id := c.Param("id")
 		color := c.Param("color")
 		// not proper route, color should be black or white
-		if color != "white" || color != "black" {
+		if color != "white" && color != "black" {
 			c.JSON(http.StatusNotFound, "")
 			return
 		}
@@ -453,7 +453,7 @@ func main() {
 		id := c.Param("id")
 		color := c.Param("color")
 		// not proper route, color should be black or white
-		if color != "white" || color != "black" {
+		if color != "white" && color != "black" {
 			c.JSON(http.StatusNotFound, "")
 			return
 		}
@@ -483,7 +483,7 @@ func main() {
 		id := c.Param("id")
 		color := c.Param("color")
 		// not proper route, color should be black or white
-		if color != "white" || color != "black" {
+		if color != "white" && color != "black" {
 			c.JSON(http.StatusNotFound, "")
 			return
 		}
@@ -513,7 +513,7 @@ func main() {
 		id := c.Param("id")
 		color := c.Param("color")
 		// not proper route, color should be black or white
-		if color != "white" || color != "black" {
+		if color != "white" && color != "black" {
 			c.JSON(http.StatusNotFound, "")
 			return
 		}
