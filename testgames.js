@@ -84,13 +84,18 @@ async function waitForGameEnd(gameID) {
       const event = parseSSE(eventStr)
       const data = JSON.parse(event.data) 
 
-      // const move = data.moves.split(' ').pop()
-      // process.stdout.write(`${move} `)
+      const move = data.moves.split(' ').pop()
+      process.stdout.write(`${move} `)
       
+      if (data.winner === "draw") {
+        console.log("the bots drew each other")
+        process.exit(0)
+      }
 
       if (data.winner) {
         console.log("closing stream ", data.id)
         controller.abort() 
+
         return null
       }
     }

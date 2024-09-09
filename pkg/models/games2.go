@@ -53,10 +53,11 @@ func (g *Game2) UserIsColor(userID, color string) bool {
 }
 
 func (g *Game2) IsUsersTurn(userID string) bool {
-	if g.TurnColor() == "white" && g.WhitePlayer.ID == userID {
+	turnColor := g.TurnColor()
+	if turnColor == "white" && g.WhitePlayer.ID == userID {
 		return true
 	}
-	if g.TurnColor() == "blakc" && g.BlackPlayer.ID == userID {
+	if turnColor == "black" && g.BlackPlayer.ID == userID {
 		return true
 	}
 	return false

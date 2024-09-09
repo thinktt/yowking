@@ -55,6 +55,7 @@ func PlayEngineMove(game models.Game2) {
 
 	// have cmp set willDraw if the engine is willing to accept one
 	if engineMove.WillAcceptDraw {
+		fmt.Println(game.TurnColor(), "is offering a draw")
 		err = OfferDraw(game.ID, cmpName, game.TurnColor())
 	}
 
