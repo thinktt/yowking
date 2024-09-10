@@ -129,3 +129,6 @@ doservice:
 		# -l "traefik.http.routers.yowking-http.entrypoints=web" \
 		# -l "traefik.http.routers.yowking-http.service=yowking" \
 		# --network=traefik_default \
+
+jot: 
+	go install ./cmd/jot/

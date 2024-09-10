@@ -1,16 +1,18 @@
 Today
 ....api....
-offer draw
-resign game
-abort game
-yow unique ids?
+get all games stream with filters
+jwt cli tool to generate a jwt of any user
 
 better error handling
-wire engine to respond to draws
 restrict lichess user to 1 game at a time 
 let admin bypass restriction
 better endpoint validations
 
+x offer draw
+x resign game
+x abort game
+x yow unique ids?
+x wire engine to respond to draws
 x fix 0-0 issue
 x fix promotion issue
 x game conclusion events
