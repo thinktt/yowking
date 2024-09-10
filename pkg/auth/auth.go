@@ -94,6 +94,23 @@ func GetToken(lichessToken string) (TokenRes, error) {
 	return tokenRes, nil
 }
 
+func MakeToken(sub string, roles []string) (string, jwt.MapClaims, error) {
+	claims := jwt.MapClaims{
+		"iss":   "yeoldwizard.com",
+		"sub":   sub,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"roles": roles,
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenStr, err := token.SignedString([]byte(jwtKey))
+	if err != nil {
+		fmt.Println("error creating token:", err)
+		return "", claims, fmt.Errorf("error creating token")
+	}
+
+	return tokenStr, claims, nil
+}
+
 func isValidUser(username string) bool {
 	for _, user := range validUsers {
 		if user == username {
