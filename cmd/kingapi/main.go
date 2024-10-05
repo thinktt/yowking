@@ -265,6 +265,42 @@ func main() {
 		c.JSON(http.StatusOK, game)
 	})
 
+	r.GET("/games2", func(c *gin.Context) {
+		user := c.Query("playerId")
+		if user == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "must specify playerId query"})
+			return
+		}
+
+		createdAtStr := c.Query("createdAfter")
+		if createdAtStr == "" {
+			createdAtStr = "0"
+		}
+
+		createdAt, err := strconv.ParseInt(createdAtStr, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "unable to parse created at parameter"})
+			return
+		}
+
+		gameStream, err := db.GetGames(user, createdAt)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
+			return
+		}
+
+		c.Writer.Header().Set("Content-Type", "text/event-stream")
+		c.Writer.Header().Set("Cache-Control", "no-cache")
+		c.Writer.Header().Set("Connection", "keep-alive")
+		c.Writer.Flush()
+
+		for game := range gameStream {
+			gameJSON, _ := json.Marshal(game)
+			c.Writer.Write([]byte("data: " + string(gameJSON) + "\n\n"))
+			c.Writer.Flush()
+		}
+	})
+
 	r.GET("/streams/:ids", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
