@@ -61,6 +61,43 @@ func GetAllLiveGameIDs() ([]string, error) {
 	return gameIDs, nil
 }
 
+// GetGames takes a user and a createAt time, find all games with ghat user
+// after the createAt time, send them as a stream of games objects
+func GetGames(playerID string, createdAt int64) (<-chan models.Game2, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{
+		"$or": []bson.M{
+			{"whitePlayer.id": playerID},
+			{"blackPlayer.id": playerID},
+		},
+		"createdAt": bson.M{"$gt": createdAt},
+	}
+
+	cursor, err := gamesCollection.Find(context.Background(), filter)
+	if err != nil {
+		return nil, err
+	}
+
+	ch := make(chan models.Game2)
+
+	go func() {
+		defer close(ch)
+		defer cursor.Close(context.Background())
+
+		for cursor.Next(context.Background()) {
+			var game models.Game2
+			if err := cursor.Decode(&game); err != nil {
+				continue
+			}
+			game.Moves = strings.Join(game.MoveList, " ")
+			ch <- game
+		}
+	}()
+
+	return ch, nil
+}
+
 // GetGame retrieves a game by its ID
 func GetGame2(id string) (models.Game2, error) {
 	gamesCollection := yowDatabase.Collection("games2")

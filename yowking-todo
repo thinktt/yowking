@@ -1,13 +1,13 @@
 Today
 ....api....
 get all games stream with filters
-jwt cli tool to generate a jwt of any user
 
 better error handling
 restrict lichess user to 1 game at a time 
 let admin bypass restriction
 better endpoint validations
 
+x jwt cli tool to generate a jwt of any user
 x offer draw
 x resign game
 x abort game
