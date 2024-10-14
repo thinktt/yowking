@@ -4,7 +4,7 @@ import "fmt"
 
 type Player struct {
 	ID   string `json:"id" binding:"required"` //needs lichess id validation
-	Type string `json:"type" binding:"required,oneof=cmp lichess"`
+	Type string `json:"type" binding:"required,oneof=cmp lichess lichessBot"`
 }
 type Game2New struct {
 	LichessID   string `json:"lichessId" bson:"lichessId" binding:"omitempty,alphanum,min=8,max=8"`
@@ -18,7 +18,7 @@ type Game2 struct {
 	CreatedAt     int64    `json:"createdAt" bson:"createdAt" binding:"required"`
 	LastMoveAt    int64    `json:"lastMoveAt" bson:"lastMoveAt" binding:"required"`
 	Winner        string   `json:"winner" bson:"winner" binding:"required,oneof=pending white black draw"`
-	Method        string   `json:"method,omitempty" bson:"method,omitempty" binding:"omitempty,oneof=mate resign material mutual stalemate threefold fiftyMove"`
+	Method        string   `json:"method,omitempty" bson:"method,omitempty" binding:"omitempty,oneof=mate resign material mutual stalemate threefold fiftyMove time"`
 	Moves         string   `json:"moves" bson:"moves,omitempty" binding:"required"`
 	MoveList      []string `json:"moveList,omitempty" bson:"moveList"`
 	WhitePlayer   Player   `json:"whitePlayer" bson:"whitePlayer" binding:"required"`

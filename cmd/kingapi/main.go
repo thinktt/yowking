@@ -266,13 +266,13 @@ func main() {
 	})
 
 	r.GET("/games2", func(c *gin.Context) {
-		user := c.Query("playerId")
-		if user == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "must specify playerId query"})
+		playerID := c.Query("playerId")
+		createdAtStr := c.Query("createdAt")
+		if playerID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "queries required: ?playerId=<playerId>&createdAt=<timestamp>"})
 			return
 		}
 
-		createdAtStr := c.Query("createdAfter")
 		if createdAtStr == "" {
 			createdAtStr = "0"
 		}
@@ -283,7 +283,7 @@ func main() {
 			return
 		}
 
-		gameStream, err := db.GetGames(user, createdAt)
+		gameStream, err := db.GetGames(playerID, createdAt)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
