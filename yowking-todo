@@ -1,12 +1,11 @@
 Today
-....api....
-get all games stream with filters
+.........
+tranfer db games
+tranfer any other games
 
-better error handling
-restrict lichess user to 1 game at a time 
-let admin bypass restriction
-better endpoint validations
 
+
+x get all games stream with filters
 x jwt cli tool to generate a jwt of any user
 x offer draw
 x resign game
@@ -26,7 +25,10 @@ x make move
 x get stream
 x post historical games
 
-
+better error handling
+restrict lichess user to 1 game at a time 
+let admin bypass restriction
+better endpoint validations
 
 
 
