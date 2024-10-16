@@ -91,6 +91,7 @@ func GetGames(playerID string, createdAt int64) (<-chan models.Game2, error) {
 				continue
 			}
 			game.Moves = strings.Join(game.MoveList, " ")
+			game.MoveList = nil
 			ch <- game
 		}
 	}()
