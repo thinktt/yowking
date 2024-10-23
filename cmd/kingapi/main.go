@@ -299,6 +299,11 @@ func main() {
 			c.Writer.Write([]byte("data: " + string(gameJSON) + "\n\n"))
 			c.Writer.Flush()
 		}
+
+		// Send a final event to indicate the end of the stream
+		c.Writer.Write([]byte("event: done\ndata: Stream complete\n\n"))
+		c.Writer.Flush()
+
 	})
 
 	r.GET("/streams/:ids", func(c *gin.Context) {
