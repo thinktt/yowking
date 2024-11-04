@@ -306,6 +306,10 @@ func main() {
 
 	})
 
+	r.GET("/streams/count", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"count": events.Pub.GetSubCount()})
+	})
+
 	r.GET("/streams/:ids", func(c *gin.Context) {
 		c.Writer.Header().Set("Content-Type", "text/event-stream")
 		c.Writer.Header().Set("Cache-Control", "no-cache")
@@ -333,7 +337,8 @@ func main() {
 				c.Writer.Write([]byte("data: " + gameData + "\n\n"))
 				c.Writer.Flush()
 				// case <-pingTicker.C:
-				// 	c.Writer.Write([]byte("event: ping\n\n"))
+				// 	c.Writer.Write([]byte("event: ping\n"))
+				// 	c.Writer.Write([]byte("data: \n\n"))
 				// 	c.Writer.Flush()
 			}
 		}
