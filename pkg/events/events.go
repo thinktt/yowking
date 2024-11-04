@@ -26,6 +26,10 @@ func (p *Publisher) PublishMessage(gameID, msg string) {
 	}
 }
 
+func (p *Publisher) GetSubCount() int {
+	return len(p.subscriptions)
+}
+
 var Pub = &Publisher{
 	subscriptions: make(map[*Subscription]struct{}),
 }
@@ -54,7 +58,7 @@ func (s *Subscription) Destroy() {
 	close(s.Channel)
 }
 
-// NewSubscrition creates a subscription to game events. It will filter events
+// NewSubscription creates a subscription to game events. It will filter events
 // by GameIDs, if GammeIDs list is empty it will all game messages will be
 // published to the subscription
 func NewSubscription(gameIDs []string) *Subscription {
