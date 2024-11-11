@@ -324,8 +324,6 @@ func main() {
 		defer gameStream.Destroy()
 
 		clientClosed := c.Writer.CloseNotify()
-		// pingTicker := time.NewTicker(1 * time.Second)
-		// defer pingTicker.Stop()
 
 		for {
 			select {
@@ -336,13 +334,16 @@ func main() {
 				c.Writer.Write([]byte("event: gameUpdate\n"))
 				c.Writer.Write([]byte("data: " + gameData + "\n\n"))
 				c.Writer.Flush()
-				// case <-pingTicker.C:
-				// 	c.Writer.Write([]byte("event: ping\n"))
-				// 	c.Writer.Write([]byte("data: \n\n"))
-				// 	c.Writer.Flush()
 			}
 		}
 	})
+
+	// pingTicker := time.NewTicker(1 * time.Second)
+	// defer pingTicker.Stop()
+	// case <-pingTicker.C:
+	// 	c.Writer.Write([]byte("event: ping\n"))
+	// 	c.Writer.Write([]byte("data: \n\n"))
+	// 	c.Writer.Flush()
 
 	r.Use(PullToken())
 
