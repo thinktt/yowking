@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/thinktt/yowking/pkg/db"
+	"github.com/thinktt/yowking/pkg/models"
 )
 
 var lichessUrl = "https://lichess.org/api/account"
@@ -72,12 +74,22 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		errMsg := fmt.Sprintf("no authorization found for user %s", account.Username)
 		return TokenRes{}, &AuthError{errMsg}
 	}
+	roles := []string{"mover"}
+
+	adminUser, exists := os.LookupEnv("ADMIN_USER")
+	if !exists {
+		fmt.Println("environment variable ADMIN_USER is not set")
+	}
+
+	if account.Username == adminUser {
+		roles = []string{"mover", "admin"}
+	}
 
 	claims := jwt.MapClaims{
 		"iss":   "yeoldwizard.com",
 		"sub":   account.Id,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
-		"roles": []string{"mover", "admin"},
+		"roles": roles,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenStr, err := token.SignedString([]byte(jwtKey))
@@ -112,12 +124,24 @@ func MakeToken(sub string, roles []string) (string, jwt.MapClaims, error) {
 }
 
 func isValidUser(username string) bool {
-	for _, user := range validUsers {
-		if user == username {
-			return true
-		}
+	user, err := db.GetUser(username)
+	if err != nil {
+		fmt.Println("error getting user from db:", err)
+		return false
 	}
-	return false
+
+	// Check if user was found (empty struct check)
+	if (user == models.User{}) {
+		fmt.Println("no user found for username:", username)
+		return false
+	}
+
+	// Validate fields
+	if !user.HasAcceptedDisclaimer || user.KingCmVersion == "" {
+		return false
+	}
+
+	return true
 }
 
 type ServerError struct {
