@@ -71,21 +71,20 @@ func CreateUser(user models.User) (*mongo.UpdateResult, error) {
 	return usersCollection.UpdateOne(context.Background(), filter, update, options)
 }
 
-func GetUser(id string) (bson.M, error) {
+func GetUser(id string) (models.User, error) {
 	usersCollection := yowDatabase.Collection("users")
 
 	filter := bson.M{"id": id}
-	var result bson.M
-	err := usersCollection.FindOne(context.Background(), filter).Decode(&result)
+	var user models.User
+	err := usersCollection.FindOne(context.Background(), filter).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil // No user found, return nil without error
+			return models.User{}, nil // No user found, return empty struct without error
 		}
-		return nil, err // An error occurred during the query
+		return models.User{}, err // An error occurred during the query
 	}
 
-	delete(result, "_id") // Remove the MongoDB _id field
-	return result, nil
+	return user, nil
 }
 
 // GetAllUsers retrieves all user IDs

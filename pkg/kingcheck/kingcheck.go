@@ -15,7 +15,7 @@ var kingHashMap = map[string]string{
 
 // GetVersion returns a version number if the blob hash is found in the kingHashMap
 func GetVersion(blob string) (string, error) {
-	hash, err := getStringHash(blob)
+	hash, err := GetStringHash(blob)
 	if err != nil {
 		return "", err
 	}
@@ -29,7 +29,7 @@ func GetVersion(blob string) (string, error) {
 }
 
 // getStringHash returns the SHA-256 hash of the given string
-func getStringHash(str string) (string, error) {
+func GetStringHash(str string) (string, error) {
 	hasher := sha256.New()
 	_, err := hasher.Write([]byte(str))
 	if err != nil {

@@ -154,18 +154,18 @@ func main() {
 	r.GET("/users/:id", func(c *gin.Context) {
 		userID := c.Param("id")
 
-		result, err := db.GetUser(userID)
+		user, err := db.GetUser(userID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB Error: " + err.Error()})
 			return
 		}
 
-		if result == nil {
+		if (user == models.User{}) {
 			c.JSON(http.StatusNotFound, gin.H{"message": fmt.Sprintf("no user found for id %s", userID)})
 			return
 		}
 
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, user)
 	})
 
 	r.POST("/games", func(c *gin.Context) {
