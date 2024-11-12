@@ -723,7 +723,7 @@ func main() {
 		c.JSON(http.StatusOK, settings)
 	})
 
-	r.POST("/move-req", CheckRole("mover"), func(c *gin.Context) {
+	r.POST("/move-req", CheckRole("admin"), func(c *gin.Context) {
 		var moveReq models.MoveReq
 		if err := c.ShouldBindJSON(&moveReq); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -178,9 +179,17 @@ func CheckToken(tokenStr string) (Claims, error) {
 	})
 
 	if err != nil {
-		errMsg := "invalid token format"
-		fmt.Println(errMsg, err)
-		return Claims{}, &AuthError{errMsg}
+		errMsg := err.Error()
+		if strings.Contains(errMsg, "expired") {
+			return Claims{}, &AuthError{"token is expired"}
+		}
+
+		if strings.Contains(errMsg, "malformed") {
+			return Claims{}, &AuthError{"token is malformed"}
+		}
+
+		fmt.Println(err.Error())
+		return Claims{}, &AuthError{"could not parse token"}
 	}
 
 	if !token.Valid {
