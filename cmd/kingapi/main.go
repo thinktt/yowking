@@ -757,12 +757,14 @@ func main() {
 		c.JSON(http.StatusNotFound, gin.H{"messagge": "404 Not Found"})
 	})
 
-	if port == "8443" {
-		r.RunTLS(":8443", "../certs/cert.pem", "../certs/key.pem")
+	portStr := ":" + port
+
+	if port == "8443" || port == "64355" {
+		r.RunTLS(portStr, "../certs/cert.pem", "../certs/key.pem")
 		return
 	}
 
-	r.Run(":" + port)
+	r.Run(portStr)
 }
 
 func PullToken() gin.HandlerFunc {
