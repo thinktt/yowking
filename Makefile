@@ -25,7 +25,7 @@ run: export IS_WSL=true
 run: dist
 	source .env; \
 	# cd dist && go run ../cmd/kingworker
-	cd dist && go run ../cmd/kingapi
+	cd dist && go run ../cmd/yowapi
 
 assets:
 	mkdir assets
@@ -51,10 +51,10 @@ gobuild:
 	GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker  ./cmd/kingworker
 
 buildapi:
-	GOOS=linux CGO_ENABLED=0 go build -o dist/kingapi  ./cmd/kingapi
+	GOOS=linux CGO_ENABLED=0 go build -o dist/yowapi  ./cmd/yowapi
 
 runapi:
-	cd dist && go run ../cmd/kingapi
+	cd dist && go run ../cmd/yowapi
 
 dbuild: dist
 	docker rm yowking || true
@@ -62,9 +62,9 @@ dbuild: dist
 	docker build -t zen:5000/yowking .
 	# docker push zen:5000/yowking  
 
-dbuildapi: dist/kingapi
-	docker image rm zen:5000/kingapi:latest || true
-	docker build -t zen:5000/kingapi:latest -f cmd/kingapi/Dockerfile .
+dbuildapi: dist/yowapi
+	docker image rm zen:5000/yowapi:latest || true
+	docker build -t zen:5000/yowapi:latest -f cmd/yowapi/Dockerfile .
 
 dbuild2: 
 	docker rm yowking || true
@@ -88,12 +88,12 @@ drun:
 	# docker run --rm -it --env-file ./env --name yowking zen:5000/yowking
 
 drunapi:
-	docker rm kingapi || true
-	docker run --rm -it --name kingapi -p 8080:8080 \
+	docker rm yowapi || true
+	docker run --rm -it --name yowapi -p 8080:8080 \
 		-e JWT_KEY=XG6paWLxhsCiVcOMDF3YXWYZLeb8oyrYjyPKqbld \
 	 	-e NATS_TOKEN=tYlZBeYnAEfAJofInCML53ot3ibrFJWWCpdaIYRx \
 		-e NATS_URL=nats:4222 \
-	 	zen:5000/kingapi /bin/ash
+	 	zen:5000/yowapi /bin/ash
 
 dexec: 
 	# docker run --rm -it --name yowking zen:5000/yowking /bin/bash
