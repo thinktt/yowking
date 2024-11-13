@@ -760,7 +760,7 @@ func main() {
 	portStr := ":" + port
 
 	if port == "8443" || port == "64355" {
-		r.RunTLS(portStr, "../certs/cert.pem", "../certs/key.pem")
+		r.RunTLS(portStr, "./certs/cert.pem", "./certs/key.pem")
 		return
 	}
 

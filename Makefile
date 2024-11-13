@@ -3,11 +3,11 @@
 
 SHELL := /bin/bash
 
-certs:
-	mkdir certs
+certs: dist
+	mkdir dist/certs
 	openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
 		-subj "/C=US/O=ACME/CN=yeoldwiz.localhost" \
-		-keyout certs/key.pem -out certs/cert.pem
+		-keyout dist/certs/key.pem -out dist/certs/cert.pem
 
 .PHONY: run docal getclocks dbuild drun din dcal clean books2bin \
 	rmbooks  reset eep testengine cpbadbooks push gobuild dexec \
