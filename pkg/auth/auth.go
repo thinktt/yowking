@@ -17,13 +17,10 @@ import (
 var lichessUrl = "https://lichess.org/api/account"
 var jwtKey = os.Getenv("JWT_KEY")
 
-// hard coded for now, will be deligated to a db or api later
-var validUsers = []string{"thinktt"}
-
 // would be good to run this through a validator since it's coming from outside
 // even if lichess is  a trusted source
 type LichessAccount struct {
-	Id       string `json:"id"`
+	ID       string `json:"id"`
 	Username string `json:"username"`
 }
 
@@ -71,8 +68,8 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		return TokenRes{}, &ServerError{"error parsing lichess response"}
 	}
 
-	if !isValidUser(account.Username) {
-		errMsg := fmt.Sprintf("no authorization found for user %s", account.Username)
+	if !isValidUser(account.ID) {
+		errMsg := fmt.Sprintf("no authorization found for user %s", account.ID)
 		return TokenRes{}, &AuthError{errMsg}
 	}
 	roles := []string{"mover"}
@@ -82,13 +79,13 @@ func GetToken(lichessToken string) (TokenRes, error) {
 		fmt.Println("environment variable ADMIN_USER is not set")
 	}
 
-	if account.Username == adminUser {
+	if account.ID == adminUser {
 		roles = []string{"mover", "admin"}
 	}
 
 	claims := jwt.MapClaims{
 		"iss":   "yeoldwizard.com",
-		"sub":   account.Id,
+		"sub":   account.ID,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 		"roles": roles,
 	}
@@ -124,8 +121,8 @@ func MakeToken(sub string, roles []string) (string, jwt.MapClaims, error) {
 	return tokenStr, claims, nil
 }
 
-func isValidUser(username string) bool {
-	user, err := db.GetUser(username)
+func isValidUser(userID string) bool {
+	user, err := db.GetUser(userID)
 	if err != nil {
 		fmt.Println("error getting user from db:", err)
 		return false
@@ -133,7 +130,7 @@ func isValidUser(username string) bool {
 
 	// Check if user was found (empty struct check)
 	if (user == models.User{}) {
-		fmt.Println("no user found for username:", username)
+		fmt.Println("no user found for userID:", userID)
 		return false
 	}
 

@@ -131,8 +131,11 @@ func main() {
 			kingCmVersion = "B"
 		}
 
+		// user IDs will always be lower case in db
+		id := strings.ToLower(userReq.ID)
+
 		user := models.User{
-			ID:                    userReq.ID,
+			ID:                    id,
 			KingCmVersion:         kingCmVersion,
 			HasAcceptedDisclaimer: userReq.HasAcceptedDisclaimer,
 		}
