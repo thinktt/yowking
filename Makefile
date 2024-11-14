@@ -95,6 +95,10 @@ drunapi:
 		-e NATS_URL=nats:4222 \
 	 	zen:5000/yowapi /bin/ash
 
+dpush: 
+	docker push zen:5000/yowapi
+	docker push zen:5000/yowking
+
 dexec: 
 	# docker run --rm -it --name yowking zen:5000/yowking /bin/bash
 	docker exec -it yowking /bin/bash
