@@ -14,11 +14,26 @@ import (
 	"github.com/thinktt/yowking/pkg/models"
 )
 
+// PublishGameUPdates takes a game ID and gets that game from the DB and then
+// derives the gameUpdate from the game and publishes the update to the streams
 func PublishGameUpdates(gameID string) error {
+
 	game, err := db.GetGame2(gameID)
 	if err != nil {
 		return err
 	}
+
+	gameUpdate := GetGameUpdate(game)
+
+	jsonData, _ := json.Marshal(gameUpdate)
+	events.Pub.PublishMessage(game.ID, string(jsonData))
+
+	go PlayEngineMove(game)
+
+	return nil
+}
+
+func GetGameUpdate(game models.Game2) models.Game2MutableFields {
 
 	// if winner hasn't change omit winner and method from update
 	winner := ""
@@ -39,12 +54,7 @@ func PublishGameUpdates(gameID string) error {
 		BlackWillDraw: game.BlackWillDraw,
 	}
 
-	jsonData, _ := json.Marshal(gameMuation)
-	events.Pub.PublishMessage(game.ID, string(jsonData))
-
-	go PlayEngineMove(game)
-
-	return nil
+	return gameMuation
 }
 
 // var uciRegex = regexp.MustCompile(`[a-h][1-8][a-h][1-8][qrbn]?`)
