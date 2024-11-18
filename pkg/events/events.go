@@ -38,6 +38,7 @@ type Subscription struct {
 	gameIDs       map[string]struct{}
 	willAcceptAll bool
 	Channel       chan string
+	MessageCount  int
 }
 
 // PublishMessage allows you to directly publish messages ot this subscription

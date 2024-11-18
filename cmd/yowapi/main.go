@@ -328,6 +328,20 @@ func main() {
 
 		clientClosed := c.Writer.CloseNotify()
 
+		// publish the initial states of the games to the new stream
+		go func() {
+			for _, id := range gameIDs {
+				game, err := db.GetGame2(id)
+				if err != nil {
+					continue
+				}
+				gameUpdate := games.GetGameUpdate(game)
+				jsonData, _ := json.Marshal(gameUpdate)
+				gameStream.PublishMessage(string(jsonData))
+
+			}
+		}()
+
 		for {
 			select {
 			case <-clientClosed:
@@ -339,6 +353,7 @@ func main() {
 				c.Writer.Flush()
 			}
 		}
+
 	})
 
 	// pingTicker := time.NewTicker(1 * time.Second)
