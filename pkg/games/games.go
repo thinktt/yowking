@@ -6,11 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/akamensky/base58"
 	"github.com/notnil/chess"
 	"github.com/thinktt/yowking/pkg/db"
 	"github.com/thinktt/yowking/pkg/events"
+	"github.com/thinktt/yowking/pkg/lichess"
 	"github.com/thinktt/yowking/pkg/models"
 )
 
@@ -140,4 +142,125 @@ func GetGameID() (string, error) {
 	id := encoded + "y"
 
 	return id, nil
+}
+
+func GetPGN(gameID string) (string, error) {
+	game, err := db.GetGame2(gameID)
+	if err != nil {
+		return "", err
+	}
+
+	pgn, err := buildPGN(game)
+	if err != nil {
+		return "", err
+	}
+
+	return pgn, nil
+}
+
+func buildPGN(game models.Game2) (string, error) {
+	pgnTemplate := `
+	[Event "Ye Old Wizard Game"]
+	[Site "https://yeoldwizard.com/%s"]
+	[White "%s"]
+	[Black "%s"]
+	[UTCDate "%s"]
+	[UTCTime "%s"]
+`
+
+	pgn := fmt.Sprintf(pgnTemplate,
+		game.ID,
+		game.WhitePlayer.ID,
+		game.BlackPlayer.ID,
+		time.Unix(game.CreatedAt/1000, 0).Format("2006.01.02"),
+		time.Unix(game.CreatedAt/1000, 0).Format("15:04:05"),
+	)
+
+	pgn = stripIndentation(pgn)
+
+	pgnMoves, err := buildPGNMoves(game.MoveList)
+	if err != nil {
+		return "", err
+	}
+
+	resultMap := map[string]string{
+		"pending": "*", "white": "1-0", "black": "0-1", "draw": "1/2-1/2"}
+	result := resultMap[game.Winner]
+
+	pgn = pgn + "\n\n" + pgnMoves + " " + result
+
+	return pgn, nil
+}
+
+func buildPGNMoves(moves []string) (string, error) {
+	if len(moves) == 0 {
+		return "", fmt.Errorf("no moves provided")
+	}
+
+	var pgnMoves strings.Builder
+	for i, move := range moves {
+		if i%2 == 0 {
+			pgnMoves.WriteString(fmt.Sprintf("%d. ", i/2+1))
+		}
+		pgnMoves.WriteString(move + " ")
+	}
+	return pgnMoves.String(), nil
+}
+
+func stripIndentation(s string) string {
+	lines := strings.Split(strings.TrimSpace(s), "\n")
+	for i, line := range lines {
+		lines[i] = strings.TrimLeft(line, "\t ")
+	}
+	return strings.Join(lines, "\n")
+}
+
+func GetLichessInfo(gameID string) (lichess.LichessInfo, error) {
+	game, err := db.GetGame2(gameID)
+	if err != nil {
+		return lichess.LichessInfo{}, err
+	}
+
+	if game.ID == "" {
+		return lichess.LichessInfo{}, fmt.Errorf("game not found for ID: %s", gameID)
+	}
+
+	// this game already has a lichess mirror
+	if game.LichessID != "" {
+		lichessInfo := lichess.LichessInfo{
+			ID:    game.LichessID,
+			URL:   "https://lichess.org/" + game.LichessID,
+			IsNew: false,
+		}
+		return lichessInfo, nil
+	}
+
+	lichessInfo, err := CreateLichessGame(game)
+	if err != nil {
+		return lichess.LichessInfo{}, fmt.Errorf("error sending pgn to lichess: %w", err)
+	}
+
+	return lichessInfo, nil
+}
+
+func CreateLichessGame(game models.Game2) (lichess.LichessInfo, error) {
+
+	pgn, err := buildPGN(game)
+	fmt.Println(game)
+	if err != nil {
+		return lichess.LichessInfo{}, fmt.Errorf("error building pgn: %w", err)
+	}
+
+	// send game to lichess
+	lichessInfo, err := lichess.ImportGame(pgn)
+	if err != nil {
+		return lichess.LichessInfo{}, fmt.Errorf("error sending pgn to lichess: %w", err)
+	}
+
+	_, err = db.UpdateLichessID(game.ID, lichessInfo.ID)
+	if err != nil {
+		return lichess.LichessInfo{}, err
+	}
+
+	return lichessInfo, nil
 }

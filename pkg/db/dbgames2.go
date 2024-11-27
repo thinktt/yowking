@@ -278,3 +278,16 @@ func GetGameIDs(user string, createdAt int64) (map[string]string, error) {
 
 	return map[string]string{"ids": strings.Join(ids, ",")}, nil
 }
+
+func UpdateLichessID(gameID, lichessID string) (*mongo.UpdateResult, error) {
+	gamesCollection := yowDatabase.Collection("games2")
+
+	filter := bson.M{"id": gameID}
+	update := bson.M{
+		"$set": bson.M{
+			"lichessId": lichessID,
+		},
+	}
+
+	return gamesCollection.UpdateOne(context.Background(), filter, update)
+}

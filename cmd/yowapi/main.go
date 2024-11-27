@@ -250,6 +250,30 @@ func main() {
 		c.JSON(http.StatusOK, ids)
 	})
 
+	r.GET("/games2/:id/pgn", func(c *gin.Context) {
+		id := c.Param("id")
+
+		pgn, err := games.GetPGN(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error building pgn: " + err.Error()})
+			return
+		}
+
+		c.String(http.StatusOK, pgn)
+	})
+
+	r.GET("/games2/:id/lichess", func(c *gin.Context) {
+		id := c.Param("id")
+
+		lichessInfo, err := games.GetLichessInfo(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "getting lichess info: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, lichessInfo)
+	})
+
 	r.GET("/games2/:id", func(c *gin.Context) {
 		id := c.Param("id")
 
