@@ -82,9 +82,22 @@ func AddMove(id string, userID string, moveData models.MoveData2) error {
 
 	// choose db update method based on what needs to be updated
 	if winner == "pending" {
+		// game is in progress
 		_, err = db.CreateMove(id, properMove, game.TurnColor())
 	} else {
+		// game is over
 		_, err = db.UpdateGame(id, properMove, winner, method)
+
+		// hack for now, since game is finished mirror it on lichess and update the
+		// lichessID. lichess stuff should be moved to a lichess bot service later
+		game, err := db.GetGame2(id)
+		if err != nil {
+			fmt.Println("error mirroring game to lichess", err.Error())
+		}
+		_, err = CreateLichessGame(game)
+		if err != nil {
+			fmt.Println("error mirroring game to liches", err.Error())
+		}
 	}
 	if err != nil {
 		err = utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
