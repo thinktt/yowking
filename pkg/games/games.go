@@ -150,7 +150,7 @@ func GetPGN(gameID string) (string, error) {
 		return "", err
 	}
 
-	pgn, err := buildPGN(game)
+	pgn, err := buildPGN(game, true)
 	if err != nil {
 		return "", err
 	}
@@ -158,10 +158,10 @@ func GetPGN(gameID string) (string, error) {
 	return pgn, nil
 }
 
-func buildPGN(game models.Game2) (string, error) {
+func buildPGN(game models.Game2, isForLichess bool) (string, error) {
 	pgnTemplate := `
 	[Event "Ye Old Wizard Game"]
-	[Site "https://yeoldwizard.com/%s"]
+	[Site "https://yeoldwizard.com/#board/%s"]
 	[White "%s"]
 	[Black "%s"]
 	[UTCDate "%s"]
@@ -178,6 +178,11 @@ func buildPGN(game models.Game2) (string, error) {
 
 	pgn = stripIndentation(pgn)
 
+	// adding this gets lichess to recognize end score resignation
+	if game.Method == "resign" {
+		pgn = pgn + "\n" + `[Termination "Normal"]`
+	}
+
 	pgnMoves, err := buildPGNMoves(game.MoveList)
 	if err != nil {
 		return "", err
@@ -187,9 +192,29 @@ func buildPGN(game models.Game2) (string, error) {
 		"pending": "*", "white": "1-0", "black": "0-1", "draw": "1/2-1/2"}
 	result := resultMap[game.Winner]
 
-	pgn = pgn + "\n\n" + pgnMoves + " " + result
+	if isForLichess {
+		result = getLichessResult(game, result)
+	}
+
+	pgn = pgn + "\n\n" + pgnMoves + result
 
 	return pgn, nil
+}
+
+// getLichessResults is to deal with strange issues in the lichess pgn import
+// algorithm parsing results, it tries to sanatize as best as possible reults
+// so they turn out better when imported
+func getLichessResult(game models.Game2, result string) string {
+
+	// leave result off if lichess can parse the resullt from moves alone
+	isBoardParsable := map[string]bool{
+		"stalemate": true, "mate": true, "material": true, "fiftyMove": true,
+	}
+	if isBoardParsable[game.Method] {
+		result = ""
+	}
+
+	return result
 }
 
 func buildPGNMoves(moves []string) (string, error) {
@@ -245,7 +270,7 @@ func GetLichessInfo(gameID string) (lichess.LichessInfo, error) {
 
 func CreateLichessGame(game models.Game2) (lichess.LichessInfo, error) {
 
-	pgn, err := buildPGN(game)
+	pgn, err := buildPGN(game, true)
 	fmt.Println(game)
 	if err != nil {
 		return lichess.LichessInfo{}, fmt.Errorf("error building pgn: %w", err)
