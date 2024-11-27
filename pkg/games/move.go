@@ -35,17 +35,17 @@ func AddMove(id string, userID string, moveData models.MoveData2) error {
 		return err
 	}
 
-	// // check if user is playing this game
-	// if !game.HasPlayer(userID) {
-	// 	return utils.NewHTTPError(http.StatusBadRequest, "not your game")
-	// }
+	// check if user is playing this game
+	if !game.HasPlayer(userID) {
+		return utils.NewHTTPError(http.StatusBadRequest, "not your game")
+	}
 
-	// // check if the move is at valid index
-	// if len(game.MoveList) != moveData.Index {
-	// 	err = utils.NewHTTPError(http.StatusBadRequest,
-	// 		fmt.Sprintf("invalid move index, next move index is %d", len(game.MoveList)))
-	// 	return err
-	// }
+	// check if the move is at valid index
+	if len(game.MoveList) != moveData.Index {
+		err = utils.NewHTTPError(http.StatusBadRequest,
+			fmt.Sprintf("invalid move index, next move index is %d", len(game.MoveList)))
+		return err
+	}
 
 	// check if it is this user's turn
 	if !game.IsUsersTurn(userID) {
