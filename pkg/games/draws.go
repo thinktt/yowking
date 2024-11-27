@@ -67,8 +67,6 @@ func OfferDraw(id, userID, color string) error {
 		return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 	}
 
-	fmt.Println(color, " offered a draw")
-
 	return nil
 }
 

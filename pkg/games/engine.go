@@ -26,7 +26,7 @@ func PlayEngineMove(game models.Game2) {
 
 	// no cmp found for this turn, nothing needs to be done
 	if cmpName == "" {
-		fmt.Println("not a cmp turn")
+		// fmt.Println("not a cmp turn")
 		return
 	}
 
@@ -55,7 +55,7 @@ func PlayEngineMove(game models.Game2) {
 
 	// have cmp set willDraw if the engine is willing to accept one
 	if engineMove.WillAcceptDraw {
-		fmt.Println(game.TurnColor(), "is offering a draw")
+		// fmt.Println(game.TurnColor(), "is offering a draw")
 		err = OfferDraw(game.ID, cmpName, game.TurnColor())
 	}
 
