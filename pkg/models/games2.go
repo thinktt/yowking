@@ -78,6 +78,7 @@ func (g *Game2) GetUsercolor(userID string) (string, error) {
 
 type Game2MutableFields struct {
 	ID            string `json:"id" binding:"required,alphanum,min=8,max=8"`
+	LichessID     string `json:"lichessId,omitempty" bson:"lichessId"  binding:"alphanum,min=8,max=8"`
 	LastMoveAt    int64  `json:"lastMoveAt" binding:"required"`
 	Moves         string `json:"moves" binding:"required"`
 	Winner        string `json:"winner,omitempty" binding:"required,oneof=white black"`
