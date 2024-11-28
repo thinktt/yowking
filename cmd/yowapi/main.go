@@ -262,18 +262,6 @@ func main() {
 		c.String(http.StatusOK, pgn)
 	})
 
-	r.POST("/games2/:id/lichessID", func(c *gin.Context) {
-		id := c.Param("id")
-
-		lichessInfo, err := games.GetLichessInfo(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "getting lichess info: " + err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, lichessInfo)
-	})
-
 	r.GET("/games2/:id", func(c *gin.Context) {
 		id := c.Param("id")
 
@@ -626,6 +614,22 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, gin.H{"message": "game aborted"})
+	})
+
+	//......................................
+	// ..... Admin routes start here......
+	//.....................................
+
+	r.POST("/games2/:id/lichessID", CheckRole("admin"), func(c *gin.Context) {
+		id := c.Param("id")
+
+		lichessInfo, err := games.GetLichessInfo(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "getting lichess info: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, lichessInfo)
 	})
 
 	r.GET("/users", CheckRole("admin"), func(c *gin.Context) {
