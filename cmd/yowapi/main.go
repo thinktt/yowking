@@ -262,7 +262,7 @@ func main() {
 		c.String(http.StatusOK, pgn)
 	})
 
-	r.GET("/games2/:id/lichess", func(c *gin.Context) {
+	r.POST("/games2/:id/lichessID", func(c *gin.Context) {
 		id := c.Param("id")
 
 		lichessInfo, err := games.GetLichessInfo(id)
