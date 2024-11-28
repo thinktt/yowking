@@ -40,14 +40,17 @@ func GetGameUpdate(game models.Game2) models.Game2MutableFields {
 	// if winner hasn't change omit winner and method from update
 	winner := ""
 	method := ""
+	lichessID := ""
 
 	if game.Winner != "pending" {
 		winner = game.Winner
 		method = game.Method
+		lichessID = game.LichessID
 	}
 
 	gameMuation := models.Game2MutableFields{
 		ID:            game.ID,
+		LichessID:     lichessID,
 		LastMoveAt:    game.LastMoveAt,
 		Moves:         game.Moves,
 		Winner:        winner,
