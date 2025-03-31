@@ -57,7 +57,21 @@ func OfferDraw(id, userID, color string) error {
 		if err != nil {
 			return utils.NewHTTPError(http.StatusInternalServerError, "DB Error: "+err.Error())
 		}
+
+		// hack for now, since game is finished mirror it on lichess and update the
+		// lichessID. lichess stuff should be moved to a lichess bot service later
+		// this is currently in the move, draw and resign func
+		game, err = db.GetGame2(id)
+		if err != nil {
+			fmt.Printf("error mirroring %s to lichess %s", game.ID, err.Error())
+		}
+		_, err = CreateLichessGame(game)
+		if err != nil {
+			fmt.Printf("error mirroring %s to lichess %s", game.ID, err.Error())
+		}
+
 		PublishGameUpdates(game.ID)
+
 		return nil
 	}
 
