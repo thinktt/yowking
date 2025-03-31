@@ -90,7 +90,7 @@ func AddMove(id string, userID string, moveData models.MoveData2) error {
 
 		// hack for now, since game is finished mirror it on lichess and update the
 		// lichessID. lichess stuff should be moved to a lichess bot service later
-		// this is currently in the move and resign func
+		// this is currently in the move, draw and resign func
 		game, err := db.GetGame2(id)
 		if err != nil {
 			fmt.Printf("error mirroring %s to lichess %s", game.ID, err.Error())
