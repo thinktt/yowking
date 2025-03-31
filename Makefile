@@ -29,12 +29,11 @@ run: dist
 
 assets:
 	mkdir assets
-	# cp -r ../yeoldwiz-lnx/yowbot/dist/books assets/books
-	cp ../yeoldwiz-lnx/yowbot/cals/xps/run1/clockTimes.json assets/clockTimes.json
-	cp ../yeoldwiz-lnx/yowbot/dist/TheKing350noOpk.exe assets/TheKing350noOpk.exe
-	cp ../yeoldwiz-lnx/yowbot/dist/personalities.json assets/personalities.json
-	cp ../yeoldwiz-lnx/yowbot/dist/runbook assets/runbook
-	cp -r ../yeoldwiz-lnx/yowbot/dist/books assets/books
+	# cp ../yeoldwiz-lnx/yowbot/cals/xps/run1/clockTimes.json assets/clockTimes.json
+	cp ../yeoldwiz/yowdeps/dist/TheKing350noOpk.exe assets/TheKing350noOpk.exe
+	cp ../yeoldwiz/yowdeps/dist/personalities.json assets/personalities.json
+	cp ../yeoldwiz/yowdeps/dist/runbook assets/runbook
+	cp -r ../yeoldwiz/yowdeps/dist/books assets/books
 
 push: 
 	# docker push zen:5000/yowking
