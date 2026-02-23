@@ -1,38 +1,17 @@
-Today
+... Today ...
+fork yowking into yowapi folder create new repo
+remove all yowapi stuff from yowking
+remove all yowking stuff from yowapi
+
+
+
+
+
+
+
+
+
 .........
-x tranfer db games
-? tranfer any other games
-
-
-
-x get all games stream with filters
-x jwt cli tool to generate a jwt of any user
-x offer draw
-x resign game
-x abort game
-x yow unique ids?
-x wire engine to respond to draws
-x fix 0-0 issue
-x fix promotion issue
-x game conclusion events
-x validate proper user when making a game
-x add method for how game ended
-x fix stream stopping when one stream closes
-x wire up engine to respond to moves
-x restrict move to authed player of game
-x create game
-x make move
-x get stream
-x post historical games
-
-better error handling
-restrict lichess user to 1 game at a time 
-let admin bypass restriction
-better endpoint validations
-
-
-
-
 
 
 
@@ -76,6 +55,13 @@ Presentation
 Ideas and Interest for project
 intersest in grpc
 interest in using api gatway security
+
+better error handling
+restrict lichess user to 1 game at a time 
+let admin bypass restriction
+better endpoint validations
+
+
 
 ...done...
 x Use Books 
@@ -127,6 +113,26 @@ zen setup
   x calibrations
   x setup ssh
   x ?test hardware
+
+x get all games stream with filters
+x jwt cli tool to generate a jwt of any user
+x offer draw
+x resign game
+x abort game
+x yow unique ids?
+x wire engine to respond to draws
+x fix 0-0 issue
+x fix promotion issue
+x game conclusion events
+x validate proper user when making a game
+x add method for how game ended
+x fix stream stopping when one stream closes
+x wire up engine to respond to moves
+x restrict move to authed player of game
+x create game
+x make move
+x get stream
+x post historical games
 
 
 .........stash..............
