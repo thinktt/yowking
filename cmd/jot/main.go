@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
-	"github.com/thinktt/yowking/pkg/auth"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func main() {
@@ -23,7 +24,21 @@ func main() {
 		roles = []string{"user"}
 	}
 
-	tokenStr, _, err := auth.MakeToken(username, roles)
+	jwtKey := os.Getenv("JWT_KEY")
+	if jwtKey == "" {
+		fmt.Println("Error: JWT_KEY environment variable is not set")
+		return
+	}
+
+	claims := jwt.MapClaims{
+		"iss":   "yeoldwizard.com",
+		"sub":   username,
+		"exp":   time.Now().Add(24 * time.Hour).Unix(),
+		"roles": roles,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenStr, err := token.SignedString([]byte(jwtKey))
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
