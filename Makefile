@@ -17,7 +17,7 @@ certs: dist
 dist:
 	mkdir dist 
 	mkdir dist/calibrations
-	cp -r ../yeoldwiz/yowdeps/dist/* dist/
+	cp -r ../yowdeps/dist/* dist/
 	cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
 	make gobuild
 
@@ -26,14 +26,6 @@ run: dist
 	source .env; \
 	# cd dist && go run ../cmd/kingworker
 	cd dist && go run ../cmd/yowapi
-
-assets:
-	mkdir assets
-	# cp ../yeoldwiz-lnx/yowbot/cals/xps/run1/clockTimes.json assets/clockTimes.json
-	cp ../yeoldwiz/yowdeps/dist/TheKing350noOpk.exe assets/TheKing350noOpk.exe
-	cp ../yeoldwiz/yowdeps/dist/personalities.json assets/personalities.json
-	cp ../yeoldwiz/yowdeps/dist/runbook assets/runbook
-	cp -r ../yeoldwiz/yowdeps/dist/books assets/books
 
 push: 
 	# docker push zen:5000/yowking
