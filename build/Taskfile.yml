@@ -1,0 +1,99 @@
+version: "3"
+
+dotenv:
+  - .env
+
+tasks:
+
+  dorunbook:
+    desc: Run the Node.js runbook script against a sample move list
+    cmds:
+      - |
+        cd ../dist
+        node runbook.js '{"moves": ["d2d4", "c7c5", "c2c4", "c5d4"], "book": "EarlyQueen.bin"}'
+
+  dorunbinbook:
+    desc: Run the compiled runbook binary against a sample move list
+    cmds:
+      - |
+        cd ../dist
+        ./runbook '{"moves": ["d2d4"], "book": "EarlyQueen.bin"}'
+        echo
+
+
+  cm:import:
+    desc: Import Chessmaster assets from CM_DIR into assets/cm
+    cmds:
+      - echo "${CM_DIR}"
+      - mkdir -p assets/cm/books
+      - mkdir -p assets/cm/personalities
+      - cp "${CM_DIR}/TheKing350.exe" assets/cm/TheKing350.exe
+      - cp -r "${CM_DIR}/Data/Opening Books/"* assets/cm/books/
+      - cp -r "${CM_DIR}/Data/Personalities/"* assets/cm/personalities/
+      - cd assets/cm/personalities && rm -f *#*
+      - cd assets/cm/personalities && mv "Josh - Age 6.CMP" "Josh6.CMP"
+      - cd assets/cm/personalities && mv "Josh - Age 7.CMP" "Josh7.CMP"
+      - cd assets/cm/personalities && mv "Josh - Age 8.CMP" "Josh8.CMP"
+      - cd assets/cm/personalities && mv "Josh - Age 9.CMP" "Josh9.CMP"
+      - cd assets/cm/personalities && mv "Josh - Age 12.CMP" "Josh12.CMP"
+      - |
+        hash=$(md5sum assets/cm/personalities/* | awk '{ print $1 }' | md5sum | head -c 32)
+        echo "personalites folder check"
+        echo "correct hash: d3ef7f9453b372e094bac18ce262b442"
+        echo "actual hash : $hash"
+
+  clean:dist:
+    desc: Remove dist outputs and generated book artifacts
+    cmds:
+      - rm -rf ../dist
+
+  clean:runbook:
+    desc: Remove the built runbook binary from dist
+    cmds:
+      - rm -f ../dist/runbook
+
+  clean:assets:
+    desc: Remove imported Chessmaster assets
+    cmds:
+      - rm -rf assets/cm
+
+
+  clean:images:
+    desc: Remove local Docker containers/images used for builds
+    cmds:
+      - docker rm -f bookbuilder || true
+      - docker rmi bookbuilder || true
+      - docker rmi ace:5000/yeoldwiz || true
+
+  clean:all:
+    desc: Run all cleanup tasks
+    deps:
+      - clean:runbook
+      - clean:assets
+      - clean:dist
+      - clean:images
+
+  dbuild:
+    desc: Build the yowdeps Docker image
+    cmds:
+      - docker build -t yowdeps .
+
+  drun:
+    desc: Build and run yowdeps container
+    deps: [dbuild]
+    cmds:
+      - docker run --rm yowdeps
+
+  din:
+    desc: Open an interactive shell in the yowdeps container
+    cmds:
+      - docker run --rm -it --name yowdeps yowdeps bash
+
+  build:dist:
+    desc: Build dependency artifacts into the repo root dist/ via the Docker build pipeline
+    deps: [dbuild]
+    cmds:
+      - rm -rf ../dist
+      - docker run --name yowdeps-build yowdeps ./scripts/build-all.sh
+      - docker cp yowdeps-build:/build/dist ../dist
+      - docker rm yowdeps-build

@@ -1,0 +1,101 @@
+version: "3"
+
+vars:
+  CPU1: "10"
+  CPU2: "11"
+  LOGICAL_PROCESSOR: "{{.CPU1}},{{.CPU2}}"
+  NAME: "yowkingdp{{.CPU1}}{{.CPU2}}"
+  VOL_NAME: "cal45"
+  CPU_START: "2"
+  CPU_END: "11"
+
+tasks:
+  dist:
+    desc: Build dependency artifacts and worker binaries into root dist/
+    cmds:
+      - task -d build build:dist
+      - mkdir -p dist/calibrations
+      - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
+      - task gobuild
+
+  run:
+    desc: Run kingworker from dist/ in local WSL mode
+    deps: [dist]
+    env:
+      IS_WSL: "true"
+    cmds:
+      - bash -lc 'source .env; cd dist && go run ../cmd/kingworker'
+
+  push:
+    desc: Push the public yowking image tag
+    cmds:
+      - docker push thinktt/yowking:latest
+
+  test:
+    desc: Run Go tests after assembling dist/
+    deps: [dist]
+    cmds:
+      - bash -lc 'source .env; export ROOT_DIR=$(pwd); go test ./...'
+
+  gobuild:
+    desc: Build enginewrap and kingworker binaries into dist/
+    cmds:
+      - GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe ./cmd/enginewrap
+      - GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker ./cmd/kingworker
+
+  dbuild:
+    desc: Build local docker image zen:5000/yowking:latest
+    deps: [dist]
+    cmds:
+      - docker rm yowking || true
+      - docker image rm zen:5000/yowking:latest || true
+      - docker build -t zen:5000/yowking .
+
+  dbuild2:
+    desc: Build and push GCP Artifact Registry image
+    cmds:
+      - docker rm yowking || true
+      - docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true
+      - docker build -t us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest .
+      - docker push us-central1-docker.pkg.dev/thinktt/yowking/yowking
+
+  dbuild3:
+    desc: Build and push Docker Hub image thinktt/yowking:latest
+    cmds:
+      - docker rm yowking || true
+      - docker image rm thinktt/yowking:latest || true
+      - docker build -t thinktt/yowking:latest .
+      - docker push thinktt/yowking:latest
+
+  clean:
+    desc: Remove root dist/
+    cmds:
+      - rm -rf dist
+
+  drun:
+    desc: Run the yowking image locally with docker.env
+    cmds:
+      - docker run --rm -it --name yowking --env-file ./docker.env --network=yow thinktt/yowking:latest
+
+  dpush:
+    desc: Push local registry yowking image tag
+    cmds:
+      - docker push zen:5000/yowking
+
+  dexec:
+    desc: Open a shell in the running yowking container
+    cmds:
+      - docker exec -it yowking /bin/bash
+
+  doservice:
+    desc: Run a pinned-CPU yowking service container for calibration/load testing
+    cmds:
+      - docker rm {{.NAME}} || true
+      - |
+        docker run \
+          --cpus=1 --cpuset-cpus={{.LOGICAL_PROCESSOR}} \
+          -v {{.VOL_NAME}}:/opt/yowking/calibrations \
+          --env-file docker.env \
+          --name {{.NAME}} \
+          --network=yow \
+          -it zen:5000/yowking /bin/sh

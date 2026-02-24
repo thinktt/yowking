@@ -3,3 +3,5 @@ assets
 *.env
 certs
 creds
+node_modules
+build/assets/cm
