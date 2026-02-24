@@ -4,3 +4,4 @@ certs
 creds
 node_modules
 /assets/cm/*
+deploy/compose.yowking.yaml

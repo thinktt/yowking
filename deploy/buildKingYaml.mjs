@@ -18,7 +18,7 @@ for (let i = cpuStart; i <= cpuEnd; i++) {
 
 console.log('using cpuSets', cpuSets)
 
-let data = `version: '3'\nservices:`
+let data = `services:`
 for (let i = 0; i < cpuSets.length; i+=2) {
   const cpu1 = cpuSets[i]
   const cpu2 = cpuSets[i+1]
@@ -40,4 +40,4 @@ for (let i = 0; i < cpuSets.length; i+=2) {
 data += `\n\nnetworks:\n  yow:\n    external: true\n`;
 data += `\nvolumes:\n  cal45:\n    external: true\n`;
 
-writeFileSync('compose-yowking.yaml', data, 'utf8')
+writeFileSync('compose.yowking.yaml', data, 'utf8')

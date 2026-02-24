@@ -1,0 +1,193 @@
+version: "3"
+
+# Archived tasks moved out of the main Taskfile during build-flow simplification.
+# These are kept for reference and possible reintroduction later.
+
+dotenv:
+  - .env
+
+vars:
+  CPU1: "10"
+  CPU2: "11"
+  LOGICAL_PROCESSOR: "{{.CPU1}},{{.CPU2}}"
+  NAME: "yowkingdp{{.CPU1}}{{.CPU2}}"
+  VOL_NAME: "cal45"
+  CPU_START: "2"
+  CPU_END: "11"
+  DEPS_IMAGE: "yowdeps"
+  MAIN_IMAGE_LOCAL: "zen:5000/yowking:latest"
+
+tasks:
+  run:
+    desc: Run kingworker from dist/ in local WSL mode
+    deps: [build:dist]
+    env:
+      IS_WSL: "true"
+    cmds:
+      - bash -lc 'source .env; cd dist && go run ../cmd/kingworker'
+
+  test:
+    desc: Run Go tests after assembling dist/
+    deps: [build:dist]
+    cmds:
+      - bash -lc 'source .env; export ROOT_DIR=$$(pwd); go test ./...'
+
+  clean:
+    desc: Remove root dist/
+    cmds:
+      - rm -rf dist
+
+  clean:assets:
+    desc: Remove imported Chessmaster assets (assets/cm)
+    cmds:
+      - rm -rf assets/cm
+
+  clean:images:
+    desc: Remove local build helper image/container
+    cmds:
+      - docker rm -f yowdeps-build || true
+      - docker rmi {{.DEPS_IMAGE}} || true
+
+  clean:all:
+    desc: Remove dist, imported CM assets, and helper build image/container
+    deps: [clean, clean:assets, clean:images]
+
+  push:
+    desc: Push the public yowking image tag
+    cmds:
+      - docker push thinktt/yowking:latest
+
+  image:push:local:
+    desc: Push local registry yowking image tag
+    cmds:
+      - docker push zen:5000/yowking
+
+  image:build:gcp:
+    desc: Build and push GCP Artifact Registry image
+    cmds:
+      - docker rm yowking || true
+      - docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true
+      - docker build -t us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest .
+      - docker push us-central1-docker.pkg.dev/thinktt/yowking/yowking
+
+  image:build:dockerhub:
+    desc: Build and push Docker Hub image thinktt/yowking:latest
+    cmds:
+      - docker rm yowking || true
+      - docker image rm thinktt/yowking:latest || true
+      - docker build -t thinktt/yowking:latest .
+      - docker push thinktt/yowking:latest
+
+  drun:
+    desc: Run the yowking image locally with root .env on docker network yow
+    cmds:
+      - docker run --rm -it --name yowking --env-file ./.env --network=yow thinktt/yowking:latest
+
+  dexec:
+    desc: Open a shell in the running yowking container
+    cmds:
+      - docker exec -it yowking /bin/bash
+
+  doservice:
+    desc: Run a pinned-CPU yowking service container for calibration/load testing
+    cmds:
+      - docker rm {{.NAME}} || true
+      - |
+        docker run \
+          --cpus=1 --cpuset-cpus={{.LOGICAL_PROCESSOR}} \
+          -v {{.VOL_NAME}}:/opt/yowking/calibrations \
+          --env-file ./.env \
+          --name {{.NAME}} \
+          --network=yow \
+          -it {{.MAIN_IMAGE_LOCAL}} /bin/sh
+
+  build:runbook:js:
+    desc: Run the Node.js runbook script against a sample move list from assets/runbook
+    cmds:
+      - cd dist && node ../assets/runbook/runbook.js '{"moves":["d2d4","c7c5","c2c4","c5d4"],"book":"EarlyQueen.bin"}'
+
+  build:runbook:bin:
+    desc: Run the compiled runbook binary against a sample move list
+    cmds:
+      - cd dist && ./runbook '{"moves":["d2d4"],"book":"EarlyQueen.bin"}' && echo
+
+  deploy:resources:
+    desc: Create required docker network/volume for kingworker deploys
+    cmds:
+      - docker network create yow || true
+      - docker volume create cal45 || true
+
+  deploy:compose:
+    desc: Generate deploy/compose.yowking.yaml from CPU_START/CPU_END
+    dir: deploy
+    env:
+      CPU_START: "{{.CPU_START}}"
+      CPU_END: "{{.CPU_END}}"
+    cmds:
+      - node buildKingYaml.mjs
+
+  deploy:up:
+    desc: Start all generated yowking services from deploy/compose.yowking.yaml
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.yowking.yaml up -d
+
+  deploy:one:
+    desc: Start one generated yowking service (yowking45)
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.yowking.yaml up yowking45 -d
+
+  deploy:down:
+    desc: Stop all generated yowking services
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.yowking.yaml down
+
+  deploy:calclean:
+    desc: Remove calibration files from root dist/
+    cmds:
+      - rm -rf dist/calibrations/*
+
+  cpu:freq:
+    desc: Watch CPU frequency values
+    cmds:
+      - watch -n1 "grep '^[c]pu MHz' /proc/cpuinfo"
+
+  cpu:temp:
+    desc: Watch system temperatures (sensors)
+    cmds:
+      - watch -n .1 sensors
+
+  cpu:inspect:
+    desc: Inspect CPU frequency and governor settings
+    cmds:
+      - cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+      - cat /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_governors
+      - cat /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+      - cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+      - cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+      - cat /sys/devices/system/cpu/cpufreq/boost
+
+  cpu:max:
+    desc: Print per-CPU scaling_max_freq values
+    cmds:
+      - cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+
+  cpu:gov:
+    desc: Print per-CPU scaling governors
+    cmds:
+      - cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+  cpu:turbo:
+    desc: Print CPU turbo/boost setting
+    cmds:
+      - cat /sys/devices/system/cpu/cpufreq/boost
+
+  cpu:restart:
+    desc: Restart cpufrequtils service
+    cmds:
+      - systemctl restart cpufrequtils
+
+  cpu:offturbo:
+    desc: Disable CPU turbo boost and install deploy/rc.local helper
+    cmds:
+      - echo "0" | tee /sys/devices/system/cpu/cpufreq/boost
+      - cp deploy/rc.local /etc/rc.local
