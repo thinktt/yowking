@@ -1,41 +1,54 @@
 version: "3"
 
+dotenv:
+  - .env
+
 vars:
-  CPU1: "10"
-  CPU2: "11"
-  LOGICAL_PROCESSOR: "{{.CPU1}},{{.CPU2}}"
-  NAME: "yowkingdp{{.CPU1}}{{.CPU2}}"
-  VOL_NAME: "cal45"
-  CPU_START: "2"
-  CPU_END: "11"
+  DEPS_IMAGE: "yowdeps"
+  MAIN_IMAGE_LOCAL: "zen:5000/yowking:latest"
 
 tasks:
-  dist:
-    desc: Build dependency artifacts and worker binaries into root dist/
+  default:
+    desc: Show available tasks
     cmds:
-      - task -d build build:dist
-      - mkdir -p dist/calibrations
-      - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
-      - task gobuild
+      - task --list
 
-  run:
-    desc: Run kingworker from dist/ in local WSL mode
-    deps: [dist]
-    env:
-      IS_WSL: "true"
+  import:cm:
+    desc: Step 1 - Import Chessmaster assets from CM_DIR into assets/cm
     cmds:
-      - bash -lc 'source .env; cd dist && go run ../cmd/kingworker'
+      - echo "CM_DIR=${CM_DIR}"
+      - test -n "${CM_DIR}"
+      - mkdir -p assets/cm/books
+      - mkdir -p assets/cm/personalities
+      - cp "${CM_DIR}/TheKing350.exe" assets/cm/TheKing350.exe
+      - cp -r "${CM_DIR}/Data/Opening Books/"* assets/cm/books/
+      - cp -r "${CM_DIR}/Data/Personalities/"* assets/cm/personalities/
+      - cd assets/cm/personalities && rm -f *#*
+      - cd assets/cm/personalities && mv "Josh - Age 6.CMP" "Josh6.CMP" || true
+      - cd assets/cm/personalities && mv "Josh - Age 7.CMP" "Josh7.CMP" || true
+      - cd assets/cm/personalities && mv "Josh - Age 8.CMP" "Josh8.CMP" || true
+      - cd assets/cm/personalities && mv "Josh - Age 9.CMP" "Josh9.CMP" || true
+      - cd assets/cm/personalities && mv "Josh - Age 12.CMP" "Josh12.CMP" || true
+      - >
+        bash -lc 'hash=$(md5sum assets/cm/personalities/* | awk "{ print \$1 }" | md5sum | head -c 32);
+        echo "personalities folder check";
+        echo "correct hash: d3ef7f9453b372e094bac18ce262b442";
+        echo "actual hash : $hash"'
 
-  push:
-    desc: Push the public yowking image tag
+  build:deps:image:
+    desc: Build the dependency-builder image (Dockerfile.dist)
     cmds:
-      - docker push thinktt/yowking:latest
+      - docker build -f Dockerfile.dist -t {{.DEPS_IMAGE}} .
 
-  test:
-    desc: Run Go tests after assembling dist/
-    deps: [dist]
+  build:deps:dist:
+    desc: Build dependency artifacts into root dist/ using Dockerfile.dist
+    deps: [build:deps:image]
     cmds:
-      - bash -lc 'source .env; export ROOT_DIR=$(pwd); go test ./...'
+      - rm -rf dist
+      - docker rm -f yowdeps-build || true
+      - docker run --name yowdeps-build {{.DEPS_IMAGE}} ./scripts/build-all.sh
+      - docker cp yowdeps-build:/build/dist ./dist
+      - docker rm yowdeps-build
 
   gobuild:
     desc: Build enginewrap and kingworker binaries into dist/
@@ -43,59 +56,71 @@ tasks:
       - GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe ./cmd/enginewrap
       - GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker ./cmd/kingworker
 
-  dbuild:
-    desc: Build local docker image zen:5000/yowking:latest
-    deps: [dist]
-    cmds:
-      - docker rm yowking || true
-      - docker image rm zen:5000/yowking:latest || true
-      - docker build -t zen:5000/yowking .
-
-  dbuild2:
-    desc: Build and push GCP Artifact Registry image
-    cmds:
-      - docker rm yowking || true
-      - docker image rm us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest || true
-      - docker build -t us-central1-docker.pkg.dev/thinktt/yowking/yowking:latest .
-      - docker push us-central1-docker.pkg.dev/thinktt/yowking/yowking
-
-  dbuild3:
-    desc: Build and push Docker Hub image thinktt/yowking:latest
-    cmds:
-      - docker rm yowking || true
-      - docker image rm thinktt/yowking:latest || true
-      - docker build -t thinktt/yowking:latest .
-      - docker push thinktt/yowking:latest
-
   clean:
-    desc: Remove root dist/
+    desc: Remove root dist/ and generated compose files
     cmds:
       - rm -rf dist
+      - rm -f deploy/compose.yowking.yaml
 
-  drun:
-    desc: Run the yowking image locally with docker.env
+  clean:assets:
+    desc: Remove imported Chessmaster assets (assets/cm)
     cmds:
-      - docker run --rm -it --name yowking --env-file ./docker.env --network=yow thinktt/yowking:latest
+      - rm -rf assets/cm
 
-  dpush:
-    desc: Push local registry yowking image tag
+  clean:images:
+    desc: Remove local build helper image/container
     cmds:
-      - docker push zen:5000/yowking
+      - docker rm -f yowdeps-build || true
+      - docker rmi {{.DEPS_IMAGE}} || true
 
-  dexec:
-    desc: Open a shell in the running yowking container
-    cmds:
-      - docker exec -it yowking /bin/bash
+  clean:all:
+    desc: Remove dist, generated compose files, imported CM assets, and helper build image/container
+    deps: [clean, clean:assets, clean:images]
 
-  doservice:
-    desc: Run a pinned-CPU yowking service container for calibration/load testing
+  build:dist:
+    desc: Step 2 - Build full runtime dist/ (deps artifacts + calibrations + Go binaries)
+    deps: [build:deps:dist]
     cmds:
-      - docker rm {{.NAME}} || true
-      - |
-        docker run \
-          --cpus=1 --cpuset-cpus={{.LOGICAL_PROCESSOR}} \
-          -v {{.VOL_NAME}}:/opt/yowking/calibrations \
-          --env-file docker.env \
-          --name {{.NAME}} \
-          --network=yow \
-          -it zen:5000/yowking /bin/sh
+      - mkdir -p dist/calibrations
+      - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
+      - task gobuild
+
+  build:image:
+    desc: Step 3 - Build the main yowking container image
+    deps: [build:dist]
+    cmds:
+      - docker rm yowking || true
+      - docker image rm {{.MAIN_IMAGE_LOCAL}} || true
+      - docker build -t {{.MAIN_IMAGE_LOCAL}} .
+
+  dist:
+    desc: Alias for build:dist (Step 2)
+    cmds:
+      - task build:dist
+
+  image:
+    desc: Alias for build:image (Step 3)
+    cmds:
+      - task build:image
+
+  deploy:
+    desc: Step 4 (for now) - Deploy one dev worker
+    cmds:
+      - task deploy:dev
+
+  deploy:dev:
+    desc: Start one dev yowking worker from deploy/compose.dev.yaml
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.dev.yaml up -d
+
+  deploy:dev:down:
+    desc: Stop the dev yowking worker compose stack
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.dev.yaml down
+
+  dev:up:
+    desc: Full dev pipeline (import CM assets, build dist, build image, deploy one dev worker)
+    cmds:
+      - task import:cm
+      - task build:image
+      - task deploy:dev

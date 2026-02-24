@@ -1,0 +1,20 @@
+services:
+  yowking-dev:
+    image: zen:5000/yowking:latest
+    container_name: yowking-dev
+    environment:
+      - NATS_TOKEN=${NATS_TOKEN}
+      - NATS_URL=nats:4222
+    volumes:
+      - cal45:/opt/yowking/calibrations
+    networks:
+      - yow
+    restart: unless-stopped
+
+networks:
+  yow:
+    external: true
+
+volumes:
+  cal45:
+    external: true
