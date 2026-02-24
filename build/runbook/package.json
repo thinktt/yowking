@@ -1,0 +1,15 @@
+{
+  "name": "yowdeps-runbook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Runbook runtime for Ye Old Wizard opening book moves",
+  "main": "runbook.js",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "node runbook.js"
+  },
+  "dependencies": {
+    "chess-tools": "git+https://github.com/thinktt/chess-tools.git",
+    "chess.js": "^0.10.3"
+  }
+}
