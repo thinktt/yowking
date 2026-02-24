@@ -1,14 +1,10 @@
 FROM alpine
 
-RUN apk update
-RUN apk add wine
-RUN apk add vim
-RUN winecfg
-RUN apk add xvfb
-# RUN apk add nodejs
+RUN apk add --no-cache wine 
 
 ENV WINEDEBUG=-all
-ENV DISPLAY=:0.0
+ENV XDG_RUNTIME_DIR=/tmp
+RUN wineboot --init
 
 COPY dist /opt/yowking/
 WORKDIR /opt/yowking

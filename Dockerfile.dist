@@ -8,13 +8,13 @@ ENV XDG_RUNTIME_DIR=/tmp
 RUN wineboot --init
 
 WORKDIR /build
-COPY assets ./assets
-RUN test -d assets/cm/books && \
-    test -d assets/cm/personalities && \
-    test -f assets/cm/TheKing350.exe
+COPY assets/cm/books ./assets/cm/books
+COPY assets/cm/personalities ./assets/cm/personalities
+COPY assets/cm/TheKing350.exe ./assets/cm/TheKing350.exe
+COPY assets/personalities.cfg ./assets/personalities.cfg
+COPY assets/runbook ./runbook
 
-COPY runbook ./runbook
-COPY scripts ./scripts
+COPY build ./scripts
 RUN chmod +x ./scripts/*.sh
 RUN mkdir -p /build/dist
 RUN mkdir -p /build/logs
