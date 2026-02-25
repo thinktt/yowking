@@ -1,0 +1,5409 @@
+{
+  "sourceGames": "notes/testGames.json",
+  "sourcePersonalities": "dist/personalities.json",
+  "gamesCount": 100,
+  "maxPlyPerGame": 6,
+  "casesCount": 600,
+  "cases": [
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppppppp/8/8/3P1Bn1/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "move": "Ng4"
+    },
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppppppp/8/8/3P1Bn1/7P/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
+      "move": "h3"
+    },
+    {
+      "gameId": "iTBzNdr6y",
+      "cmpName": "Manny",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppppppp/8/8/3P1B2/7P/PPP1PnP1/RN1QKBNR w KQkq - 0 4",
+      "move": "Nxf2"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "r1bqkbnr/pppppppp/n7/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Na6"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "r1bqkbnr/pppppppp/n7/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pp1ppppp/n7/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq c6 0 3",
+      "move": "c5"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pp1ppppp/n7/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "hxem5unty",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/p2ppppp/n7/1pp5/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq b6 0 4",
+      "move": "b5"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "ufkDzPg2y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnb1kb1r/pppqpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Qd7"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nd2"
+    },
+    {
+      "gameId": "D6NEaCFvy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "64EQrpQ9y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rn1qkb1r/pppbpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Bd7"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "3duvcchjy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "fKPRKGGny",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rn1qkb1r/pppbpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Bd7"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "s3G6ZzsKy",
+      "cmpName": "Risa",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Bf5"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "e5cdWQNJy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nd2"
+    },
+    {
+      "gameId": "TmKPCWPvy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq c6 0 3",
+      "move": "c5"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/8/2N5/PPP1PPPP/R1BQKBNR b KQkq - 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "ZowwpdDhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/8/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 4",
+      "move": "d6"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq c3 0 3",
+      "move": "c4"
+    },
+    {
+      "gameId": "65ASp3Bcy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "2mJWH4tyy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p4/3PnB2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Ne4"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nd2"
+    },
+    {
+      "gameId": "vLtjwfPhy",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "AmS4dh4yy",
+      "cmpName": "Argyle",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq c6 0 4",
+      "move": "c5"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "7gUqJp8Ay",
+      "cmpName": "Marius",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rn1qkb1r/pppbpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Bd7"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bg5"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "move": "Ne4"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/5N2/PPP1PPPP/RN1QKB1R b KQkq - 4 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "BjDEAPqZy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn3/5N2/PPP1PPPP/RN1QKB1R w KQkq d6 0 4",
+      "move": "d5"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR b KQkq - 0 2",
+      "move": "g3"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR b KQkq - 1 3",
+      "move": "Bg2"
+    },
+    {
+      "gameId": "AV52CTn7y",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/ppp3pp/4p3/3p1p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq d6 0 4",
+      "move": "d5"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bg5"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/6B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/6B1/3P4/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "w4bQQd8Hy",
+      "cmpName": "Eddie",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pp1p1ppp/2p1pn2/6B1/3P4/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+      "move": "c6"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq c3 0 2",
+      "move": "c4"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "move": "dxc4"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "RvSbohxty",
+      "cmpName": "Ross",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/8/2pP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "r1bqkbnr/pppppppp/2n5/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "r1bqkbnr/pppppppp/2n5/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq e6 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "move": "dxe5"
+    },
+    {
+      "gameId": "jB2dog6ry",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/ppp2ppp/2n5/3pP3/5B2/8/PPP1PPPP/RN1QKBNR w KQkq d6 0 4",
+      "move": "d5"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq c3 0 2",
+      "move": "c4"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P5/5N2/PP1PPPPP/RNBQKB1R w KQkq - 0 3",
+      "move": "c6"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq d3 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "G4hHViXWy",
+      "cmpName": "Josh6",
+      "book": "EarlyQueen.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rn1qkbnr/pp2pppp/2p5/3p1b2/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 1 4",
+      "move": "Bf5"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq c3 0 3",
+      "move": "c4"
+    },
+    {
+      "gameId": "2LmC3RWZy",
+      "cmpName": "Joey",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/2P2N2/PP1PPPPP/RNBQKB1R b KQkq - 0 2",
+      "move": "c3"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/8/2P2N2/PP1PPPPP/RNBQKB1R w KQkq - 1 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/3p2N1/8/2P5/PP1PPPPP/RNBQKB1R b KQkq - 2 3",
+      "move": "Ng5"
+    },
+    {
+      "gameId": "1Yc7w1VLy",
+      "cmpName": "Willow",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkbnr/ppp1ppp1/2n4p/3p2N1/8/2P5/PP1PPPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "h6"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "dq82wvULy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/2N5/PP1PPPPP/R1BQKBNR b KQkq - 0 3",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "GSEdV9MSy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq e6 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4B3/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "move": "Bxe5"
+    },
+    {
+      "gameId": "PWxW3tYCy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp1ppp/8/4B3/3P2n1/8/PPP1PPPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Ng4"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "7UvAV9oHy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "move": "a6"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/4P3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "move": "e3"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/8/2pp4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq c6 0 3",
+      "move": "c5"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/8/1Bpp4/3P4/4P3/PPP2PPP/RNBQK1NR b KQkq - 1 3",
+      "move": "Bb5+"
+    },
+    {
+      "gameId": "VwCwkL9fy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rn1qkbnr/pp1bpppp/8/1Bpp4/3P4/4P3/PPP2PPP/RNBQK1NR w KQkq - 2 4",
+      "move": "Bd7"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq e3 0 2",
+      "move": "e4"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "move": "c6"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PPB2/8/PPP2PPP/RN1QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "uSkPJWPry",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3PpB2/8/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "move": "d6"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "hf4vnzLry",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1pppp/3p4/3n4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nd5"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/7N/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nh3"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "XeJJvrCpy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3P4/8/PPP1PPPP/RNBQKBNR w KQkq b6 0 2",
+      "move": "b5"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/p1pppppp/5n2/1p6/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/p1pppppp/5n2/1p6/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "Y5i5LV53y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/p1pp1ppp/4pn2/1p6/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "move": "d6"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "8DyX4mDPy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1pppp/3p4/3n4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nd5"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N1P3/PP1P1PPP/R1BQKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "sJq8zgeYy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pp1p1ppp/2p2n2/4p3/2P5/2N1P3/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "c6"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/7N/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nh3"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5p2/3P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5pN1/3P4/8/PPP1PPPP/RNBQKB1R b KQkq - 1 3",
+      "move": "Ng5"
+    },
+    {
+      "gameId": "ELwuUcTSy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqk1nr/ppppb1pp/4p3/5pN1/3P4/8/PPP1PPPP/RNBQKB1R w KQkq - 2 4",
+      "move": "Be7"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3P4/8/PPP1PPPP/RNBQKBNR w KQkq b6 0 2",
+      "move": "b5"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/p1pp1ppp/8/1p2p3/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq e6 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/p1pp1ppp/8/1p2B3/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "move": "Bxe5"
+    },
+    {
+      "gameId": "CqD8Xhyxy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/p1pp1ppp/2n5/1p2B3/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "move": "d6"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "5cEFhowey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1pppp/3p4/3n4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nd5"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "L97eBNQTy",
+      "cmpName": "Wizard",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/7N/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nh3"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "LwcmNTN2y",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq e3 0 3",
+      "move": "e4"
+    },
+    {
+      "gameId": "9KTVFNyBy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 4",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "8Gjd94d9y",
+      "cmpName": "George",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/8/1P6/P1PPPPPP/RNBQKBNR b KQkq - 0 1",
+      "move": "b3"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/1P6/P1PPPPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/7P/1P6/P1PPPPP1/RNBQKBNR b KQkq h3 0 2",
+      "move": "h4"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/3p3P/1P6/P1PPPPP1/RNBQKBNR w KQkq - 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/1P1p3P/8/P1PPPPP1/RNBQKBNR b KQkq - 0 3",
+      "move": "b4"
+    },
+    {
+      "gameId": "ySPpz2c8y",
+      "cmpName": "Pete",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/ppp2ppp/8/4p3/1P1p3P/8/P1PPPPP1/RNBQKBNR w KQkq e6 0 4",
+      "move": "e5"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq h3 0 1",
+      "move": "h4"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/7P/8/PPPPPPP1/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/7P/5P2/PPPPP1P1/RNBQKBNR b KQkq - 0 2",
+      "move": "f3"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/3p3P/5P2/PPPPP1P1/RNBQKBNR w KQkq - 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/P2p3P/5P2/1PPPP1P1/RNBQKBNR b KQkq a3 0 3",
+      "move": "a4"
+    },
+    {
+      "gameId": "ZvtxZsBhy",
+      "cmpName": "Stanley",
+      "book": "NoBook.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/ppp2ppp/8/4p3/P2p3P/5P2/1PPPP1P1/RNBQKBNR w KQkq e6 0 4",
+      "move": "e5"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "iHvfH2vTy",
+      "cmpName": "Dylan",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/1p1ppppp/p1n5/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+      "move": "a6"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "Yb3zyrmUy",
+      "cmpName": "Cal",
+      "book": "DangerDon.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "move": "a6"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "UfaDoR1Zy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq c6 0 4",
+      "move": "c5"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/7N/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nh3"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "6VTakfJey",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "move": "d3"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/3P4/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nd2"
+    },
+    {
+      "gameId": "joi38tXXy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/4p3/3P4/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "dmYZdyky",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/7N/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nh3"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "k1FzcdGiy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/2P4N/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR b KQkq - 0 2",
+      "move": "g3"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR w KQkq - 1 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR b KQkq - 2 3",
+      "move": "Bg2"
+    },
+    {
+      "gameId": "i8TQTUpFy",
+      "cmpName": "Kanna",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5pB1/3P4/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3",
+      "move": "Bg5"
+    },
+    {
+      "gameId": "ye6Hu1f6y",
+      "cmpName": "Annie",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5pB1/3P4/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+      "move": "Nd5"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppppppp/8/3nP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq d3 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "28zdtsuRy",
+      "cmpName": "Charles",
+      "book": "Gambit.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp1ppp/4p3/3nP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq e3 0 3",
+      "move": "e4"
+    },
+    {
+      "gameId": "5h5D3zJNy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 4",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "APxHXLwKy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "7a7E7MdFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq e6 0 4",
+      "move": "e5"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "34v2SDrKy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "move": "a6"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "move": "c6"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/2N1P3/PP1P1PPP/R1BQKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "7EkgW96Qy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/2P5/2N1P3/PP1P1PPP/R1BQKBNR w KQkq d6 0 4",
+      "move": "d5"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "As2ZBgN3y",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq c6 0 4",
+      "move": "c5"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR b KQkq - 0 2",
+      "move": "g3"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/6P1/PPP1PP1P/RNBQKBNR w KQkq - 1 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppppp1pp/5n2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR b KQkq - 2 3",
+      "move": "Bg2"
+    },
+    {
+      "gameId": "8sHC6vsAy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
+      "move": "d6"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "EdpV83Emy",
+      "cmpName": "Hans",
+      "book": "CMX.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqk1nr/pppp1ppp/2n5/1Bb1p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "move": "Bc5"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/8/3pp3/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq e6 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/8/3pB3/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "move": "Bxe5"
+    },
+    {
+      "gameId": "KBCRgJkky",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/pppn1ppp/8/3pB3/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nd7"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N1P3/PP1P1PPP/R1BQKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "ttPG3KxVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N1P3/PP1P1PPP/R1BQKBNR w KQkq - 1 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3P4/8/PPP1PPPP/RNBQKBNR w KQkq b6 0 2",
+      "move": "b5"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/p1pppppp/8/1p6/3PP3/8/PPP2PPP/RNBQKBNR b KQkq e3 0 2",
+      "move": "e4"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/p1pppppp/2n5/1p6/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/p1pppppp/2n5/1p6/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "z3gZ2TCQy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r2qkbnr/pbpppppp/2n5/1p6/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 3 4",
+      "move": "Bb7"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "move": "c6"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "QVb3dUcTy",
+      "cmpName": "Wendy",
+      "book": "Depth2.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq d6 0 4",
+      "move": "d5"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 1 2",
+      "move": "Qf3"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5Q2/PPPP1PPP/RNB1KBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "N6ZLMFLyy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/5Q2/PPPP1PPP/RNB1KBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/2N5/PPP1PPPP/R2QKBNR b KQkq - 3 3",
+      "move": "Bg5"
+    },
+    {
+      "gameId": "GGwsKrZ6y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P4/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 1 2",
+      "move": "Qf3"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5Q2/PPPP1PPP/RNB1KBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "2kTAo9Svy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/5Q2/PPPP1PPP/RNB1KBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "move": "d6"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "StaQQ7Qny",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2ppp1/2pp3p/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+      "move": "h6"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 1 2",
+      "move": "Qf3"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5Q2/PPPP1PPP/RNB1KBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/8/5Q2/PPPP1PPP/RNB1KBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "v9wToXTTy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/8/5Q2/PPPP1PPP/RNB1KBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqk1nr/pppp1ppp/4p3/8/1bP5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqk1nr/pppp1ppp/4p3/8/1bP1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq e3 0 3",
+      "move": "e4"
+    },
+    {
+      "gameId": "Lgu5kzk9y",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk1nr/pppp1ppp/4p3/2b5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 1 4",
+      "move": "Bc5"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqk1nr/pppp1ppp/8/4p3/1bP5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqk1nr/pppp1ppp/8/4p3/1bP5/P1N5/1P1PPPPP/R1BQKBNR b KQkq - 0 3",
+      "move": "a3"
+    },
+    {
+      "gameId": "jowDMksWy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqk1nr/pppp1ppp/8/4p3/2P5/P1b5/1P1PPPPP/R1BQKBNR w KQkq - 0 4",
+      "move": "Bxc3"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "r1bqkbnr/pppppppp/2n5/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "r1bqkbnr/pppppppp/2n5/8/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq d3 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "HkbTFQcVy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqk1nr/pppp1ppp/2n1p3/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 1 4",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "KW45toPGy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rn1qkbnr/pp2pppp/2p5/3pP3/6b1/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+      "move": "Bg4"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "d2UD5sDFy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk1nr/ppp2ppp/4p3/3pP3/1b1P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
+      "move": "Bb4+"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq f6 0 2",
+      "move": "f5"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq c3 0 2",
+      "move": "c4"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5p2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pppp2pp/4p3/5p2/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+      "move": "g3"
+    },
+    {
+      "gameId": "bibLMeQMy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/2PP4/6P1/PP2PP1P/RNBQKBNR w KQkq - 1 4",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "move": "Bc4"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "2ftN98Zgy",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1",
+      "move": "c4"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R b KQkq - 3 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "724z4dU5y",
+      "cmpName": "Orin",
+      "book": "Depth6.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 4 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPPQPPP/RNB1KB1R b KQkq - 1 3",
+      "move": "Qe2"
+    },
+    {
+      "gameId": "cSurTJSDy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/4p3/5N2/PPPPQPPP/RNB1KB1R w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "move": "Bc4"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "7aLv1PJqy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq e3 0 2",
+      "move": "e4"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/3pP3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "move": "d4"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp1pppp/8/4N3/3pP3/8/PPPP1PPP/RNBQKB1R b KQkq - 1 3",
+      "move": "Ne5"
+    },
+    {
+      "gameId": "sq9Cd2CPy",
+      "cmpName": "Sam",
+      "book": "FastLose.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/4N3/3pP3/8/PPPP1PPP/RNBQKB1R w KQkq - 2 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+      "move": "e6"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "FoMkkxgWy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+      "move": "Bb4"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "HR5pdpx2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "2Xo9ypFGy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "b6"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "dTNgjHyPy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq e6 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "move": "dxe5"
+    },
+    {
+      "gameId": "96TFePbYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - 1 4",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "BWXmRAC2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "t1APQap7y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkb1r/ppppnppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "move": "Nge7"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "eZTzgusVy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "move": "d4"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "move": "d5"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "move": "Bf4"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "move": "e3"
+    },
+    {
+      "gameId": "UYec8DZ9y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq e6 0 4",
+      "move": "e5"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "oVQRSmG5y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "TX35BJJty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "yUg7gcsYy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2",
+      "move": "e5"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "JuCawUy2y",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "move": "a6"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "e5"
+    },
+    {
+      "gameId": "AtMAhn8Vy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "c5"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+      "move": "c5"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "move": "a6"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+      "move": "c3"
+    },
+    {
+      "gameId": "ZjhjwYzty",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "rnbqkbnr/1p1p1ppp/p3p3/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+      "move": "e6"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+      "move": "Nc3"
+    },
+    {
+      "gameId": "KKgSXqLey",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "move": "dxe4"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 2,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "e6"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 3,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "move": "Nf3"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 4,
+      "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "move": "Nc6"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 5,
+      "fen": "r1bqkbnr/pppp1ppp/2n1p3/1B6/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "move": "Bb5"
+    },
+    {
+      "gameId": "CXbhKFsxy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "white",
+      "ply": 6,
+      "fen": "r1bqkb1r/pppp1ppp/2n1pn2/1B6/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "move": "Nf6"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 1,
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "move": "e4"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 2,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "move": "c6"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 3,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2",
+      "move": "d4"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 4,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq d6 0 3",
+      "move": "d5"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "move": "exd5"
+    },
+    {
+      "gameId": "wpygeEKUy",
+      "cmpName": "Ginger",
+      "book": "Trappee.bin",
+      "playedAs": "black",
+      "ply": 6,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "move": "cxd5"
+    }
+  ]
+}
