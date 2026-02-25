@@ -3,7 +3,7 @@ const OpeningBook = ChessTools.OpeningBooks.Polyglot
 const fs = require("fs")
 const path = require("path")
 
-module.exports =  { getHeavyMove , getRandomMove}
+module.exports = { getHeavyMove, getRandomMove, getAllBookMoves }
 
 function getRunbookDir() {
   if (process.pkg) {
@@ -47,10 +47,11 @@ async function getHeavyMove(fen, book) {
   return move
 }
 
-async function getAllBookMoves(fen, bookName) {
+async function getAllBookMoves(fen, bookName, opts = {}) {
   // console.log(bookName)
   const book = new OpeningBook()
-  const bookPath = path.join(getRunbookDir(), "books", bookName)
+  const booksDir = opts.booksDir || path.join(getRunbookDir(), "books")
+  const bookPath = path.join(booksDir, bookName)
   const movePromise = new Promise((resolve, reject) => {
     book.on("loaded", () => {
       // console.log("book loaded")
