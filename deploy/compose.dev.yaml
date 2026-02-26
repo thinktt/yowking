@@ -5,6 +5,8 @@ services:
     environment:
       - NATS_TOKEN=${NATS_TOKEN}
       - NATS_URL=nats:4222
+      - SHOULD_LOG_ENGINE=${SHOULD_LOG_ENGINE}
+      - SHOULD_POST_INPUT=${SHOULD_POST_INPUT}
     volumes:
       - cal45:/opt/yowking/calibrations
     networks:

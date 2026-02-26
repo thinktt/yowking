@@ -11,17 +11,11 @@ echo "$md5"
 echo "=== Building personalities.json ==="
 node ./scripts/personalitiesBuilder.js
 echo "personalities.json hash check, valid and actual:"
-echo "231964a9a5bf74f9fb615c1bdcae97a9"
+echo "17e79cab47a4938f1428e2185002a20c"
 md5sum dist/personalities.json
 
 echo "=== Fixing The King ==="
 bash ./scripts/buildKing.sh
 echo "king hash check, valid and actual:"
-echo "489bdc755fe6539b0f9f71b36fea97fb"
+echo "d858f0015870c458431ce79175d127de"
 md5sum dist/TheKing350noOpk.exe
-
-echo "=== Building Runbook ==="
-bash ./scripts/buildRunbook.sh
-echo "runbook hash check, valid and actual:"
-echo "32f6c13255833cdd7995a50b689b3e1b"
-md5sum dist/runbook

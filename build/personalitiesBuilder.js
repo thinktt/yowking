@@ -40,6 +40,7 @@ async function run() {
 
   // fix some incorrect book names from the cmp files
   cmps['Shakespeare'].book = 'PawnMoves.bin'
+  cmps['Jessica'].book = 'PawnMoves.bin'
   cmps['Smyslov'].book = 'SmyslovV.bin'
   cmps['Shirov'].book = 'ShirovA.bin'
   
