@@ -25,7 +25,6 @@ The runtime `dist/` folder contains:
 - `dist/kingworker` (Linux worker binary)
 - `dist/enginewrap.exe` (Wine-side wrapper for engine IO)
 - `dist/TheKing350.exe` (King engine)
-- `dist/runbook` (opening-book helper binary)
 - `dist/books/*.bin` (Polyglot-style opening book artifacts)
 - `dist/personalities.json` (personality metadata/settings)
 - `dist/calibrations/clockTimes.json` (copied calibration timings)
