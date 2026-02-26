@@ -29,6 +29,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		"gameId": settings.GameId,
 		"moveNo": len(settings.Moves),
 	})
+	isVerboseMode = strings.EqualFold(os.Getenv("SHOULD_LOG_ENGINE"), "true")
 
 	isWsl := os.Getenv("IS_WSL")
 	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")

@@ -1,9 +1,12 @@
 package polybook
 
 import (
+	"errors"
 	"fmt"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
 
 	chess "github.com/corentings/chess/v2"
 )
@@ -16,10 +19,59 @@ type BookMove struct {
 	Learn  uint32
 }
 
+var ErrNoBookMove = errors.New("no book move")
+
 // GetAllBookMoves loads a polyglot book from ./books/<bookName> and returns all
 // moves available for the given FEN.
 func GetAllBookMoves(fen, bookName string) ([]BookMove, error) {
 	return GetAllBookMovesFromDir(fen, "books", bookName)
+}
+
+// GetMove applies the provided move list to a fresh game, queries the named
+// polyglot book, and returns a weighted-random move (ignoring zero weights).
+func GetMove(moves []string, bookName string) (string, error) {
+	fen, err := FENFromMoves(moves)
+	if err != nil {
+		return "", err
+	}
+	return GetHeavyMoveFromFEN(fen, bookName)
+}
+
+// FENFromMoves reproduces the runbook/chess.js behavior of applying a move list
+// from the initial position before querying the opening book.
+func FENFromMoves(moves []string) (string, error) {
+	g := chess.NewGame()
+	for i, s := range moves {
+		if err := pushSloppy(g, s); err != nil {
+			return "", fmt.Errorf("apply move %d (%q): %w", i+1, s, err)
+		}
+	}
+	return g.FEN(), nil
+}
+
+// GetHeavyMoveFromFEN matches the JS getHeavyMove behavior: get all book moves,
+// ignore zero-weight moves, and pick randomly weighted by the move weight.
+func GetHeavyMoveFromFEN(fen, bookName string) (string, error) {
+	bookMoves, err := GetAllBookMoves(fen, bookName)
+	if err != nil {
+		return "", err
+	}
+	if len(bookMoves) == 0 {
+		return "", ErrNoBookMove
+	}
+
+	weighted := make([]string, 0)
+	for _, m := range bookMoves {
+		for i := uint16(0); i < m.Weight; i++ {
+			weighted = append(weighted, m.Move)
+		}
+	}
+	if len(weighted) == 0 {
+		return "", ErrNoBookMove
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return weighted[r.Intn(len(weighted))], nil
 }
 
 // GetAllBookMovesFromDir loads a polyglot book from <booksDir>/<bookName> and
@@ -84,4 +136,26 @@ func polyglotEntryToUCIMove(entry chess.PolyglotEntry) (string, error) {
 	}
 
 	return uci, nil
+}
+
+func pushSloppy(g *chess.Game, s string) error {
+	// First try SAN/algebraic (works for "e4", "Nf3", "O-O", etc.)
+	if err := g.PushMove(s, nil); err == nil {
+		return nil
+	}
+
+	// Then try explicit UCI and long algebraic forms (e2e4, e7e8q, etc.)
+	if err := g.PushNotationMove(s, chess.UCINotation{}, nil); err == nil {
+		return nil
+	}
+	if err := g.PushNotationMove(s, chess.LongAlgebraicNotation{}, nil); err == nil {
+		return nil
+	}
+
+	// Final fallback: SAN decoder directly against current position.
+	if err := g.PushNotationMove(s, chess.AlgebraicNotation{}, nil); err == nil {
+		return nil
+	}
+
+	return fmt.Errorf("invalid move")
 }
