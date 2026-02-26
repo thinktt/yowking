@@ -35,14 +35,14 @@ tasks:
         echo "correct hash: d3ef7f9453b372e094bac18ce262b442";
         echo "actual hash : $hash"'
 
-  build:deps:image:
+  depsbuild:image:
     desc: Build the dependency-builder image (Dockerfile.dist)
     cmds:
       - docker build -f Dockerfile.dist -t {{.DEPS_IMAGE}} .
 
-  build:deps:dist:
+  depsbuild:dist:
     desc: Build dependency artifacts into root dist/ using Dockerfile.dist
-    deps: [build:deps:image]
+    deps: [depsbuild:image]
     cmds:
       - rm -rf dist
       - docker rm -f yowdeps-build || true
@@ -56,13 +56,22 @@ tasks:
       - GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe ./cmd/enginewrap
       - GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker ./cmd/kingworker
 
-  clean:
+  clean:all:
+    desc: Remove dist, generated compose files, imported CM assets, and helper build image/container
+    deps: [clean:compose, clean:dist, clean:cm, clean:images]
+  
+  clean:compose:
+    desc: Remove generated compose files
+    cmds:
+      - rm -f deploy/compose.yowking.yaml
+
+  clean:dist:
     desc: Remove root dist/ and generated compose files
     cmds:
       - rm -rf dist
       - rm -f deploy/compose.yowking.yaml
 
-  clean:assets:
+  clean:cm:
     desc: Remove imported Chessmaster assets (assets/cm)
     cmds:
       - rm -rf assets/cm
@@ -73,13 +82,10 @@ tasks:
       - docker rm -f yowdeps-build || true
       - docker rmi {{.DEPS_IMAGE}} || true
 
-  clean:all:
-    desc: Remove dist, generated compose files, imported CM assets, and helper build image/container
-    deps: [clean, clean:assets, clean:images]
 
   build:dist:
     desc: Step 2 - Build full runtime dist/ (deps artifacts + calibrations + Go binaries)
-    deps: [build:deps:dist]
+    deps: [depstbuild:dist]
     cmds:
       - mkdir -p dist/calibrations
       - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
@@ -87,7 +93,6 @@ tasks:
 
   build:image:
     desc: Step 3 - Build the main yowking container image
-    deps: [build:dist]
     cmds:
       - docker rm yowking || true
       - docker image rm {{.MAIN_IMAGE_LOCAL}} || true
@@ -124,3 +129,16 @@ tasks:
       - task import:cm
       - task build:image
       - task deploy:dev
+
+  din:
+    desc: Rebuild image, recreate dev worker detached, then exec into container shell
+    deps: [build:image]
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.dev.yaml up -d --force-recreate yowking-dev
+      - docker exec -it yowking-dev sh
+
+  dex:
+    desc: Rebuild image and run dev worker attached (interactive logs)
+    deps: [build:image]
+    cmds:
+      - docker compose --env-file .env -f deploy/compose.dev.yaml up --force-recreate yowking-dev

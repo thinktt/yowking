@@ -1,7 +1,9 @@
 FROM alpine
 
-RUN apk add --no-cache wine nodejs npm bash \
-    && npm i -g pkg@5.8.1
+# RUN apk add --no-cache wine nodejs npm bash \
+#     && npm i -g pkg@5.8.1
+RUN apk add --no-cache wine bash nodejs sed
+
 
 ENV WINEDEBUG=-all
 ENV XDG_RUNTIME_DIR=/tmp
@@ -13,7 +15,7 @@ COPY assets/cm/personalities ./assets/cm/personalities
 COPY assets/cm/TheKing350.exe ./assets/cm/TheKing350.exe
 COPY assets/personalities.cfg ./assets/personalities.cfg
 COPY assets/tools ./assets/tools
-COPY assets/runbook ./runbook
+# COPY assets/runbook ./runbook
 
 COPY build ./scripts
 RUN chmod +x ./scripts/*.sh
