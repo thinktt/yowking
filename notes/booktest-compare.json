@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-02-25T22:43:35.697002617Z",
+  "jsFile": "notes/booktest-js.json",
+  "goFile": "notes/booktest-go.json",
+  "totalCases": 1376,
+  "exactMatches": 1376,
+  "mismatches": 0,
+  "jsErrors": 0,
+  "goErrors": 0,
+  "jsOnlyErrors": 0,
+  "goOnlyErrors": 0,
+  "bothErrors": 0,
+  "jsTotalDurationMs": 204242.029,
+  "goTotalDurationMs": 909.363,
+  "goSpeedupVsJs": 224.59900941648164,
+  "issueBreakdown": {},
+  "sampleMismatches": []
+}
