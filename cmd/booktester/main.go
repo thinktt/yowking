@@ -1,31 +1,32 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
 
-	"github.com/thinktt/yowking/pkg/polybook"
+	chess "github.com/corentings/chess/v2"
+	"github.com/thinktt/yowking/pkg/books"
 )
 
 var ExtraBooks = []string{
-	"PawnMoves.bin",
 	"AnandV.bin",
 	"AnderssenA.bin",
 	"BlackburneJ.bin",
 	"BogoljubowE.bin",
 	"BotvinnikM.bin",
+	"CaptureBook.bin",
 	"ChigorinM.bin",
 	"EuweM.bin",
 	"EvansL.bin",
+	"FastBook.bin",
 	"FineR.bin",
 	"FlohrS.bin",
 	"GellerE.bin",
@@ -43,6 +44,7 @@ var ExtraBooks = []string{
 	"NajdorfM.bin",
 	"NimzowitschA.bin",
 	"PaulsenL.bin",
+	"PawnMoves.bin",
 	"PetrosianT.bin",
 	"PillsburyH.bin",
 	"PolgarJ.bin",
@@ -51,12 +53,16 @@ var ExtraBooks = []string{
 	"SeirawanY.bin",
 	"ShirovA.bin",
 	"ShortN.bin",
+	"SlowBook.bin",
 	"SmyslovV.bin",
 	"SpasskyB.bin",
 	"SteinitzW.bin",
+	"Strong.bin",
 	"TarraschS.bin",
 	"TartakowerS.bin",
 	"TimmanJ.bin",
+	"Trapper.bin",
+	"Unorthodox.bin",
 }
 
 type fenCaseFile struct {
@@ -75,7 +81,7 @@ type fenCase struct {
 
 type runCase struct {
 	ID       string  `json:"id"`
-	Scenario string  `json:"scenario"` // native | rotated
+	Scenario string  `json:"scenario"`
 	Source   fenCase `json:"source"`
 	TestBook string  `json:"testBook"`
 }
@@ -83,7 +89,6 @@ type runCase struct {
 type moveOut struct {
 	Move   string `json:"move"`
 	Weight uint16 `json:"weight"`
-	Learn  uint32 `json:"learn"`
 }
 
 type caseResult struct {
@@ -108,7 +113,6 @@ type runSummary struct {
 	GeneratedAt       time.Time    `json:"generatedAt"`
 	Input             string       `json:"input"`
 	BooksDir          string       `json:"booksDir"`
-	JSRunbookDir      string       `json:"jsRunbookDir,omitempty"`
 	ExtraBooks        []string     `json:"extraBooks"`
 	NativeCases       int          `json:"nativeCases"`
 	RotatedCases      int          `json:"rotatedCases"`
@@ -123,143 +127,34 @@ type runSummary struct {
 	Results           []caseResult `json:"results"`
 }
 
-type compareSummary struct {
-	GeneratedAt      time.Time        `json:"generatedAt"`
-	JSFile           string           `json:"jsFile"`
-	GoFile           string           `json:"goFile"`
-	TotalCases       int              `json:"totalCases"`
-	ExactMatches     int              `json:"exactMatches"`
-	Mismatches       int              `json:"mismatches"`
-	JSErrors         int              `json:"jsErrors"`
-	GoErrors         int              `json:"goErrors"`
-	JSOnlyErrors     int              `json:"jsOnlyErrors"`
-	GoOnlyErrors     int              `json:"goOnlyErrors"`
-	BothErrors       int              `json:"bothErrors"`
-	JSTotalMS        float64          `json:"jsTotalDurationMs"`
-	GoTotalMS        float64          `json:"goTotalDurationMs"`
-	Speedup          float64          `json:"goSpeedupVsJs"`
-	IssueBreakdown   map[string]int   `json:"issueBreakdown"`
-	SampleMismatches []compareProblem `json:"sampleMismatches"`
-}
-
-type compareProblem struct {
-	ID       string     `json:"id"`
-	Scenario string     `json:"scenario"`
-	TestBook string     `json:"testBook"`
-	FEN      string     `json:"fen"`
-	JS       caseResult `json:"js"`
-	Go       caseResult `json:"go"`
-	Reason   string     `json:"reason"`
-}
-
 func main() {
 	if len(os.Args) < 2 {
 		usage()
 		os.Exit(2)
 	}
-
 	switch os.Args[1] {
-	case "run-js":
-		if err := runJS(os.Args[2:]); err != nil {
+	case "fens", "run-go":
+		// "run-go" kept as a compatibility alias.
+	case "mem":
+		if err := runMem(os.Args[2:]); err != nil {
 			fatal(err)
 		}
-	case "run-go":
-		if err := runGo(os.Args[2:]); err != nil {
-			fatal(err)
-		}
-	case "compare":
-		if err := runCompare(os.Args[2:]); err != nil {
-			fatal(err)
-		}
+		return
 	default:
 		usage()
 		os.Exit(2)
 	}
+	if err := runGo(os.Args[2:]); err != nil {
+		fatal(err)
+	}
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: booktester <run-js|run-go|compare> [flags]\n")
-}
-
-func runJS(args []string) error {
-	fs := flag.NewFlagSet("run-js", flag.ExitOnError)
-	in := fs.String("in", "notes/testFens.json", "input test fens json")
-	out := fs.String("out", "notes/booktest-js.json", "output results json")
-	booksDir := fs.String("books-dir", "dist/books", "books directory")
-	runbookDir := fs.String("runbook-dir", "assets/runbook", "runbook directory")
-	extraBooks := fs.String("extra-books", strings.Join(ExtraBooks, ","), "comma-separated extra books for rotated pass")
-	_ = fs.Parse(args)
-
-	absRunbookDir, err := filepath.Abs(*runbookDir)
-	if err != nil {
-		return fmt.Errorf("resolve runbook dir: %w", err)
-	}
-	absBooksDir, err := filepath.Abs(*booksDir)
-	if err != nil {
-		return fmt.Errorf("resolve books dir: %w", err)
-	}
-
-	cases, native, rotated, extras, err := buildRunCases(*in, parseCSV(*extraBooks))
-	if err != nil {
-		return err
-	}
-
-	startAll := time.Now()
-	results := make([]caseResult, 0, len(cases))
-	errCount := 0
-	withMoves := 0
-	noMoves := 0
-	bookSeenOK := map[string]bool{}
-	bookHadMove := map[string]bool{}
-	for i, c := range cases {
-		logCaseStart("js", c)
-		res, err := jsCase(c, i, absRunbookDir, absBooksDir)
-		if err != nil {
-			return err
-		}
-		logCaseResult(res)
-		if res.Err != "" {
-			errCount++
-		} else if len(res.Moves) == 0 {
-			noMoves++
-			bookSeenOK[res.TestBook] = true
-		} else {
-			withMoves++
-			bookSeenOK[res.TestBook] = true
-			bookHadMove[res.TestBook] = true
-		}
-		results = append(results, res)
-	}
-	totalMS := msSince(startAll)
-
-	sum := runSummary{
-		Engine:            "js",
-		GeneratedAt:       time.Now().UTC(),
-		Input:             *in,
-		BooksDir:          absBooksDir,
-		JSRunbookDir:      absRunbookDir,
-		ExtraBooks:        extras,
-		NativeCases:       native,
-		RotatedCases:      rotated,
-		TotalCases:        len(results),
-		Errors:            errCount,
-		CasesWithMoves:    withMoves,
-		CasesNoMoves:      noMoves,
-		BooksWithMoves:    sortedBookKeys(bookHadMove),
-		BooksWithNoMoves:  booksWithNoMoves(bookSeenOK, bookHadMove),
-		TotalDurationMS:   totalMS,
-		AverageDurationMS: safeDiv(totalMS, float64(len(results))),
-		Results:           results,
-	}
-	if err := writeJSON(*out, sum); err != nil {
-		return err
-	}
-	printRunSummary(sum)
-	return nil
+	fmt.Fprintln(os.Stderr, "usage: booktester <fens|mem> [flags]")
 }
 
 func runGo(args []string) error {
-	fs := flag.NewFlagSet("run-go", flag.ExitOnError)
+	fs := flag.NewFlagSet("fens", flag.ExitOnError)
 	in := fs.String("in", "notes/testFens.json", "input test fens json")
 	out := fs.String("out", "notes/booktest-go.json", "output results json")
 	booksDir := fs.String("books-dir", "dist/books", "books directory")
@@ -283,10 +178,11 @@ func runGo(args []string) error {
 	noMoves := 0
 	bookSeenOK := map[string]bool{}
 	bookHadMove := map[string]bool{}
+
 	for i, c := range cases {
-		logCaseStart("go", c)
+		logCaseStart(c)
 		start := time.Now()
-		moves, runErr := polybook.GetAllBookMovesFromDir(c.Source.FEN, absBooksDir, c.TestBook)
+		moves, runErr := books.GetAllBookMovesFromDir(c.Source.FEN, absBooksDir, c.TestBook)
 		res := caseResult{
 			ID:          c.ID,
 			Scenario:    c.Scenario,
@@ -307,22 +203,21 @@ func runGo(args []string) error {
 		} else {
 			res.Moves = make([]moveOut, 0, len(moves))
 			for _, m := range moves {
-				res.Moves = append(res.Moves, moveOut{Move: m.Move, Weight: m.Weight, Learn: m.Learn})
+				res.Moves = append(res.Moves, moveOut{Move: m.Move, Weight: m.Weight})
 			}
+			bookSeenOK[res.TestBook] = true
 			if len(res.Moves) == 0 {
 				noMoves++
-				bookSeenOK[res.TestBook] = true
 			} else {
 				withMoves++
-				bookSeenOK[res.TestBook] = true
 				bookHadMove[res.TestBook] = true
 			}
 		}
 		logCaseResult(res)
 		results = append(results, res)
 	}
-	totalMS := msSince(startAll)
 
+	totalMS := msSince(startAll)
 	sum := runSummary{
 		Engine:            "go",
 		GeneratedAt:       time.Now().UTC(),
@@ -348,109 +243,72 @@ func runGo(args []string) error {
 	return nil
 }
 
-func runCompare(args []string) error {
-	fs := flag.NewFlagSet("compare", flag.ExitOnError)
-	jsPath := fs.String("js", "notes/booktest-js.json", "js results file")
-	goPath := fs.String("go", "notes/booktest-go.json", "go results file")
-	out := fs.String("out", "notes/booktest-compare.json", "comparison output json")
-	sample := fs.Int("sample", 20, "max mismatches to include")
+func runMem(args []string) error {
+	fs := flag.NewFlagSet("mem", flag.ExitOnError)
+	booksDir := fs.String("books-dir", "dist/books", "books directory")
 	_ = fs.Parse(args)
 
-	var jsRun, goRun runSummary
-	if err := readJSON(*jsPath, &jsRun); err != nil {
-		return fmt.Errorf("read js run: %w", err)
-	}
-	if err := readJSON(*goPath, &goRun); err != nil {
-		return fmt.Errorf("read go run: %w", err)
-	}
-	if len(jsRun.Results) != len(goRun.Results) {
-		return fmt.Errorf("result length mismatch: js=%d go=%d", len(jsRun.Results), len(goRun.Results))
+	absBooksDir, err := filepath.Abs(*booksDir)
+	if err != nil {
+		return fmt.Errorf("resolve books dir: %w", err)
 	}
 
-	jsErrors, goErrors := 0, 0
-	jsOnlyErr, goOnlyErr, bothErr := 0, 0, 0
-	exact := 0
-	mismatches := make([]compareProblem, 0)
-	issueCounts := map[string]int{}
+	entries, err := os.ReadDir(absBooksDir)
+	if err != nil {
+		return fmt.Errorf("read books dir: %w", err)
+	}
 
-	for i := range jsRun.Results {
-		jr := jsRun.Results[i]
-		gr := goRun.Results[i]
-		if jr.Err != "" {
-			jsErrors++
-		}
-		if gr.Err != "" {
-			goErrors++
-		}
-		switch {
-		case jr.Err != "" && gr.Err != "":
-			bothErr++
-		case jr.Err != "" && gr.Err == "":
-			jsOnlyErr++
-		case jr.Err == "" && gr.Err != "":
-			goOnlyErr++
-		}
+	type loadedBook struct {
+		name string
+		book *chess.PolyglotBook
+	}
+	loaded := make([]loadedBook, 0)
+	var diskBytes int64
 
-		if jr.ID != gr.ID {
-			mismatches = append(mismatches, compareProblem{
-				ID:       jr.ID,
-				Scenario: jr.Scenario,
-				TestBook: jr.TestBook,
-				FEN:      jr.FEN,
-				JS:       jr,
-				Go:       gr,
-				Reason:   "result ordering/id mismatch",
-			})
-			issueCounts["result ordering/id mismatch"]++
+	runtime.GC()
+	var before runtime.MemStats
+	runtime.ReadMemStats(&before)
+
+	for _, e := range entries {
+		if e.IsDir() || !strings.HasSuffix(strings.ToLower(e.Name()), ".bin") {
 			continue
 		}
-
-		reason := compareCase(jr, gr)
-		if reason == "" {
-			exact++
-			continue
+		p := filepath.Join(absBooksDir, e.Name())
+		info, err := e.Info()
+		if err != nil {
+			return fmt.Errorf("stat %s: %w", p, err)
 		}
-		issueCounts[reason]++
-		if len(mismatches) < *sample {
-			mismatches = append(mismatches, compareProblem{
-				ID:       jr.ID,
-				Scenario: jr.Scenario,
-				TestBook: jr.TestBook,
-				FEN:      jr.FEN,
-				JS:       jr,
-				Go:       gr,
-				Reason:   reason,
-			})
+		diskBytes += info.Size()
+
+		f, err := os.Open(p)
+		if err != nil {
+			return fmt.Errorf("open %s: %w", p, err)
 		}
+		b, err := chess.LoadFromReader(f)
+		f.Close()
+		if err != nil {
+			return fmt.Errorf("load %s: %w", p, err)
+		}
+		loaded = append(loaded, loadedBook{name: e.Name(), book: b})
 	}
 
-	total := len(jsRun.Results)
-	sum := compareSummary{
-		GeneratedAt:      time.Now().UTC(),
-		JSFile:           *jsPath,
-		GoFile:           *goPath,
-		TotalCases:       total,
-		ExactMatches:     exact,
-		Mismatches:       total - exact,
-		JSErrors:         jsErrors,
-		GoErrors:         goErrors,
-		JSOnlyErrors:     jsOnlyErr,
-		GoOnlyErrors:     goOnlyErr,
-		BothErrors:       bothErr,
-		JSTotalMS:        jsRun.TotalDurationMS,
-		GoTotalMS:        goRun.TotalDurationMS,
-		Speedup:          safeDiv(jsRun.TotalDurationMS, goRun.TotalDurationMS),
-		IssueBreakdown:   issueCounts,
-		SampleMismatches: mismatches,
-	}
+	runtime.GC()
+	var after runtime.MemStats
+	runtime.ReadMemStats(&after)
 
-	if err := writeJSON(*out, sum); err != nil {
-		return err
-	}
+	heapDelta := memDelta(after.HeapAlloc, before.HeapAlloc)
+	allocDelta := memDelta(after.Alloc, before.Alloc)
+	sysDelta := memDelta(after.Sys, before.Sys)
 
-	fmt.Printf("cases=%d exact=%d mismatches=%d js_ms=%.2f go_ms=%.2f speedup=%.2fx\n",
-		sum.TotalCases, sum.ExactMatches, sum.Mismatches, sum.JSTotalMS, sum.GoTotalMS, sum.Speedup)
-	printCompareSummary(sum)
+	fmt.Printf("books=%d disk_bytes=%d disk_mb=%.2f\n", len(loaded), diskBytes, float64(diskBytes)/(1024*1024))
+	fmt.Printf("heap_alloc_delta=%d (%.2f MB)\n", heapDelta, float64(heapDelta)/(1024*1024))
+	fmt.Printf("alloc_delta=%d (%.2f MB)\n", allocDelta, float64(allocDelta)/(1024*1024))
+	fmt.Printf("sys_delta=%d (%.2f MB)\n", sysDelta, float64(sysDelta)/(1024*1024))
+
+	// Keep parsed books alive until after stats are printed.
+	if len(loaded) == 0 {
+		return errors.New("no .bin books loaded")
+	}
 	return nil
 }
 
@@ -464,14 +322,13 @@ func buildRunCases(in string, extraBooks []string) ([]runCase, int, int, []strin
 	}
 
 	out := make([]runCase, 0, len(input.Cases)*2)
-	for i, c := range input.Cases {
+	for _, c := range input.Cases {
 		out = append(out, runCase{
 			ID:       fmt.Sprintf("native:%s:%03d", c.GameID, c.Ply),
 			Scenario: "native",
 			Source:   c,
 			TestBook: c.Book,
 		})
-		_ = i
 	}
 	nativeCount := len(out)
 
@@ -502,92 +359,6 @@ func buildRunCases(in string, extraBooks []string) ([]runCase, int, int, []strin
 		rotatedCount++
 	}
 	return out, nativeCount, rotatedCount, extraBooks, nil
-}
-
-func jsCase(c runCase, idx int, runbookDir, booksDir string) (caseResult, error) {
-	payload := map[string]string{
-		"fen":      c.Source.FEN,
-		"book":     c.TestBook,
-		"booksDir": booksDir,
-	}
-	b, err := json.Marshal(payload)
-	if err != nil {
-		return caseResult{}, err
-	}
-
-	cmd := exec.Command("node", "dumpBookMoves.js", string(b))
-	cmd.Dir = runbookDir
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-
-	start := time.Now()
-	out, err := cmd.Output()
-	duration := msSince(start)
-
-	res := caseResult{
-		ID:          c.ID,
-		Scenario:    c.Scenario,
-		GameID:      c.Source.GameID,
-		Ply:         c.Source.Ply,
-		CmpName:     c.Source.CmpName,
-		SourceBook:  c.Source.Book,
-		TestBook:    c.TestBook,
-		FEN:         c.Source.FEN,
-		DurationMS:  duration,
-		SourceMove:  c.Source.Move,
-		SourceSide:  c.Source.PlayedAs,
-		SourceIndex: idx,
-	}
-
-	if err != nil {
-		msg := strings.TrimSpace(stderr.String())
-		if msg == "" {
-			msg = err.Error()
-		}
-		res.Err = msg
-		return res, nil
-	}
-
-	var moves []moveOut
-	if err := json.Unmarshal(out, &moves); err != nil {
-		return caseResult{}, fmt.Errorf("parse js output for %s: %w; raw=%q", c.ID, err, string(out))
-	}
-	res.Moves = moves
-	return res, nil
-}
-
-func compareCase(jsR, goR caseResult) string {
-	if jsR.Err != "" || goR.Err != "" {
-		if jsR.Err == goR.Err {
-			return ""
-		}
-		return "error mismatch"
-	}
-	jsMoves := normalizeMoves(jsR.Moves)
-	goMoves := normalizeMoves(goR.Moves)
-	if len(jsMoves) != len(goMoves) {
-		return "move count mismatch"
-	}
-	for i := range jsMoves {
-		if jsMoves[i] != goMoves[i] {
-			return "move set/weight mismatch"
-		}
-	}
-	return ""
-}
-
-func normalizeMoves(in []moveOut) []moveOut {
-	out := append([]moveOut(nil), in...)
-	sort.Slice(out, func(i, j int) bool {
-		if out[i].Move != out[j].Move {
-			return out[i].Move < out[j].Move
-		}
-		if out[i].Weight != out[j].Weight {
-			return out[i].Weight < out[j].Weight
-		}
-		return out[i].Learn < out[j].Learn
-	})
-	return out
 }
 
 func parseCSV(s string) []string {
@@ -641,8 +412,7 @@ func fatal(err error) {
 	os.Exit(1)
 }
 
-func logCaseStart(engine string, c runCase) {
-	_ = engine
+func logCaseStart(c runCase) {
 	fmt.Printf("test fen: %s\n", c.Source.FEN)
 }
 
@@ -685,23 +455,6 @@ func printRunSummary(sum runSummary) {
 	}
 }
 
-func printCompareSummary(sum compareSummary) {
-	if sum.Mismatches == 0 {
-		fmt.Println("issues none")
-		return
-	}
-	keys := make([]string, 0, len(sum.IssueBreakdown))
-	for k := range sum.IssueBreakdown {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	parts := make([]string, 0, len(keys))
-	for _, k := range keys {
-		parts = append(parts, fmt.Sprintf("%s:%d", k, sum.IssueBreakdown[k]))
-	}
-	fmt.Printf("issues %s\n", strings.Join(parts, " | "))
-}
-
 func sortedBookKeys(m map[string]bool) []string {
 	out := make([]string, 0, len(m))
 	for k := range m {
@@ -720,4 +473,11 @@ func booksWithNoMoves(bookSeenOK, bookHadMove map[string]bool) []string {
 	}
 	sort.Strings(out)
 	return out
+}
+
+func memDelta(a, b uint64) uint64 {
+	if a >= b {
+		return a - b
+	}
+	return 0
 }

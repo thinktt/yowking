@@ -17,11 +17,5 @@ md5sum dist/personalities.json
 echo "=== Fixing The King ==="
 bash ./scripts/buildKing.sh
 echo "king hash check, valid and actual:"
-echo "489bdc755fe6539b0f9f71b36fea97fb"
+echo "d858f0015870c458431ce79175d127de"
 md5sum dist/TheKing350noOpk.exe
-
-# echo "=== Building Runbook ==="
-# bash ./scripts/buildRunbook.sh
-# echo "runbook hash check, valid and actual:"
-# echo "32f6c13255833cdd7995a50b689b3e1b"
-# md5sum dist/runbook

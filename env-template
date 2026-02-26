@@ -1,5 +1,7 @@
-export IS_WSL=false
-export NATS_TOKEN=
-export NATS_URL=
-export CM_DIR=
+IS_WSL=false
+NATS_TOKEN=
+NATS_URL=
+CM_DIR=
+SHOULD_LOG_ENGINE=false
+SHOULD_POST_INPUT=false
 
