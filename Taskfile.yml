@@ -142,3 +142,11 @@ tasks:
     deps: [build:image]
     cmds:
       - docker compose --env-file .env -f deploy/compose.dev.yaml up --force-recreate yowking-dev
+  
+  depsin:
+    desc: Open an interactive shell in the dependency-builder container
+    deps: [depsbuild:image]
+    cmds:
+      - docker rm -f yowdeps-builder || true
+      - docker run --rm -it --name yowdeps-builder {{.DEPS_IMAGE}} bash
+
