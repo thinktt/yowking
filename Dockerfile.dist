@@ -1,9 +1,6 @@
 FROM alpine
 
-# RUN apk add --no-cache wine nodejs npm bash \
-#     && npm i -g pkg@5.8.1
 RUN apk add --no-cache wine bash nodejs sed
-
 
 ENV WINEDEBUG=-all
 ENV XDG_RUNTIME_DIR=/tmp
