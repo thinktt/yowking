@@ -142,3 +142,11 @@ tasks:
     deps: [build:image]
     cmds:
       - docker compose --env-file .env -f deploy/compose.dev.yaml up --force-recreate yowking-dev
+
+  depin:
+    desc: Rebuild deps image, start deps builder container, then exec into container shell
+    deps: [depsbuild:image]
+    cmds:
+      - docker rm -f yowdeps-build || true
+      - docker run -d --name yowdeps-build {{.DEPS_IMAGE}} sleep infinity
+      - docker exec -it yowdeps-build sh
