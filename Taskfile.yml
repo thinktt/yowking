@@ -34,6 +34,26 @@ tasks:
         echo "personalities folder check";
         echo "correct hash: d3ef7f9453b372e094bac18ce262b442";
         echo "actual hash : $hash"'
+  
+  build:dist:
+  desc: Step 2 - Build full runtime dist/ (deps artifacts + calibrations + Go binaries)
+  deps: [depsbuild:dist]
+  cmds:
+    - mkdir -p dist/calibrations
+    - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
+    - task gobuild
+
+  build:image:
+    desc: Step 3 - Build the main yowking container image
+    cmds:
+      - docker rm yowking || true
+      - docker image rm {{.MAIN_IMAGE_LOCAL}} || true
+      - docker build -t {{.MAIN_IMAGE_LOCAL}} .
+  
+  deploy:
+    desc: Step 4 (for now) - Deploy one dev worker
+    cmds:
+      - task deploy:dev
 
   depsbuild:image:
     desc: Build the dependency-builder image (Dockerfile.dist)
@@ -82,22 +102,6 @@ tasks:
       - docker rm -f yowdeps-build || true
       - docker rmi {{.DEPS_IMAGE}} || true
 
-
-  build:dist:
-    desc: Step 2 - Build full runtime dist/ (deps artifacts + calibrations + Go binaries)
-    deps: [depstbuild:dist]
-    cmds:
-      - mkdir -p dist/calibrations
-      - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
-      - task gobuild
-
-  build:image:
-    desc: Step 3 - Build the main yowking container image
-    cmds:
-      - docker rm yowking || true
-      - docker image rm {{.MAIN_IMAGE_LOCAL}} || true
-      - docker build -t {{.MAIN_IMAGE_LOCAL}} .
-
   dist:
     desc: Alias for build:dist (Step 2)
     cmds:
@@ -107,11 +111,6 @@ tasks:
     desc: Alias for build:image (Step 3)
     cmds:
       - task build:image
-
-  deploy:
-    desc: Step 4 (for now) - Deploy one dev worker
-    cmds:
-      - task deploy:dev
 
   deploy:dev:
     desc: Start one dev yowking worker from deploy/compose.dev.yaml
