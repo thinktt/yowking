@@ -45,7 +45,7 @@ tasks:
       - docker cp yowdeps-build:/build/dist ./dist
       - docker rm yowdeps-build
       - mkdir -p dist/calibrations
-      - cp ../yeoldwiz/yowbot/cals/xps/run1/clockTimes.json dist/calibrations/clockTimes.json
+      - cp assets/devClockTimes.json dist/calibrations/clockTimes.json
       - task gobuild
 
   build:image:
