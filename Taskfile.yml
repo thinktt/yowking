@@ -61,13 +61,13 @@ tasks:
       - task deploy:dev
 
   dexi:
-    desc: For dev worflow, rebuild go binaries, rebuild container, run interactively
+    desc: For dev workflow, rebuild go binaries, rebuild container, run interactively
     deps: [gobuild, build:image]
     cmds:
        - docker compose --env-file .env -f deploy/compose.dev.yaml up --force-recreate yowking-dev
 
   din:
-    desc: Similer to dexi but shell into the container for troubleshooting
+    desc: Similar to dexi but shell into the container for troubleshooting
     deps: [gobuild, build:image]
     cmds:
       - docker compose --env-file .env -f deploy/compose.dev.yaml up -d --force-recreate yowking-dev
@@ -90,7 +90,7 @@ tasks:
       - docker compose --env-file .env -f deploy/compose.dev.yaml down
 
   depin:
-    desc: For troubleshooting the dependecy builder container, start deps container, exec in
+    desc: For troubleshooting the dependency builder container, start deps container, exec in
     cmds:
       - docker rm -f yowdeps-build || true
       - docker run -d --name yowdeps-build {{.DEPS_IMAGE}} sleep infinity

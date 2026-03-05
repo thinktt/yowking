@@ -74,18 +74,12 @@ task build:image
 task deploy        # deploys one dev worker for now
 ```
 
-Or run the full dev pipeline:
-
-```bash
-task dev:up
-```
-
 ## Task Summary
 
 List tasks:
 
 ```bash
-task --list
+task --list --sort none
 ```
 
 Most important tasks:
@@ -95,6 +89,9 @@ Most important tasks:
 - `build:image` - builds `zen:5000/yowking:latest`
 - `deploy:dev` - starts one worker from `deploy/compose.dev.yaml`
 - `deploy:dev:down` - stops the dev worker
+- `dexi` - rebuild binaries/image and run dev worker attached (interactive logs)
+- `din` - rebuild binaries/image, run dev worker detached, then shell in
+- `depin` - run deps builder container and shell in for troubleshooting
 - `clean:all` - reset generated artifacts + imported CM assets + helper image
 
 ## Notes
