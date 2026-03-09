@@ -24,8 +24,10 @@ The runtime `dist/` folder contains:
 
 - `dist/kingworker` (Linux worker binary)
 - `dist/enginewrap.exe` (Wine-side wrapper for engine IO)
+- `dist/kingctl` (local CLI for engine/book testing)
 - `dist/TheKing350.exe` (King engine)
 - `dist/books/*.bin` (Polyglot-style opening book artifacts)
+- `dist/fixtures/*.json` (book/position test fixtures)
 - `dist/personalities.json` (personality metadata/settings)
 - `dist/calibrations/clockTimes.json` (copied calibration timings)
 
@@ -93,6 +95,22 @@ Most important tasks:
 - `din` - rebuild binaries/image, run dev worker detached, then shell in
 - `depin` - run deps builder container and shell in for troubleshooting
 - `clean:all` - reset generated artifacts + imported CM assets + helper image
+
+## Kingctl
+
+`kingctl` is built into `dist/` by `task gobuild` / `task build:dist`.
+
+Commands:
+
+- `./kingctl move '<json>'` - runs move resolution directly (book + engine), no NATS
+- `./kingctl move --skip-book '<json>'` - bypasses book and goes straight to engine
+- `./kingctl book fens` - runs fixture-based book checks (reads `./fixtures/testFens.json`, writes summary to `/tmp/kingctl-book-fens.json`)
+- `./kingctl book mem` - loads all books and prints memory usage deltas
+
+Notes:
+
+- `kingctl` resolves `books/` and `fixtures/` relative to the binary location.
+- If `.env` exists in the directory you launch from, unset env vars are filled from it.
 
 ## Notes
 
