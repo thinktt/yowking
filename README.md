@@ -1,6 +1,6 @@
 # The King Worker (yowking)
 
-This repo packages Johan de Koning's chess engine [The King](https://www.chessprogramming.org/The_King) (from Chessmaster) as a worker service.
+This repo packages Johan de Koning's chess engine [The King](https://www.chessprogramming.org/The_King) (from Chessmaster) as a worker service. 
 
 The worker:
 - consumes move requests from NATS
@@ -65,7 +65,7 @@ Current top-level steps:
 1. Import Chessmaster assets
 2. Build `dist/`
 3. Build the main worker image
-4. (Optional / current dev flow) deploy one dev worker
+4.  deploy one dev worker (Optional / for dev work flow)
 
 Tasks:
 
@@ -98,14 +98,18 @@ Most important tasks:
 
 ## Kingctl
 
+Kingclt is a useful doing some basic testing and diagnostic of the king engine and it's wrapper tools. During the build process it will automaticlly be compiled into the dist folder and works within the dist folder layout. This measn it will be placed into the container. The easiest way to run it is by using `task din` to build and enter the container then run the `./kingctl` from there. 
+
 `kingctl` is built into `dist/` by `task gobuild` / `task build:dist`.
 
 Commands:
 
 - `./kingctl move '<json>'` - runs move resolution directly (book + engine), no NATS
 - `./kingctl move --skip-book '<json>'` - bypasses book and goes straight to engine
+- `./kingctl move '{"cmpName":"Josh7","gameId":"g1","moves":["e2e4","e7e5","g1f3"]}'` - move command with actual json example 
 - `./kingctl book fens` - runs fixture-based book checks (reads `./fixtures/testFens.json`, writes summary to `/tmp/kingctl-book-fens.json`)
 - `./kingctl book mem` - loads all books and prints memory usage deltas
+
 
 Notes:
 
@@ -114,5 +118,5 @@ Notes:
 
 ## Notes
 
-- `deploy/compose.yowking.yaml` is generated and ignored.
+- `deploy/compose.yowking.yaml` is a generated compose file for the production server.
 - `deploy/compose.dev.yaml` is the simple single-worker dev compose file.
