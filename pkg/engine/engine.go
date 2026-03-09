@@ -31,12 +31,12 @@ func GetMove(settings Settings) (MoveData, error) {
 	})
 	isVerboseMode = strings.EqualFold(os.Getenv("SHOULD_LOG_ENGINE"), "true")
 
-	isWsl := os.Getenv("IS_WSL")
+	isWsl := envTrue("IS_WSL")
 	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	// log.Println("shouldPostInput: " + shouldPostInput)
 
 	var cmd *exec.Cmd
-	if isWsl == "true" {
+	if isWsl {
 		cmd = exec.Command("./TheKing350.exe")
 	} else {
 		cmd = exec.Command("wine", "enginewrap.exe")
@@ -223,6 +223,16 @@ func parseMoveLine(words []string) (MoveData, error) {
 	}
 
 	return moveData, nil
+}
+
+func envTrue(key string) bool {
+	v := strings.TrimSpace(strings.ToLower(os.Getenv(key)))
+	switch v {
+	case "1", "true", "yes", "y", "on":
+		return true
+	default:
+		return false
+	}
 }
 
 func forwardUserCommands(engine io.WriteCloser) {
