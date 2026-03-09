@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -94,7 +93,6 @@ func runMove(args []string) error {
 	if err != nil {
 		return err
 	}
-	loadDotEnvDefaults()
 	if err := os.Chdir(baseDir); err != nil {
 		return fmt.Errorf("change dir to %q: %w", baseDir, err)
 	}
@@ -229,46 +227,4 @@ func binaryDir() (string, error) {
 		return "", fmt.Errorf("resolve executable path: %w", err)
 	}
 	return filepath.Dir(exe), nil
-}
-
-func loadDotEnvDefaults() {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return
-	}
-	p := filepath.Join(cwd, ".env")
-	if _, err := os.Stat(p); err == nil {
-		loadEnvFile(p)
-	}
-}
-
-func loadEnvFile(path string) {
-	f, err := os.Open(path)
-	if err != nil {
-		return
-	}
-	defer f.Close()
-
-	sc := bufio.NewScanner(f)
-	for sc.Scan() {
-		line := sc.Text()
-		if line == "" || line[0] == '#' {
-			continue
-		}
-		eq := -1
-		for i := 0; i < len(line); i++ {
-			if line[i] == '=' {
-				eq = i
-				break
-			}
-		}
-		if eq <= 0 {
-			continue
-		}
-		key := line[:eq]
-		val := line[eq+1:]
-		if os.Getenv(key) == "" {
-			_ = os.Setenv(key, val)
-		}
-	}
 }

@@ -31,7 +31,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	})
 	isVerboseMode = strings.EqualFold(os.Getenv("SHOULD_LOG_ENGINE"), "true")
 
-	isWsl := envTrue("IS_WSL")
+	isWsl := strings.EqualFold(os.Getenv("IS_WSL"), "true")
 	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	// log.Println("shouldPostInput: " + shouldPostInput)
 
@@ -223,16 +223,6 @@ func parseMoveLine(words []string) (MoveData, error) {
 	}
 
 	return moveData, nil
-}
-
-func envTrue(key string) bool {
-	v := strings.TrimSpace(strings.ToLower(os.Getenv(key)))
-	switch v {
-	case "1", "true", "yes", "y", "on":
-		return true
-	default:
-		return false
-	}
 }
 
 func forwardUserCommands(engine io.WriteCloser) {
