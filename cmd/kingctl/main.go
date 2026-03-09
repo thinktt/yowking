@@ -66,27 +66,28 @@ func printUsage() {
 }
 
 func runMove(args []string) error {
-	fs := flag.NewFlagSet("move", flag.ContinueOnError)
-	fs.SetOutput(os.Stderr)
-	skipBook := fs.Bool("s", false, "skip book lookup")
-	fs.BoolVar(skipBook, "skip-book", false, "skip book lookup")
-	if err := fs.Parse(args); err != nil {
+	moveFlags := flag.NewFlagSet("move", flag.ContinueOnError)
+	moveFlags.SetOutput(os.Stderr)
+	var skipBook bool
+	moveFlags.BoolVar(&skipBook, "s", false, "skip book lookup")
+	moveFlags.BoolVar(&skipBook, "skip-book", false, "skip book lookup")
+	if err := moveFlags.Parse(args); err != nil {
 		return err
 	}
 
-	if fs.NArg() != 1 {
+	if moveFlags.NArg() != 1 {
 		return errors.New("usage: kingctl move [-s|--skip-book] <json>")
 	}
 
-	req, err := readMoveReq(fs.Arg(0))
+	moveReq, err := readMoveReq(moveFlags.Arg(0))
 	if err != nil {
 		return err
 	}
-	if *skipBook {
-		req.ShouldSkipBook = true
+	if skipBook {
+		moveReq.ShouldSkipBook = true
 	}
-	if req.GameId == "" {
-		req.GameId = fmt.Sprintf("kingctl-%d", time.Now().UnixNano())
+	if moveReq.GameId == "" {
+		moveReq.GameId = fmt.Sprintf("kingctl-%d", time.Now().UnixNano())
 	}
 
 	baseDir, err := binaryDir()
@@ -101,25 +102,25 @@ func runMove(args []string) error {
 	if err != nil {
 		return err
 	}
-	clockTimes, err := loadClockTimes("calibrations/clockTimes.json")
+	calibratedClockTimes, err := loadClockTimes("calibrations/clockTimes.json")
 	if err != nil {
 		return err
 	}
 
-	moveRes, err := handleMoveReqLocal(req, cmpMap, clockTimes)
+	moveResponse, err := resolveMoveLocal(moveReq, cmpMap, calibratedClockTimes)
 	if err != nil {
 		return err
 	}
-	return writeJSON(moveRes)
+	return writeJSON(moveResponse)
 }
 
-type clocktimes struct {
+type clockTimes struct {
 	Easy int `json:"Easy"`
 	Hard int `json:"Hard"`
 	Gm   int `json:"Gm"`
 }
 
-func handleMoveReqLocal(moveReq models.MoveReq, cmpMap map[string]models.Cmp, clocks clocktimes) (models.MoveData, error) {
+func resolveMoveLocal(moveReq models.MoveReq, cmpMap map[string]models.Cmp, clocks clockTimes) (models.MoveData, error) {
 	cmp, ok := cmpMap[moveReq.CmpName]
 	if !ok {
 		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
@@ -155,34 +156,34 @@ func handleMoveReqLocal(moveReq models.MoveReq, cmpMap map[string]models.Cmp, cl
 }
 
 func loadCmps(path string) (map[string]models.Cmp, error) {
-	f, err := os.Open(path)
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("open %s: %w", path, err)
 	}
-	defer f.Close()
+	defer file.Close()
 
-	cmps := make(map[string]models.Cmp)
-	if err := json.NewDecoder(f).Decode(&cmps); err != nil {
+	personalitiesMap := make(map[string]models.Cmp)
+	if err := json.NewDecoder(file).Decode(&personalitiesMap); err != nil {
 		return nil, fmt.Errorf("decode %s: %w", path, err)
 	}
-	return cmps, nil
+	return personalitiesMap, nil
 }
 
-func loadClockTimes(path string) (clocktimes, error) {
-	f, err := os.Open(path)
+func loadClockTimes(path string) (clockTimes, error) {
+	file, err := os.Open(path)
 	if err != nil {
-		return clocktimes{}, fmt.Errorf("open %s: %w", path, err)
+		return clockTimes{}, fmt.Errorf("open %s: %w", path, err)
 	}
-	defer f.Close()
+	defer file.Close()
 
-	var out clocktimes
-	if err := json.NewDecoder(f).Decode(&out); err != nil {
-		return clocktimes{}, fmt.Errorf("decode %s: %w", path, err)
+	var loadedClockTimes clockTimes
+	if err := json.NewDecoder(file).Decode(&loadedClockTimes); err != nil {
+		return clockTimes{}, fmt.Errorf("decode %s: %w", path, err)
 	}
-	return out, nil
+	return loadedClockTimes, nil
 }
 
-func getClockTime(cmp models.Cmp, clocks clocktimes) int {
+func getClockTime(cmp models.Cmp, clocks clockTimes) int {
 	if cmp.Ponder == "easy" {
 		return clocks.Easy
 	}
@@ -193,32 +194,32 @@ func getClockTime(cmp models.Cmp, clocks clocktimes) int {
 }
 
 func getDrawEval(currentEval int, settings models.MoveReq) bool {
-	contemtForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
+	contemptForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
 	if err != nil {
 		return false
 	}
 	if len(settings.Moves) <= 30 {
 		return false
 	}
-	return (currentEval + contemtForDraw) < 0
+	return (currentEval + contemptForDraw) < 0
 }
 
-func readMoveReq(raw string) (models.MoveReq, error) {
-	payload := []byte(raw)
-	var req models.MoveReq
-	if err := json.Unmarshal(payload, &req); err != nil {
+func readMoveReq(rawJSON string) (models.MoveReq, error) {
+	payload := []byte(rawJSON)
+	var moveRequest models.MoveReq
+	if err := json.Unmarshal(payload, &moveRequest); err != nil {
 		return models.MoveReq{}, fmt.Errorf("parse move request json: %w", err)
 	}
-	if req.CmpName == "" {
+	if moveRequest.CmpName == "" {
 		return models.MoveReq{}, errors.New("cmpName is required")
 	}
-	return req, nil
+	return moveRequest, nil
 }
 
-func writeJSON(v any) error {
+func writeJSON(value any) error {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
-	return enc.Encode(v)
+	return enc.Encode(value)
 }
 
 func binaryDir() (string, error) {
