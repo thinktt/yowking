@@ -12,7 +12,7 @@ import (
 	"time"
 
 	chess "github.com/corentings/chess/v2"
-	"github.com/thinktt/yowking/pkg/books"
+	"github.com/thinktt/yowking/internal/books"
 )
 
 var ExtraBooks = []string{

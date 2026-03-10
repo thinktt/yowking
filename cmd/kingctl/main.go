@@ -7,13 +7,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	"github.com/thinktt/yowking/internal/booktester"
-	"github.com/thinktt/yowking/pkg/books"
-	"github.com/thinktt/yowking/pkg/engine"
+	"github.com/thinktt/yowking/internal/moves"
 	"github.com/thinktt/yowking/pkg/models"
+	"github.com/thinktt/yowking/pkg/personalities"
 )
 
 func main() {
@@ -22,26 +21,24 @@ func main() {
 		os.Exit(2)
 	}
 
-	switch os.Args[1] {
+	command := os.Args[1]
+	commandArgs := os.Args[2:]
+
+	switch command {
 	case "help", "-h", "--help":
 		printUsage()
 	case "move":
-		if err := runMove(os.Args[2:]); err != nil {
+		if err := runMoveCommand(commandArgs); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 	case "book":
-		baseDir, err := binaryDir()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
-		if err := booktester.Run(os.Args[2:], baseDir); err != nil {
+		if err := runBookCommand(commandArgs); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 	default:
-		fmt.Fprintf(os.Stderr, "unknown command: %s\n\n", os.Args[1])
+		fmt.Fprintf(os.Stderr, "unknown command: %s\n\n", command)
 		printUsage()
 		os.Exit(2)
 	}
@@ -65,149 +62,107 @@ func printUsage() {
 	fmt.Println(`  kingctl book mem`)
 }
 
-func runMove(args []string) error {
-	moveFlags := flag.NewFlagSet("move", flag.ContinueOnError)
-	moveFlags.SetOutput(os.Stderr)
-	var skipBook bool
-	moveFlags.BoolVar(&skipBook, "s", false, "skip book lookup")
-	moveFlags.BoolVar(&skipBook, "skip-book", false, "skip book lookup")
-	if err := moveFlags.Parse(args); err != nil {
-		return err
-	}
-
-	if moveFlags.NArg() != 1 {
-		return errors.New("usage: kingctl move [-s|--skip-book] <json>")
-	}
-
-	moveReq, err := readMoveReq(moveFlags.Arg(0))
-	if err != nil {
-		return err
-	}
-	if skipBook {
-		moveReq.ShouldSkipBook = true
-	}
-	if moveReq.GameId == "" {
-		moveReq.GameId = fmt.Sprintf("kingctl-%d", time.Now().UnixNano())
-	}
-
-	baseDir, err := binaryDir()
-	if err != nil {
-		return err
-	}
-	if err := os.Chdir(baseDir); err != nil {
-		return fmt.Errorf("change dir to %q: %w", baseDir, err)
-	}
-
-	cmpMap, err := loadCmps("personalities.json")
-	if err != nil {
-		return err
-	}
-	calibratedClockTimes, err := loadClockTimes("calibrations/clockTimes.json")
+func runMoveCommand(commandArgs []string) error {
+	moveRequestJSON, skipBookLookup, err := parseMoveCommandArgs(commandArgs)
 	if err != nil {
 		return err
 	}
 
-	moveResponse, err := resolveMoveLocal(moveReq, cmpMap, calibratedClockTimes)
+	moveReq, err := readMoveReq(moveRequestJSON)
+	if err != nil {
+		return err
+	}
+	moveReq = applyMoveRequestDefaults(moveReq, skipBookLookup)
+
+	binaryDirectoryPath, err := binaryDir()
+	if err != nil {
+		return err
+	}
+	if err := prepareLocalRuntime(binaryDirectoryPath); err != nil {
+		return err
+	}
+
+	moveResponse, err := moves.HandleMoveReq(moveReq)
 	if err != nil {
 		return err
 	}
 	return writeJSON(moveResponse)
 }
 
-type clockTimes struct {
-	Easy int `json:"Easy"`
-	Hard int `json:"Hard"`
-	Gm   int `json:"Gm"`
+func parseMoveCommandArgs(commandArgs []string) (string, bool, error) {
+	// Define supported flags for the move command.
+	moveFlags := flag.NewFlagSet("move", flag.ContinueOnError)
+	moveFlags.SetOutput(os.Stderr)
+
+	var skipBook bool
+	moveFlags.BoolVar(&skipBook, "s", false, "skip book lookup")
+	moveFlags.BoolVar(&skipBook, "skip-book", false, "skip book lookup")
+
+	// Parse flags and remaining positional args.
+	if err := moveFlags.Parse(commandArgs); err != nil {
+		return "", false, err
+	}
+
+	// Require exactly one positional argument: the move request JSON.
+	if moveFlags.NArg() != 1 {
+		return "", false, errors.New("usage: kingctl move [-s|--skip-book] <json>")
+	}
+
+	// Return decomposed values to the caller.
+	moveRequestJSON := moveFlags.Arg(0)
+
+	return moveRequestJSON, skipBook, nil
 }
 
-func resolveMoveLocal(moveReq models.MoveReq, cmpMap map[string]models.Cmp, clocks clockTimes) (models.MoveData, error) {
-	cmp, ok := cmpMap[moveReq.CmpName]
-	if !ok {
-		errMsg := fmt.Sprintf("%s is not a valid personality", moveReq.CmpName)
-		return models.MoveData{Err: &errMsg}, nil
+func applyMoveRequestDefaults(moveReq models.MoveReq, skipBookLookup bool) models.MoveReq {
+	if skipBookLookup {
+		moveReq.ShouldSkipBook = true
 	}
-
-	if !moveReq.ShouldSkipBook {
-		bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
-		if err == nil {
-			bookMove.GameId = moveReq.GameId
-			return bookMove, nil
-		}
+	gameIDMissing := moveReq.GameId == ""
+	if gameIDMissing {
+		moveReq.GameId = fmt.Sprintf("kingctl-%d", time.Now().UnixNano())
 	}
+	return moveReq
+}
 
-	settings := moveReq
-	settings.CmpVals = cmp.Vals
-	if moveReq.ClockTime == 0 {
-		settings.ClockTime = getClockTime(cmp, clocks)
+func prepareLocalRuntime(binaryDirectoryPath string) error {
+	if err := os.Chdir(binaryDirectoryPath); err != nil {
+		return fmt.Errorf("change dir to %q: %w", binaryDirectoryPath, err)
 	}
+	personalities.Reload()
+	return nil
+}
 
-	moveData, err := engine.GetMove(settings)
+func runBookCommand(commandArgs []string) error {
+	bookSubcommand, err := parseBookCommandArgs(commandArgs)
 	if err != nil {
-		return models.MoveData{}, err
-	}
-	if moveData.Err != nil {
-		return moveData, nil
+		return err
 	}
 
-	moveData.WillAcceptDraw = getDrawEval(moveData.Eval, settings)
-	moveData.Type = "engine"
-	moveData.GameId = moveReq.GameId
-	return moveData, nil
-}
-
-func loadCmps(path string) (map[string]models.Cmp, error) {
-	file, err := os.Open(path)
+	binaryDirectoryPath, err := binaryDir()
 	if err != nil {
-		return nil, fmt.Errorf("open %s: %w", path, err)
+		return err
 	}
-	defer file.Close()
-
-	personalitiesMap := make(map[string]models.Cmp)
-	if err := json.NewDecoder(file).Decode(&personalitiesMap); err != nil {
-		return nil, fmt.Errorf("decode %s: %w", path, err)
-	}
-	return personalitiesMap, nil
+	booktesterArgs := []string{bookSubcommand}
+	return booktester.Run(booktesterArgs, binaryDirectoryPath)
 }
 
-func loadClockTimes(path string) (clockTimes, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return clockTimes{}, fmt.Errorf("open %s: %w", path, err)
+func parseBookCommandArgs(commandArgs []string) (string, error) {
+	if len(commandArgs) != 1 {
+		return "", errors.New("usage: kingctl book <fens|mem>")
 	}
-	defer file.Close()
-
-	var loadedClockTimes clockTimes
-	if err := json.NewDecoder(file).Decode(&loadedClockTimes); err != nil {
-		return clockTimes{}, fmt.Errorf("decode %s: %w", path, err)
+	bookSubcommand := commandArgs[0]
+	isFens := bookSubcommand == "fens"
+	isMem := bookSubcommand == "mem"
+	if !isFens && !isMem {
+		return "", errors.New("usage: kingctl book <fens|mem>")
 	}
-	return loadedClockTimes, nil
-}
-
-func getClockTime(cmp models.Cmp, clocks clockTimes) int {
-	if cmp.Ponder == "easy" {
-		return clocks.Easy
-	}
-	if cmp.Rating >= 2700 {
-		return clocks.Gm
-	}
-	return clocks.Hard
-}
-
-func getDrawEval(currentEval int, settings models.MoveReq) bool {
-	contemptForDraw, err := strconv.Atoi(settings.CmpVals.Cfd)
-	if err != nil {
-		return false
-	}
-	if len(settings.Moves) <= 30 {
-		return false
-	}
-	return (currentEval + contemptForDraw) < 0
+	return bookSubcommand, nil
 }
 
 func readMoveReq(rawJSON string) (models.MoveReq, error) {
-	payload := []byte(rawJSON)
 	var moveRequest models.MoveReq
-	if err := json.Unmarshal(payload, &moveRequest); err != nil {
+	if err := json.Unmarshal([]byte(rawJSON), &moveRequest); err != nil {
 		return models.MoveReq{}, fmt.Errorf("parse move request json: %w", err)
 	}
 	if moveRequest.CmpName == "" {
