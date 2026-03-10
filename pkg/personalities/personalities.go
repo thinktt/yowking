@@ -24,6 +24,14 @@ func init() {
 	loadClockTimes()
 }
 
+// Reload reloads personalities and clock times from the current working directory.
+func Reload() {
+	CmpMap = make(map[string]models.Cmp)
+	clockTimes = Clocktimes{}
+	loadCmps()
+	loadClockTimes()
+}
+
 func loadCmps() {
 	file, err := os.Open("personalities.json")
 	if err != nil {

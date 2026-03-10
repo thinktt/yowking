@@ -1,9 +1,8 @@
-package main
+package booktester
 
 import (
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,7 +12,7 @@ import (
 	"time"
 
 	chess "github.com/corentings/chess/v2"
-	"github.com/thinktt/yowking/pkg/books"
+	"github.com/thinktt/yowking/internal/books"
 )
 
 var ExtraBooks = []string{
@@ -127,46 +126,30 @@ type runSummary struct {
 	Results           []caseResult `json:"results"`
 }
 
-func main() {
-	if len(os.Args) < 2 {
-		usage()
-		os.Exit(2)
+func Run(args []string, baseDir string) error {
+	if len(args) < 1 {
+		return errors.New(Usage())
 	}
-	switch os.Args[1] {
-	case "fens", "run-go":
-		// "run-go" kept as a compatibility alias.
+	switch args[0] {
+	case "fens":
+		return runFens(baseDir)
 	case "mem":
-		if err := runMem(os.Args[2:]); err != nil {
-			fatal(err)
-		}
-		return
+		return runMem(baseDir)
 	default:
-		usage()
-		os.Exit(2)
-	}
-	if err := runGo(os.Args[2:]); err != nil {
-		fatal(err)
+		return errors.New(Usage())
 	}
 }
 
-func usage() {
-	fmt.Fprintln(os.Stderr, "usage: booktester <fens|mem> [flags]")
+func Usage() string {
+	return "usage: kingctl book <fens|mem>"
 }
 
-func runGo(args []string) error {
-	fs := flag.NewFlagSet("fens", flag.ExitOnError)
-	in := fs.String("in", "notes/testFens.json", "input test fens json")
-	out := fs.String("out", "notes/booktest-go.json", "output results json")
-	booksDir := fs.String("books-dir", "dist/books", "books directory")
-	extraBooks := fs.String("extra-books", strings.Join(ExtraBooks, ","), "comma-separated extra books for rotated pass")
-	_ = fs.Parse(args)
+func runFens(baseDir string) error {
+	in := filepath.Join(baseDir, "fixtures", "testFens.json")
+	out := filepath.Join(os.TempDir(), "kingctl-book-fens.json")
+	absBooksDir := filepath.Join(baseDir, "books")
 
-	absBooksDir, err := filepath.Abs(*booksDir)
-	if err != nil {
-		return fmt.Errorf("resolve books dir: %w", err)
-	}
-
-	cases, native, rotated, extras, err := buildRunCases(*in, parseCSV(*extraBooks))
+	cases, native, rotated, extras, err := buildRunCases(in, ExtraBooks)
 	if err != nil {
 		return err
 	}
@@ -221,7 +204,7 @@ func runGo(args []string) error {
 	sum := runSummary{
 		Engine:            "go",
 		GeneratedAt:       time.Now().UTC(),
-		Input:             *in,
+		Input:             in,
 		BooksDir:          absBooksDir,
 		ExtraBooks:        extras,
 		NativeCases:       native,
@@ -236,23 +219,16 @@ func runGo(args []string) error {
 		AverageDurationMS: safeDiv(totalMS, float64(len(results))),
 		Results:           results,
 	}
-	if err := writeJSON(*out, sum); err != nil {
+	if err := writeJSON(out, sum); err != nil {
 		return err
 	}
+	fmt.Printf("wrote %s\n", out)
 	printRunSummary(sum)
 	return nil
 }
 
-func runMem(args []string) error {
-	fs := flag.NewFlagSet("mem", flag.ExitOnError)
-	booksDir := fs.String("books-dir", "dist/books", "books directory")
-	_ = fs.Parse(args)
-
-	absBooksDir, err := filepath.Abs(*booksDir)
-	if err != nil {
-		return fmt.Errorf("resolve books dir: %w", err)
-	}
-
+func runMem(baseDir string) error {
+	absBooksDir := filepath.Join(baseDir, "books")
 	entries, err := os.ReadDir(absBooksDir)
 	if err != nil {
 		return fmt.Errorf("read books dir: %w", err)
@@ -405,11 +381,6 @@ func safeDiv(a, b float64) float64 {
 		return 0
 	}
 	return a / b
-}
-
-func fatal(err error) {
-	fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
 }
 
 func logCaseStart(c runCase) {

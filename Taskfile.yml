@@ -46,6 +46,7 @@ tasks:
       - docker rm yowdeps-build
       - mkdir -p dist/calibrations
       - cp assets/devClockTimes.json dist/calibrations/clockTimes.json
+      - cp -r fixtures dist/fixtures
       - task gobuild
 
   build:image:
@@ -78,6 +79,7 @@ tasks:
     cmds:
       - GOOS=windows GOARCH=386 go build -o dist/enginewrap.exe ./cmd/enginewrap
       - GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker ./cmd/kingworker
+      - GOOS=linux CGO_ENABLED=0 go build -o dist/kingctl ./cmd/kingctl
 
   deploy:dev:
     desc: Start one dev yowking worker from deploy/compose.dev.yaml

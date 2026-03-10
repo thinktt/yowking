@@ -31,12 +31,12 @@ func GetMove(settings Settings) (MoveData, error) {
 	})
 	isVerboseMode = strings.EqualFold(os.Getenv("SHOULD_LOG_ENGINE"), "true")
 
-	isWsl := os.Getenv("IS_WSL")
+	isWsl := strings.EqualFold(os.Getenv("IS_WSL"), "true")
 	// shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	// log.Println("shouldPostInput: " + shouldPostInput)
 
 	var cmd *exec.Cmd
-	if isWsl == "true" {
+	if isWsl {
 		cmd = exec.Command("./TheKing350.exe")
 	} else {
 		cmd = exec.Command("wine", "enginewrap.exe")
