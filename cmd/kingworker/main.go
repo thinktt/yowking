@@ -14,30 +14,20 @@ import (
 
 var log = logrus.New()
 
-const moveReqSubject = "move-req"
-
-func getMoveReqSubject(workerTag string) string {
-	if workerTag == "" {
-		return moveReqSubject
-	}
-	return fmt.Sprintf("%s.%s", moveReqSubject, workerTag)
-}
-
-func getConsumerName(workerTag string) string {
-	if workerTag == "" {
-		return "kingworkers"
-	}
-	return fmt.Sprintf("kingworkers-%s", workerTag)
-}
-
 func main() {
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
 		log.Fatal("NATS_TOKEN environment variable is not set")
 	}
+
+	// if WORKER_TAG exist then modify the subject and consumer names accordingly
 	workerTag := os.Getenv("WORKER_TAG")
-	moveReqSubject := getMoveReqSubject(workerTag)
-	consumerName := getConsumerName(workerTag)
+	moveReqSubject := "move-req"
+	consumerName := "kingworkers"
+	if workerTag != "" {
+		moveReqSubject += "." + workerTag
+		consumerName += "-" + workerTag
+	}
 
 	natsUrl := os.Getenv("NATS_URL")
 	if natsUrl == "" {
