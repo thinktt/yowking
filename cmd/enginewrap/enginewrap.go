@@ -38,7 +38,7 @@ func main() {
 	for s.Scan() {
 		line := s.Text()
 		if shouldPostInput == "true" {
-			fmt.Printf("In: " + line + "\n")
+			fmt.Println("In: " + line)
 		}
 		engine.Write([]byte(line + "\n"))
 		if line == "quit" {

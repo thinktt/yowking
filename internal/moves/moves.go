@@ -31,6 +31,7 @@ func HandleMoveReq(moveReq models.MoveReq) (models.MoveData, error) {
 		bookMove, err := books.GetMove(moveReq.Moves, cmp.Book)
 		if err == nil {
 			bookMove.GameId = moveReq.GameId
+			bookMove.WorkerTag = moveReq.WorkerTag
 			logContext.Println("book move found:", bookMove.CoordinateMove)
 			return bookMove, nil
 		}
@@ -60,6 +61,7 @@ func HandleMoveReq(moveReq models.MoveReq) (models.MoveData, error) {
 	moveData.WillAcceptDraw = personalities.GetDrawEval(moveData.Eval, settings)
 	moveData.Type = "engine"
 	moveData.GameId = moveReq.GameId
+	moveData.WorkerTag = moveReq.WorkerTag
 
 	logContext.Println("move received from engine:", moveData.CoordinateMove)
 	return moveData, nil
