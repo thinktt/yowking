@@ -14,11 +14,30 @@ import (
 
 var log = logrus.New()
 
+const moveReqSubject = "move-req"
+
+func getMoveReqSubject(workerTag string) string {
+	if workerTag == "" {
+		return moveReqSubject
+	}
+	return fmt.Sprintf("%s.%s", moveReqSubject, workerTag)
+}
+
+func getConsumerName(workerTag string) string {
+	if workerTag == "" {
+		return "kingworkers"
+	}
+	return fmt.Sprintf("kingworkers-%s", workerTag)
+}
+
 func main() {
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
 		log.Fatal("NATS_TOKEN environment variable is not set")
 	}
+	workerTag := os.Getenv("WORKER_TAG")
+	moveReqSubject := getMoveReqSubject(workerTag)
+	consumerName := getConsumerName(workerTag)
 
 	natsUrl := os.Getenv("NATS_URL")
 	if natsUrl == "" {
@@ -42,7 +61,7 @@ func main() {
 	// Create move-req-stream
 	_, err = js.AddStream(&nats.StreamConfig{
 		Name:     "move-req-stream",
-		Subjects: []string{"move-req"},
+		Subjects: []string{"move-req", "move-req.*"},
 	})
 	if err != nil {
 		log.Printf("Failed to create stream: %v", err)
@@ -62,8 +81,8 @@ func main() {
 	}
 
 	sub, err := js.PullSubscribe(
-		"move-req",
-		"kingworkers",
+		moveReqSubject,
+		consumerName,
 		nats.ManualAck(),
 		nats.AckWait(30*time.Second),
 	)
@@ -107,8 +126,9 @@ func main() {
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
-			"gameId": moveReq.GameId,
-			"moveNo": len(moveReq.Moves),
+			"gameId":    moveReq.GameId,
+			"moveNo":    len(moveReq.Moves),
+			"workerTag": moveReq.WorkerTag,
 		})
 
 		moveRes, err := moves.HandleMoveReq(moveReq)
