@@ -11,9 +11,12 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/thinktt/yowking/pkg/models"
+	"golang.org/x/sys/unix"
 )
 
 type MoveData = models.MoveData
@@ -22,8 +25,32 @@ type Settings = models.MoveReq
 var isVerboseMode = false
 var logger = logrus.New()
 var log *logrus.Entry
+var engineProcessMu sync.Mutex
+var childReaperOnce sync.Once
+
+// StartChildReaper collects Wine children that exit after Wine's launcher has
+// already returned. It shares the engine lock so it cannot reap an active Cmd.
+func StartChildReaper() {
+	childReaperOnce.Do(func() {
+		go func() {
+			ticker := time.NewTicker(100 * time.Millisecond)
+			defer ticker.Stop()
+			for range ticker.C {
+				engineProcessMu.Lock()
+				reaped := reapExitedWineChildren()
+				engineProcessMu.Unlock()
+				if reaped > 0 {
+					logger.WithField("reapedChildren", reaped).Debug("reaped delayed Wine children")
+				}
+			}
+		}()
+	})
+}
 
 func GetMove(settings Settings) (MoveData, error) {
+	engineProcessMu.Lock()
+	defer engineProcessMu.Unlock()
+
 	// fmt.Println(settings)
 	log = logger.WithFields(logrus.Fields{
 		"gameId": settings.GameId,
@@ -79,7 +106,7 @@ func GetMove(settings Settings) (MoveData, error) {
 
 	// from here if getMove() errors or completes be sure to stop the engine
 	defer func() {
-		go stopEngine(engine, cmd, log)
+		stopEngine(engine, cmd, log)
 	}()
 
 	if settings.RandomIsOff {
@@ -140,11 +167,35 @@ func GetMove(settings Settings) (MoveData, error) {
 }
 
 func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
-	// send a quilt command to the engine
-	engine.Write([]byte("quit\n"))
-	engine.Close()
-	cmd.Wait()
-	log.Println("engine closed")
+	// Wine can reparent PE child processes to kingworker after its launcher exits.
+	// Finish the command first, then reap any exited children before another move starts.
+	if _, err := engine.Write([]byte("quit\n")); err != nil {
+		log.WithError(err).Debug("failed to send quit to engine")
+	}
+	if err := engine.Close(); err != nil {
+		log.WithError(err).Debug("failed to close engine input")
+	}
+	if err := cmd.Wait(); err != nil {
+		log.WithError(err).Debug("engine launcher exited with error")
+	}
+
+	reaped := reapExitedWineChildren()
+	log.WithField("reapedChildren", reaped).Println("engine closed")
+}
+
+func reapExitedWineChildren() int {
+	reaped := 0
+	for {
+		var status unix.WaitStatus
+		pid, err := unix.Wait4(-1, &status, unix.WNOHANG, nil)
+		if err == unix.ECHILD || pid == 0 {
+			return reaped
+		}
+		if err != nil {
+			return reaped
+		}
+		reaped += 1
+	}
 }
 
 func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {

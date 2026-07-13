@@ -47,6 +47,10 @@ func main() {
 		}
 	}
 
-	// engine.Close()
-	// cmd.Wait()
+	if err := engine.Close(); err != nil {
+		fmt.Fprintln(os.Stderr, "failed to close engine input:", err)
+	}
+	if err := cmd.Wait(); err != nil {
+		fmt.Fprintln(os.Stderr, "engine exited with error:", err)
+	}
 }

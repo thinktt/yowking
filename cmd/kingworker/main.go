@@ -8,6 +8,7 @@ import (
 
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/thinktt/yowking/internal/engine"
 	"github.com/thinktt/yowking/internal/moves"
 	"github.com/thinktt/yowking/pkg/models"
 )
@@ -15,6 +16,8 @@ import (
 var log = logrus.New()
 
 func main() {
+	engine.StartChildReaper()
+
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
 		log.Fatal("NATS_TOKEN environment variable is not set")
