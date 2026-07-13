@@ -162,16 +162,29 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
 
 func reapExitedWineChildren() int {
 	reaped := 0
+
 	for {
 		var status unix.WaitStatus
+
+		// Wait4 returns at most one exited child process per call.
+		// -1 means "any direct child of the current kingworker process."
+		// WNOHANG makes this non-blocking, so it checks for exited children
+		// and returns immediately instead of waiting for one to exit.
 		pid, err := unix.Wait4(-1, &status, unix.WNOHANG, nil)
+
+		// ECHILD means kingworker has no child processes left to wait on.
+		// pid == 0 means child processes still exist, but none have exited yet.
+		// In either case, there is nothing ready to reap right now.
 		if err == unix.ECHILD || pid == 0 {
 			return reaped
 		}
+
+		// Stop on any unexpected wait error.
 		if err != nil {
 			return reaped
 		}
-		reaped += 1
+
+		reaped++
 	}
 }
 
