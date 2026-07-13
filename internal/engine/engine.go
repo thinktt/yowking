@@ -11,8 +11,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"sync"
-	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/thinktt/yowking/pkg/models"
@@ -25,31 +23,10 @@ type Settings = models.MoveReq
 var isVerboseMode = false
 var logger = logrus.New()
 var log *logrus.Entry
-var engineProcessMu sync.Mutex
-var childReaperOnce sync.Once
-
-// StartChildReaper collects Wine children that exit after Wine's launcher has
-// already returned. It shares the engine lock so it cannot reap an active Cmd.
-func StartChildReaper() {
-	childReaperOnce.Do(func() {
-		go func() {
-			ticker := time.NewTicker(100 * time.Millisecond)
-			defer ticker.Stop()
-			for range ticker.C {
-				engineProcessMu.Lock()
-				reaped := reapExitedWineChildren()
-				engineProcessMu.Unlock()
-				if reaped > 0 {
-					logger.WithField("reapedChildren", reaped).Debug("reaped delayed Wine children")
-				}
-			}
-		}()
-	})
-}
 
 func GetMove(settings Settings) (MoveData, error) {
-	engineProcessMu.Lock()
-	defer engineProcessMu.Unlock()
+	// Collect any Wine helpers that exited after the previous move completed.
+	reapExitedWineChildren()
 
 	// fmt.Println(settings)
 	log = logger.WithFields(logrus.Fields{
@@ -236,6 +213,9 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 			break
 		}
 	}
+	if err := s.Err(); err != nil {
+		log.WithError(err).Error("failed to read engine output")
+	}
 
 	// moveCandidate.Err = errStr
 	moveChan <- moveCandidate
@@ -246,6 +226,9 @@ func readEngineErrs(r io.Reader) {
 	for s.Scan() {
 		engineLine := s.Text()
 		log.Error("Engine ERR:", engineLine)
+	}
+	if err := s.Err(); err != nil {
+		log.WithError(err).Error("failed to read engine error output")
 	}
 }
 
@@ -281,5 +264,8 @@ func forwardUserCommands(engine io.WriteCloser) {
 	for s.Scan() {
 		line := s.Text()
 		engine.Write([]byte(line + "\n"))
+	}
+	if err := s.Err(); err != nil {
+		logger.WithError(err).Error("failed to read user commands")
 	}
 }

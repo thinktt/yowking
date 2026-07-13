@@ -1,7 +1,7 @@
 // This is a simple wrapper for the Chess engine. For some reason the pipes
-// from Node to wine to the engine break but when we wrap the engine in a
+// from wine to the engine break but when we wrap the engine in a
 // Go win binary they work. The order of operations is then
-// Node in linux --> Wine --> enginewrap.exe --> engine
+// kingworker (go) --> Wine --> enginewrap.exe (go win) --> engine
 
 package main
 
@@ -46,10 +46,16 @@ func main() {
 			break
 		}
 	}
+	if err := s.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "failed to read engine commands:", err)
+	}
 
+	// engine proces cleanup happens here
+	// close the pipe
 	if err := engine.Close(); err != nil {
 		fmt.Fprintln(os.Stderr, "failed to close engine input:", err)
 	}
+	// wait for the system to reap the process
 	if err := cmd.Wait(); err != nil {
 		fmt.Fprintln(os.Stderr, "engine exited with error:", err)
 	}
