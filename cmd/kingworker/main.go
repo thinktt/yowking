@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -22,6 +23,10 @@ func main() {
 
 	// if WORKER_TAG exist then modify the subject and consumer names accordingly
 	workerTag := os.Getenv("WORKER_TAG")
+	forceRandomOff, err := boolEnv("FORCE_RANDOM_OFF")
+	if err != nil {
+		log.Fatal(err)
+	}
 	moveReqSubject := "move-req"
 	consumerName := "kingworkers"
 	if workerTag != "" {
@@ -36,6 +41,8 @@ func main() {
 	} else {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
+
+	log.Printf("worker configuration: tag=%q forceRandomOff=%t", workerTag, forceRandomOff)
 
 	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
@@ -113,6 +120,7 @@ func main() {
 			log.Error(errMsg)
 			continue
 		}
+		moveReq = applyWorkerOverrides(moveReq, forceRandomOff)
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
@@ -136,6 +144,26 @@ func main() {
 
 		m.Ack()
 	}
+}
+
+func boolEnv(name string) (bool, error) {
+	value := os.Getenv(name)
+	if value == "" {
+		return false, nil
+	}
+
+	parsed, err := strconv.ParseBool(value)
+	if err != nil {
+		return false, fmt.Errorf("%s must be a boolean: %w", name, err)
+	}
+	return parsed, nil
+}
+
+func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff bool) models.MoveReq {
+	if forceRandomOff {
+		moveReq.RandomIsOff = true
+	}
+	return moveReq
 }
 
 // PubMoveRes publishes the move data to the move_res.<gameId> subject
