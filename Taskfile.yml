@@ -17,12 +17,38 @@ vars:
   KING_DIV1_TEST5_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-div1.exe"
   KING_DIV1_TEST5_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/hard-div1-refined/clockTimes.json"
   PROD_RND0_IMAGE: "zen:5000/yowking:prod-rnd0"
+  RYZ_HOST: "ryz"
+  RYZ_DIR: "/home/legolas/yowking"
+  RYZ_SSH: "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
 
 tasks:
   default:
     desc: Show available tasks
     cmds:
       - task --list --sort none
+
+  sync:ryz:
+    desc: Mirror this yowking source tree to the dedicated Ryz work directory
+    cmds:
+      - '{{.RYZ_SSH}} {{.RYZ_HOST}} "mkdir -p {{.RYZ_DIR}}"'
+      - >
+        rsync -az --delete --info=progress2 -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        ./ {{.RYZ_HOST}}:{{.RYZ_DIR}}/
+
+  sync:ryz:dry:
+    desc: Preview the next yowking source mirror to Ryz
+    cmds:
+      - >
+        rsync -azn --delete --itemize-changes -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        ./ {{.RYZ_HOST}}:{{.RYZ_DIR}}/
 
   import:cm:
     desc: Step 1 - Import Chessmaster assets from CM_DIR into assets/cm
