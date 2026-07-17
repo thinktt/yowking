@@ -16,6 +16,7 @@ vars:
   KING_DIV1_TEST5_IMAGE: "zen:5000/yowking-nt:div1-test5"
   KING_DIV1_TEST5_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-div1.exe"
   KING_DIV1_TEST5_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/hard-div1-refined/clockTimes.json"
+  PROD_RND0_IMAGE: "zen:5000/yowking:prod-rnd0"
 
 tasks:
   default:
@@ -102,6 +103,18 @@ tasks:
     deps: [build:nt:test5]
     cmds:
       - docker push {{.KING_DIV1_TEST5_IMAGE}}
+
+  build:prod-rnd0:image:
+    desc: Build a Zen-production-derived worker with the current rnd=0-capable worker and wrapper
+    deps: [gobuild]
+    cmds:
+      - docker build -f Dockerfile.prod-rnd0 -t {{.PROD_RND0_IMAGE}} .
+
+  publish:prod-rnd0:
+    desc: Publish the production-derived rnd=0 test worker image to Zen
+    deps: [build:prod-rnd0:image]
+    cmds:
+      - docker push {{.PROD_RND0_IMAGE}}
 
   deploy:test3:bee:
     desc: Start eight unrestricted Test 3 workers on Bee tagged kingNT
