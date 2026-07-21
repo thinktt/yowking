@@ -1,0 +1,65 @@
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=380000000ns instructions=10140618955
+[2/3] wrapper=380000000ns instructions=10140657487
+[3/3] wrapper=380000000ns instructions=10140617308
+
+KingTC benchmark baseline
+wrapper median CPU ns: 380000000, 380000000, 380000000
+wall time ms:           3043.5, 3077.0, 3060.0
+retired instructions:   10140618955, 10140657487, 10140617308
+wrapper CPU range:      0 ns
+instruction range:      40179
+Wrote /home/legolas/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/ryz/ryz-isolated-full.json
+host settings restored: boost=1 ordinary_cpus=0-15
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=380000000ns instructions=10140967968
+[2/3] wrapper=380000000ns instructions=10140985984
+[3/3] wrapper=380000000ns instructions=10140973160
+
+KingTC benchmark baseline
+wrapper median CPU ns: 380000000, 380000000, 380000000
+wall time ms:           11829.4, 11858.1, 11871.0
+retired instructions:   10140967968, 10140985984, 10140973160
+wrapper CPU range:      0 ns
+instruction range:      18016
+Wrote /home/legolas/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/ryz/ryz-isolated-quarter.json
+host settings restored: boost=1 ordinary_cpus=0-15
+[1/3] wrapper=160000000ns instructions=10140093548
+[2/3] wrapper=160000000ns instructions=10140121032
+[3/3] wrapper=170000000ns instructions=10140282340
+
+KingTC benchmark baseline
+wrapper median CPU ns: 160000000, 160000000, 170000000
+wall time ms:           1338.0, 1344.9, 1332.9
+retired instructions:   10140093548, 10140121032, 10140282340
+wrapper CPU range:      10000000 ns
+instruction range:      188792
+Wrote /home/legolas/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/ryz/ryz-ordinary-full.json
+[1/3] wrapper=170000000ns instructions=10141221240
+[2/3] wrapper=170000000ns instructions=10141430645
+[3/3] wrapper=170000000ns instructions=10141183770
+
+KingTC benchmark baseline
+wrapper median CPU ns: 170000000, 170000000, 170000000
+wall time ms:           5231.6, 5075.9, 5187.4
+retired instructions:   10141221240, 10141430645, 10141183770
+wrapper CPU range:      0 ns
+instruction range:      246875
+Wrote /home/legolas/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/ryz/ryz-ordinary-quarter.json
+[1/3] wrapper=190000000ns instructions=10140839579
+[2/3] wrapper=190000000ns instructions=10140789516
+[3/3] wrapper=180000000ns instructions=10141057465
+
+KingTC benchmark baseline
+wrapper median CPU ns: 190000000, 190000000, 180000000
+wall time ms:           2364.7, 2392.7, 2460.6
+retired instructions:   10140839579, 10140789516, 10141057465
+wrapper CPU range:      10000000 ns
+instruction range:      267949
+Wrote /home/legolas/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/ryz/ryz-contention-eight.json

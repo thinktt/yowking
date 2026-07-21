@@ -15,6 +15,11 @@ import (
 )
 
 func main() {
+	if len(os.Args) == 2 && os.Args[1] == "--kingtc-benchmark" {
+		runBenchmarkMode()
+		return
+	}
+
 	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	cmd := exec.Command("./TheKing350.exe")
 
@@ -39,6 +44,15 @@ func main() {
 		line := s.Text()
 		if shouldPostInput == "true" {
 			fmt.Println("In: " + line)
+		}
+		if line == "kingtc-benchmark" {
+			report, err := runKingTCBenchmark()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "kingtc-benchmark failed:", err)
+				continue
+			}
+			printBenchmarkReport(report)
+			continue
 		}
 		engine.Write([]byte(line + "\n"))
 		if line == "quit" {
