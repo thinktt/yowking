@@ -19,6 +19,12 @@ vars:
   KING_TC_IMAGE: "zen:5000/yowking-nt:kingtc"
   KING_TC_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-threadCpu.exe"
   KING_TC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingtc-full-refined-2026-07-17/clockTimes.json"
+  KING_TC_AUTOSCALE_IMAGE: "zen:5000/yowking-nt:kingtc-autoscale-smoke"
+  KING_TC_AUTOSCALE_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-threadCpu-scale.exe"
+  KING_TC_AUTOSCALE_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingtc-isolated-bee-refined-2026-07-21/clockTimes.json"
+  KING_WC_IMAGE: "zen:5000/yowking-nt:kingwc"
+  KING_WC_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-KingWC-live.exe"
+  KING_WC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingwc-isolated-three-group-2026-07-23-hard/clockTimes.json"
   PROD_RND0_IMAGE: "zen:5000/yowking:prod-rnd0"
   RYZ_HOST: "ryz"
   RYZ_DIR: "/home/legolas/yowking"
@@ -148,6 +154,42 @@ tasks:
     deps: [build:tc]
     cmds:
       - docker push {{.KING_TC_IMAGE}}
+
+  build:tc:autoscale:
+    desc: "Build the KingTC autoscale smoke-test image from the scaled-clock candidate."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_TC_AUTOSCALE_ENGINE}}
+      - test -f {{.KING_TC_AUTOSCALE_CLOCKS}}
+      - cp {{.KING_TC_AUTOSCALE_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_TC_AUTOSCALE_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_TC_AUTOSCALE_IMAGE}} .
+
+  publish:tc:autoscale:
+    desc: "Build and publish the KingTC autoscale smoke-test image to Zen."
+    deps: [build:tc:autoscale]
+    cmds:
+      - docker push {{.KING_TC_AUTOSCALE_IMAGE}}
+
+  build:wc:
+    desc: "Build the KingWC worker image with its selected Hard calibration."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_WC_ENGINE}}
+      - test -f {{.KING_WC_CLOCKS}}
+      - cp {{.KING_WC_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_WC_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_WC_IMAGE}} .
+
+  deploy:wc:bee:
+    desc: "Start eight unrestricted KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc -f deploy/compose.kingwc.yaml up -d --scale worker={{.KING_NT_WORKERS}} worker
+
+  deploy:wc:bee:down:
+    desc: "Stop and remove KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc -f deploy/compose.kingwc.yaml down
 
   build:prod-rnd0:image:
     desc: Build a Zen-production-derived worker with the current rnd=0-capable worker and wrapper

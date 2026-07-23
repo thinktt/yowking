@@ -20,6 +20,12 @@ func main() {
 		return
 	}
 
+	autoScale, err := configureKingTCAutoScale()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "kingtc autoscale setup failed:", err)
+		os.Exit(1)
+	}
+
 	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	cmd := exec.Command("./TheKing350.exe")
 
@@ -53,6 +59,10 @@ func main() {
 			}
 			printBenchmarkReport(report)
 			continue
+		}
+		if line == "go" && autoScale.enabled {
+			fmt.Println(autoScale.logLine())
+			engine.Write([]byte(autoScale.command() + "\n"))
 		}
 		engine.Write([]byte(line + "\n"))
 		if line == "quit" {
