@@ -24,11 +24,15 @@ vars:
   KING_TC_AUTOSCALE_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingtc-isolated-bee-refined-2026-07-21/clockTimes.json"
   KING_WC_IMAGE: "zen:5000/yowking-nt:kingwc"
   KING_WC_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-KingWC-live.exe"
-  KING_WC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingwc-isolated-three-group-2026-07-23-hard/clockTimes.json"
+  KING_WC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingwc-isolated-three-group-2026-07-23/clockTimes.json"
   PROD_RND0_IMAGE: "zen:5000/yowking:prod-rnd0"
+  PROD_RANDOM_IMAGE: "zen:5000/yowking:prod-random"
   RYZ_HOST: "ryz"
   RYZ_DIR: "/home/legolas/yowking"
   RYZ_SSH: "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+  ACE_HOST: "ace"
+  ACE_DIR: "/home/agent/yowking"
+  ACE_SSH: "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
 
 tasks:
   default:
@@ -58,6 +62,22 @@ tasks:
         --exclude='.env'
         --exclude='node_modules/'
         ./ {{.RYZ_HOST}}:{{.RYZ_DIR}}/
+
+  sync:ace:
+    desc: Mirror yowking to Ace without starting workers
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "mkdir -p {{.ACE_DIR}}/deploy/env"'
+      - >
+        rsync -az --delete --info=progress2 -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        --exclude='deploy/env/'
+        ./ {{.ACE_HOST}}:{{.ACE_DIR}}/
+      - >
+        rsync -az -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        deploy/env/king.env {{.ACE_HOST}}:{{.ACE_DIR}}/deploy/env/king.env
 
   import:cm:
     desc: Step 1 - Import Chessmaster assets from CM_DIR into assets/cm
@@ -172,7 +192,7 @@ tasks:
       - docker push {{.KING_TC_AUTOSCALE_IMAGE}}
 
   build:wc:
-    desc: "Build the KingWC worker image with its selected Hard calibration."
+    desc: "Build the KingWC worker image with its selected three-group calibration."
     cmds:
       - task gobuild
       - test -f {{.KING_WC_ENGINE}}
@@ -191,6 +211,48 @@ tasks:
     cmds:
       - docker compose --project-name kingwc -f deploy/compose.kingwc.yaml down
 
+  deploy:wc:chaos:bee:
+    desc: "Start four force-random KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc-chaos -f deploy/compose.kingwc-chaos.yaml up -d
+
+  deploy:wc:chaos:bee:down:
+    desc: "Stop and remove Bee force-random KingWC workers."
+    cmds:
+      - docker compose --project-name kingwc-chaos -f deploy/compose.kingwc-chaos.yaml down
+
+  deploy:wc:ace:
+    desc: "Start two rnd=0 KingWC workers on Ace."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace.yaml up -d"'
+
+  deploy:wc:ace:down:
+    desc: "Stop and remove Ace KingWC workers."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace.yaml down"'
+
+  deploy:wc:chaos:ace:
+    desc: "Start two force-random KingWC workers on Ace."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace-chaos.yaml up -d"'
+
+  deploy:wc:chaos:ace:down:
+    desc: "Stop and remove Ace force-random KingWC workers."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace-chaos.yaml down"'
+
+  deploy:prod:random:zen:
+    desc: "Replace two Zen rnd=0 workers with tagged force-random workers."
+    cmds:
+      - ssh zen "docker stop yowking-prod-rnd0-1213 yowking-prod-rnd0-1415"
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-random.yaml up -d"
+
+  deploy:prod:random:zen:down:
+    desc: "Stop the tagged Zen random workers and restore their rnd=0 workers."
+    cmds:
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-random.yaml down"
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-rnd0.yaml up -d yowking-prod-rnd0-1213 yowking-prod-rnd0-1415"
+
   build:prod-rnd0:image:
     desc: Build a Zen-production-derived worker with the current rnd=0-capable worker and wrapper
     deps: [gobuild]
@@ -202,6 +264,18 @@ tasks:
     deps: [build:prod-rnd0:image]
     cmds:
       - docker push {{.PROD_RND0_IMAGE}}
+
+  build:prod-random:image:
+    desc: Build a Zen-production-derived force-random worker image
+    deps: [gobuild]
+    cmds:
+      - docker build -f Dockerfile.prod-rnd0 -t {{.PROD_RANDOM_IMAGE}} .
+
+  publish:prod-random:
+    desc: Publish the production-derived force-random worker image to Zen
+    deps: [build:prod-random:image]
+    cmds:
+      - docker push {{.PROD_RANDOM_IMAGE}}
 
   deploy:test3:bee:
     desc: Start eight unrestricted Test 3 workers on Bee tagged kingNT

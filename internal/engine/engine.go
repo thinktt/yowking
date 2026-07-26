@@ -86,10 +86,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		stopEngine(engine, cmd, log)
 	}()
 
-	if settings.RandomIsOff {
-		settings.CmpVals.Rnd = "0"
-		log.Info("randomIsOff is set, setting cmp rnd val to 0")
-	}
+	applyRandomSetting(&settings)
 
 	// log all the cmpVals with keys
 	// fmt.Printf("%+v\n", settings.CmpVals)
@@ -141,6 +138,19 @@ func GetMove(settings Settings) (MoveData, error) {
 	// wait for the engine to send back a move
 	moveData := <-moveChan
 	return moveData, nil
+}
+
+func applyRandomSetting(settings *Settings) {
+	if settings.RandomIsOff {
+		settings.CmpVals.Rnd = "0"
+		log.Info("randomIsOff is set, setting cmp rnd val to 0")
+		return
+	}
+
+	if settings.RandomIsForced && (settings.CmpVals.Rnd == "" || settings.CmpVals.Rnd == "0") {
+		settings.CmpVals.Rnd = "50"
+		log.Info("randomIsForced is set, raising cmp rnd val to 50")
+	}
 }
 
 func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {

@@ -27,6 +27,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	forceRandomOn, err := boolEnv("FORCE_RANDOM_ON")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if forceRandomOff && forceRandomOn {
+		log.Fatal("FORCE_RANDOM_OFF and FORCE_RANDOM_ON cannot both be true")
+	}
 	moveReqSubject := "move-req"
 	consumerName := "kingworkers"
 	if workerTag != "" {
@@ -42,7 +49,12 @@ func main() {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
 
-	log.Printf("worker configuration: tag=%q forceRandomOff=%t", workerTag, forceRandomOff)
+	log.Printf(
+		"worker configuration: tag=%q forceRandomOff=%t forceRandomOn=%t",
+		workerTag,
+		forceRandomOff,
+		forceRandomOn,
+	)
 
 	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
@@ -120,7 +132,7 @@ func main() {
 			log.Error(errMsg)
 			continue
 		}
-		moveReq = applyWorkerOverrides(moveReq, forceRandomOff)
+		moveReq = applyWorkerOverrides(moveReq, forceRandomOff, forceRandomOn)
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
@@ -159,9 +171,13 @@ func boolEnv(name string) (bool, error) {
 	return parsed, nil
 }
 
-func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff bool) models.MoveReq {
+func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn bool) models.MoveReq {
 	if forceRandomOff {
 		moveReq.RandomIsOff = true
+	}
+	if forceRandomOn {
+		moveReq.RandomIsOff = false
+		moveReq.RandomIsForced = true
 	}
 	return moveReq
 }

@@ -1,0 +1,24 @@
+services:
+  kingwc-ace-1:
+    image: zen:5000/yowking-nt:kingwc
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingWCAce
+      FORCE_RANDOM_OFF: "true"
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped
+    container_name: yowking-kingwc-ace-1
+
+  kingwc-ace-2:
+    image: zen:5000/yowking-nt:kingwc
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingWCAce
+      FORCE_RANDOM_OFF: "true"
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped
+    container_name: yowking-kingwc-ace-2
