@@ -15,6 +15,11 @@ import (
 
 var log = logrus.New()
 
+const (
+	moveAckWait          = time.Minute
+	moveProgressInterval = 15 * time.Second
+)
+
 func main() {
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
@@ -93,7 +98,7 @@ func main() {
 		moveReqSubject,
 		consumerName,
 		nats.ManualAck(),
-		nats.AckWait(30*time.Second),
+		nats.AckWait(moveAckWait),
 	)
 	if err != nil {
 		log.Fatalf("Error subscribing to stream queue: %v", err)
@@ -130,6 +135,9 @@ func main() {
 		if err != nil {
 			errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
 			log.Error(errMsg)
+			if ackErr := m.Ack(); ackErr != nil {
+				log.Errorf("Error acknowledging malformed move request: %v", ackErr)
+			}
 			continue
 		}
 		moveReq = applyWorkerOverrides(moveReq, forceRandomOff, forceRandomOn)
@@ -141,21 +149,53 @@ func main() {
 			"workerTag": moveReq.WorkerTag,
 		})
 
+		stopProgress := startProgressHeartbeat(m, logContext)
 		moveRes, err := moves.HandleMoveReq(moveReq)
+		stopProgress()
 		if err != nil {
 			logContext.Errorf("Error handling move request: %v", err)
-			continue
+			errMsg := err.Error()
+			moveRes.Err = &errMsg
 		}
 		moveRes = prepareMoveResponse(moveReq, moveRes)
 
 		err = PubMoveRes(js, moveRes)
 		if err != nil {
 			logContext.Errorf("Error publishing move response: %v", err)
-			// continue
+			continue
 		}
 		logContext.Println("succesfully published move response")
 
-		m.Ack()
+		if err := m.Ack(); err != nil {
+			logContext.Errorf("Error acknowledging move request: %v", err)
+		}
+	}
+}
+
+func startProgressHeartbeat(msg *nats.Msg, logContext *logrus.Entry) func() {
+	done := make(chan struct{})
+	stopped := make(chan struct{})
+
+	go func() {
+		defer close(stopped)
+		ticker := time.NewTicker(moveProgressInterval)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				if err := msg.InProgress(); err != nil {
+					logContext.WithError(err).Warn("failed to extend move request acknowledgement")
+				}
+			case <-done:
+				return
+			}
+		}
+	}()
+
+	return func() {
+		close(done)
+		<-stopped
 	}
 }
 

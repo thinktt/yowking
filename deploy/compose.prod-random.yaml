@@ -7,6 +7,7 @@ services:
     environment:
       WORKER_TAG: zenRandom
       FORCE_RANDOM_ON: "true"
+      ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
     env_file:
@@ -24,6 +25,7 @@ services:
     environment:
       WORKER_TAG: zenRandom
       FORCE_RANDOM_ON: "true"
+      ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
     env_file:

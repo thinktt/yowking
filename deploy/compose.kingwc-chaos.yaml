@@ -4,6 +4,7 @@ x-kingwc-chaos: &kingwc-chaos
     NATS_URL: nats://zen:4222
     WORKER_TAG: kingWCChaos
     FORCE_RANDOM_ON: "true"
+    ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
   env_file:
     - env/king.env
   pids_limit: 256
