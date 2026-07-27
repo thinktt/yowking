@@ -56,6 +56,7 @@ type Cmp struct {
 
 // MoveData is the kingworker response payload.
 type MoveData struct {
+	Index          int     `json:"index"`
 	Depth          int     `json:"depth,omitempty"`
 	Eval           int     `json:"eval,omitempty"`
 	Time           int     `json:"time,omitempty"`

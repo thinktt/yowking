@@ -146,6 +146,7 @@ func main() {
 			logContext.Errorf("Error handling move request: %v", err)
 			continue
 		}
+		moveRes = prepareMoveResponse(moveReq, moveRes)
 
 		err = PubMoveRes(js, moveRes)
 		if err != nil {
@@ -156,6 +157,13 @@ func main() {
 
 		m.Ack()
 	}
+}
+
+func prepareMoveResponse(moveReq models.MoveReq, moveRes models.MoveData) models.MoveData {
+	moveRes.Index = len(moveReq.Moves)
+	moveRes.GameId = moveReq.GameId
+	moveRes.WorkerTag = moveReq.WorkerTag
+	return moveRes
 }
 
 func boolEnv(name string) (bool, error) {
@@ -182,7 +190,8 @@ func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn 
 	return moveReq
 }
 
-// PubMoveRes publishes the move data to the move_res.<gameId> subject
+// PubMoveRes publishes legacy responses by game ID and tagged responses by
+// worker tag. The response payload carries the game identity in both cases.
 func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	// Convert your moveData to JSON
 	data, err := json.Marshal(moveData)
@@ -190,8 +199,7 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 		return err
 	}
 
-	// Generate the subject name
-	subject := fmt.Sprintf("move-res.%s", moveData.GameId)
+	subject := getMoveResSubject(moveData)
 
 	// Publish the data
 	_, err = js.Publish(subject, data)
@@ -200,4 +208,11 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	}
 
 	return nil
+}
+
+func getMoveResSubject(moveData models.MoveData) string {
+	if moveData.WorkerTag != "" {
+		return fmt.Sprintf("move-res.%s", moveData.WorkerTag)
+	}
+	return fmt.Sprintf("move-res.%s", moveData.GameId)
 }
