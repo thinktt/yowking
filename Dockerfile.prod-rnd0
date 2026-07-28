@@ -1,0 +1,10 @@
+ARG BASE_IMAGE=zen:5000/yowking:prod
+FROM ${BASE_IMAGE}
+
+# Keep the production King binary, books, personalities, and calibrations.
+COPY dist/kingworker /opt/yowking/kingworker
+COPY dist/enginewrap.exe /opt/yowking/enginewrap.exe
+
+# The current wrapper uses the modern engine filename; retain the production
+# noOpk binary bytes through a filesystem alias.
+RUN ln -sf TheKing350noOpk.exe /opt/yowking/TheKing350.exe

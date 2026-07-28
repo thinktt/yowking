@@ -1,0 +1,19 @@
+services:
+  nt:
+    image: yowking-nt:latest
+    environment:
+      - NATS_URL=nats://zen:4222
+      - WORKER_TAG=kingNT
+    env_file:
+      - env/king.env
+    restart: unless-stopped
+
+  yowking-nt-half-cpu:
+    image: yowking-nt:latest
+    cpus: 0.5
+    environment:
+      - NATS_URL=nats://zen:4222
+      - WORKER_TAG=kingNTHalf
+    env_file:
+      - env/king.env
+    restart: unless-stopped

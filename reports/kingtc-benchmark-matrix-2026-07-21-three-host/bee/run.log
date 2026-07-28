@@ -1,0 +1,77 @@
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=370000000ns instructions=10140635661
+[2/3] wrapper=370000000ns instructions=10140600748
+[3/3] wrapper=380000000ns instructions=10140765535
+
+KingTC benchmark baseline
+wrapper median CPU ns: 370000000, 370000000, 380000000
+wall time ms:           2985.0, 2996.7, 2943.8
+retired instructions:   10140635661, 10140600748, 10140765535
+wrapper CPU range:      10000000 ns
+instruction range:      164787
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/bee/bee-isolated-full.json
+Removed '/run/systemd/system.control/system.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/system.slice.d'.
+Removed '/run/systemd/system.control/user.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/user.slice.d'.
+Removed '/run/systemd/transient/init.scope.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/transient/init.scope.d'.
+host settings restored: boost=1 ordinary_cpus=all
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=380000000ns instructions=10141022247
+[2/3] wrapper=380000000ns instructions=10141078950
+[3/3] wrapper=380000000ns instructions=10141300318
+
+KingTC benchmark baseline
+wrapper median CPU ns: 380000000, 380000000, 380000000
+wall time ms:           11692.8, 11796.4, 11778.1
+retired instructions:   10141022247, 10141078950, 10141300318
+wrapper CPU range:      0 ns
+instruction range:      278071
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/bee/bee-isolated-quarter.json
+Removed '/run/systemd/system.control/system.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/system.slice.d'.
+Removed '/run/systemd/system.control/user.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/user.slice.d'.
+Removed '/run/systemd/transient/init.scope.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/transient/init.scope.d'.
+host settings restored: boost=1 ordinary_cpus=all
+[1/3] wrapper=170000000ns instructions=10140107157
+[2/3] wrapper=170000000ns instructions=10140012105
+[3/3] wrapper=170000000ns instructions=10140198423
+
+KingTC benchmark baseline
+wrapper median CPU ns: 170000000, 170000000, 170000000
+wall time ms:           1344.3, 1385.9, 1366.1
+retired instructions:   10140107157, 10140012105, 10140198423
+wrapper CPU range:      0 ns
+instruction range:      186318
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/bee/bee-ordinary-full.json
+[1/3] wrapper=170000000ns instructions=10140917126
+[2/3] wrapper=170000000ns instructions=10141640852
+[3/3] wrapper=170000000ns instructions=10141424443
+
+KingTC benchmark baseline
+wrapper median CPU ns: 170000000, 170000000, 170000000
+wall time ms:           5258.2, 5258.5, 5283.5
+retired instructions:   10140917126, 10141640852, 10141424443
+wrapper CPU range:      0 ns
+instruction range:      723726
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/bee/bee-ordinary-quarter.json
+[1/3] wrapper=200000000ns instructions=10140888423
+[2/3] wrapper=190000000ns instructions=10140948890
+[3/3] wrapper=200000000ns instructions=10141122160
+
+KingTC benchmark baseline
+wrapper median CPU ns: 200000000, 190000000, 200000000
+wall time ms:           2398.7, 2461.4, 2476.2
+retired instructions:   10140888423, 10140948890, 10141122160
+wrapper CPU range:      10000000 ns
+instruction range:      233737
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-v2-2026-07-21-amd/bee/bee-contention-eight.json

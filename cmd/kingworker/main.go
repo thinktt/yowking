@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -14,6 +15,11 @@ import (
 
 var log = logrus.New()
 
+const (
+	moveAckWait          = time.Minute
+	moveProgressInterval = 15 * time.Second
+)
+
 func main() {
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
@@ -22,6 +28,17 @@ func main() {
 
 	// if WORKER_TAG exist then modify the subject and consumer names accordingly
 	workerTag := os.Getenv("WORKER_TAG")
+	forceRandomOff, err := boolEnv("FORCE_RANDOM_OFF")
+	if err != nil {
+		log.Fatal(err)
+	}
+	forceRandomOn, err := boolEnv("FORCE_RANDOM_ON")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if forceRandomOff && forceRandomOn {
+		log.Fatal("FORCE_RANDOM_OFF and FORCE_RANDOM_ON cannot both be true")
+	}
 	moveReqSubject := "move-req"
 	consumerName := "kingworkers"
 	if workerTag != "" {
@@ -36,6 +53,13 @@ func main() {
 	} else {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
+
+	log.Printf(
+		"worker configuration: tag=%q forceRandomOff=%t forceRandomOn=%t",
+		workerTag,
+		forceRandomOff,
+		forceRandomOn,
+	)
 
 	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
@@ -74,7 +98,7 @@ func main() {
 		moveReqSubject,
 		consumerName,
 		nats.ManualAck(),
-		nats.AckWait(30*time.Second),
+		nats.AckWait(moveAckWait),
 	)
 	if err != nil {
 		log.Fatalf("Error subscribing to stream queue: %v", err)
@@ -111,8 +135,12 @@ func main() {
 		if err != nil {
 			errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
 			log.Error(errMsg)
+			if ackErr := m.Ack(); ackErr != nil {
+				log.Errorf("Error acknowledging malformed move request: %v", ackErr)
+			}
 			continue
 		}
+		moveReq = applyWorkerOverrides(moveReq, forceRandomOff, forceRandomOn)
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
@@ -121,24 +149,89 @@ func main() {
 			"workerTag": moveReq.WorkerTag,
 		})
 
+		stopProgress := startProgressHeartbeat(m, logContext)
 		moveRes, err := moves.HandleMoveReq(moveReq)
+		stopProgress()
 		if err != nil {
 			logContext.Errorf("Error handling move request: %v", err)
-			continue
+			errMsg := err.Error()
+			moveRes.Err = &errMsg
 		}
+		moveRes = prepareMoveResponse(moveReq, moveRes)
 
 		err = PubMoveRes(js, moveRes)
 		if err != nil {
 			logContext.Errorf("Error publishing move response: %v", err)
-			// continue
+			continue
 		}
 		logContext.Println("succesfully published move response")
 
-		m.Ack()
+		if err := m.Ack(); err != nil {
+			logContext.Errorf("Error acknowledging move request: %v", err)
+		}
 	}
 }
 
-// PubMoveRes publishes the move data to the move_res.<gameId> subject
+func startProgressHeartbeat(msg *nats.Msg, logContext *logrus.Entry) func() {
+	done := make(chan struct{})
+	stopped := make(chan struct{})
+
+	go func() {
+		defer close(stopped)
+		ticker := time.NewTicker(moveProgressInterval)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				if err := msg.InProgress(); err != nil {
+					logContext.WithError(err).Warn("failed to extend move request acknowledgement")
+				}
+			case <-done:
+				return
+			}
+		}
+	}()
+
+	return func() {
+		close(done)
+		<-stopped
+	}
+}
+
+func prepareMoveResponse(moveReq models.MoveReq, moveRes models.MoveData) models.MoveData {
+	moveRes.Index = len(moveReq.Moves)
+	moveRes.GameId = moveReq.GameId
+	moveRes.WorkerTag = moveReq.WorkerTag
+	return moveRes
+}
+
+func boolEnv(name string) (bool, error) {
+	value := os.Getenv(name)
+	if value == "" {
+		return false, nil
+	}
+
+	parsed, err := strconv.ParseBool(value)
+	if err != nil {
+		return false, fmt.Errorf("%s must be a boolean: %w", name, err)
+	}
+	return parsed, nil
+}
+
+func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn bool) models.MoveReq {
+	if forceRandomOff {
+		moveReq.RandomIsOff = true
+	}
+	if forceRandomOn {
+		moveReq.RandomIsOff = false
+		moveReq.RandomIsForced = true
+	}
+	return moveReq
+}
+
+// PubMoveRes publishes legacy responses by game ID and tagged responses by
+// worker tag. The response payload carries the game identity in both cases.
 func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	// Convert your moveData to JSON
 	data, err := json.Marshal(moveData)
@@ -146,8 +239,7 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 		return err
 	}
 
-	// Generate the subject name
-	subject := fmt.Sprintf("move-res.%s", moveData.GameId)
+	subject := getMoveResSubject(moveData)
 
 	// Publish the data
 	_, err = js.Publish(subject, data)
@@ -156,4 +248,11 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	}
 
 	return nil
+}
+
+func getMoveResSubject(moveData models.MoveData) string {
+	if moveData.WorkerTag != "" {
+		return fmt.Sprintf("move-res.%s", moveData.WorkerTag)
+	}
+	return fmt.Sprintf("move-res.%s", moveData.GameId)
 }

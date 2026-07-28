@@ -1,0 +1,121 @@
+services:
+    yowking-prod-rnd0-23:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "2,3"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-23
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-45:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "4,5"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-45
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-67:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "6,7"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-67
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-89:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "8,9"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-89
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-1011:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "10,11"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-1011
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-1213:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "12,13"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-1213
+      networks:
+        - yow
+      restart: always
+    yowking-prod-rnd0-1415:
+      image: zen:5000/yowking:prod-rnd0
+      cpus: 2
+      cpuset: "14,15"
+      pids_limit: 8192
+      environment:
+        - WORKER_TAG=zenRnd0
+        - FORCE_RANDOM_OFF=true
+      volumes:
+        - cal45:/opt/yowking/calibrations
+      env_file: 
+        - env/king.env
+      container_name: yowking-prod-rnd0-1415
+      networks:
+        - yow
+      restart: always
+
+networks:
+  yow:
+    external: true
+
+volumes:
+  cal45:
+    external: true

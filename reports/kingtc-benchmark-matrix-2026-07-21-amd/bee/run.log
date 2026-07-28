@@ -1,0 +1,72 @@
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=370000000ns instructions=10140512724
+[2/3] wrapper=370000000ns instructions=10140705011
+[3/3] wrapper=370000000ns instructions=10140548329
+
+KingTC benchmark baseline
+wrapper median CPU ns: 370000000, 370000000, 370000000
+retired instructions:   10140512724, 10140705011, 10140548329
+wrapper CPU range:      0 ns
+instruction range:      192287
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-2026-07-21-amd/bee/bee-isolated-full.json
+Removed '/run/systemd/system.control/system.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/system.slice.d'.
+Removed '/run/systemd/system.control/user.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/user.slice.d'.
+Removed '/run/systemd/transient/init.scope.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/transient/init.scope.d'.
+host settings restored: boost=1 ordinary_cpus=all
+isolated benchmark environment:
+  boost=0
+  isolated_slice=king-benchmark-isolated.slice cpus=14-15
+  system.slice cpus=0-13
+[1/3] wrapper=380000000ns instructions=10141120036
+[2/3] wrapper=380000000ns instructions=10140934373
+[3/3] wrapper=380000000ns instructions=10140766762
+
+KingTC benchmark baseline
+wrapper median CPU ns: 380000000, 380000000, 380000000
+retired instructions:   10141120036, 10140934373, 10140766762
+wrapper CPU range:      0 ns
+instruction range:      353274
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-2026-07-21-amd/bee/bee-isolated-quarter.json
+Removed '/run/systemd/system.control/system.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/system.slice.d'.
+Removed '/run/systemd/system.control/user.slice.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/system.control/user.slice.d'.
+Removed '/run/systemd/transient/init.scope.d/50-AllowedCPUs.conf'.
+Removed '/run/systemd/transient/init.scope.d'.
+host settings restored: boost=1 ordinary_cpus=all
+[1/3] wrapper=170000000ns instructions=10140078853
+[2/3] wrapper=170000000ns instructions=10140357084
+[3/3] wrapper=170000000ns instructions=10140265672
+
+KingTC benchmark baseline
+wrapper median CPU ns: 170000000, 170000000, 170000000
+retired instructions:   10140078853, 10140357084, 10140265672
+wrapper CPU range:      0 ns
+instruction range:      278231
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-2026-07-21-amd/bee/bee-ordinary-full.json
+[1/3] wrapper=170000000ns instructions=10141716685
+[2/3] wrapper=170000000ns instructions=10141161814
+[3/3] wrapper=170000000ns instructions=10141619318
+
+KingTC benchmark baseline
+wrapper median CPU ns: 170000000, 170000000, 170000000
+retired instructions:   10141716685, 10141161814, 10141619318
+wrapper CPU range:      0 ns
+instruction range:      554871
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-2026-07-21-amd/bee/bee-ordinary-quarter.json
+[1/3] wrapper=190000000ns instructions=10141066607
+[2/3] wrapper=190000000ns instructions=10140935003
+[3/3] wrapper=200000000ns instructions=10141148408
+
+KingTC benchmark baseline
+wrapper median CPU ns: 190000000, 190000000, 200000000
+retired instructions:   10141066607, 10140935003, 10141148408
+wrapper CPU range:      10000000 ns
+instruction range:      213405
+Wrote /home/legolas/code/yowking/reports/kingtc-benchmark-matrix-2026-07-21-amd/bee/bee-contention-eight.json

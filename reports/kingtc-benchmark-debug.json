@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-07-21T17:13:50.445Z",
+  "runName": "kingtc-benchmark-debug",
+  "benchmark": "enginewrap.exe --kingtc-benchmark; two warmups then five fixed prime-count passes to 3,000,000",
+  "environment": {
+    "hostname": "bee",
+    "cpuModel": "AMD Ryzen 7 5825U with Radeon Graphics",
+    "cpusetCpus": "14,15",
+    "cgroupParent": "king-perf-isolated.slice",
+    "image": "zen:5000/yowking:prod-rnd0"
+  },
+  "results": [
+    {
+      "repeat": 1,
+      "wrapperPid": 21214,
+      "wrapper": {
+        "primes": 216816,
+        "limit": 3000000,
+        "warmups": 2,
+        "runs": 5,
+        "cpuNs": [
+          190000000,
+          260000000,
+          170000000,
+          290000000,
+          220000000
+        ],
+        "medianCpuNs": 220000000
+      },
+      "counters": {
+        "instructions": {
+          "count": 26860118633
+        },
+        "cycles": {
+          "count": 13606730124
+        },
+        "branches": {
+          "count": 6760144460
+        },
+        "branch-misses": {
+          "count": 8986442
+        }
+      },
+      "perfDiagnostics": "Events disabled\nEvents enabled"
+    }
+  ],
+  "summary": {
+    "repeats": 1,
+    "wrapperMedianCpuNs": [
+      220000000
+    ],
+    "instructions": [
+      26860118633
+    ],
+    "cycles": [
+      13606730124
+    ],
+    "instructionRange": 0,
+    "wrapperCpuRangeNs": 0
+  }
+}

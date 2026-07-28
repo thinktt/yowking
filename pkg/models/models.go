@@ -9,6 +9,7 @@ type MoveReq struct {
 	StopId         int      `json:"stopId" binding:"omitempty,alphanum,max=15"`
 	ClockTime      int      `json:"clockTime" binding:"omitempty,alphanum,max=15"`
 	RandomIsOff    bool     `json:"randomIsOff"`
+	RandomIsForced bool     `json:"randomIsForced"`
 	ShouldSkipBook bool     `json:"shouldSkipBook"`
 	CmpVals        CmpVals  `json:"-"`
 }
@@ -55,6 +56,7 @@ type Cmp struct {
 
 // MoveData is the kingworker response payload.
 type MoveData struct {
+	Index          int     `json:"index"`
 	Depth          int     `json:"depth,omitempty"`
 	Eval           int     `json:"eval,omitempty"`
 	Time           int     `json:"time,omitempty"`
@@ -63,6 +65,7 @@ type MoveData struct {
 	CoordinateMove string  `json:"coordinateMove,omitempty"`
 	WorkerTag      string  `json:"workerTag,omitempty"`
 	WillAcceptDraw bool    `json:"willAcceptDraw"`
+	Warning        *string `json:"warning,omitempty"`
 	Err            *string `json:"err,omitempty"`
 	Type           string  `json:"type"`
 	GameId         string  `json:"gameId,omitempty"`
