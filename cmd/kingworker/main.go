@@ -16,7 +16,7 @@ import (
 var log = logrus.New()
 
 const (
-	moveAckWait          = time.Minute
+	moveAckWait          = 30 * time.Second
 	moveProgressInterval = 15 * time.Second
 )
 
