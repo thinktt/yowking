@@ -1,0 +1,17 @@
+name: kingwc-wizard-equal-half
+
+services:
+  worker:
+    image: zen:5000/yowking-nt:kingwc
+    cpus: 0.5
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: ${WIZARD_WORKER_TAG}
+      FORCE_RANDOM_OFF: "true"
+      ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
+    env_file:
+      - env/king.env
+    volumes:
+      - ${WIZARD_CLOCK_FILE}:/opt/yowking/calibrations/clockTimes.json:ro
+    pids_limit: 256
+    restart: unless-stopped
