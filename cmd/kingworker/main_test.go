@@ -49,6 +49,25 @@ func TestPrepareMoveResponseCopiesRequestIdentity(t *testing.T) {
 	}
 }
 
+func TestWorkerTagDefaultsWhenMissing(t *testing.T) {
+	if got := workerTagFromEnv(""); got != "default" {
+		t.Fatalf("workerTagFromEnv(\"\") = %q, want %q", got, "default")
+	}
+}
+
+func TestNormalizeMoveRequestAddsDefaultWorkerTag(t *testing.T) {
+	moveReq := normalizeMoveRequest(models.MoveReq{GameId: "game1234"})
+	if moveReq.WorkerTag != "default" {
+		t.Fatalf("expected default worker tag, got %q", moveReq.WorkerTag)
+	}
+}
+
+func TestGetMoveReqSubjectUsesDefaultWorkerTag(t *testing.T) {
+	if got := getMoveReqSubject(""); got != "move-req.default" {
+		t.Fatalf("getMoveReqSubject(\"\") = %q, want %q", got, "move-req.default")
+	}
+}
+
 func TestGetMoveResSubjectUsesWorkerTagWhenPresent(t *testing.T) {
 	moveRes := models.MoveData{GameId: "game1234", WorkerTag: "kingWC"}
 	if got := getMoveResSubject(moveRes); got != "move-res.kingWC" {
@@ -56,9 +75,9 @@ func TestGetMoveResSubjectUsesWorkerTagWhenPresent(t *testing.T) {
 	}
 }
 
-func TestGetMoveResSubjectPreservesLegacyGameSubject(t *testing.T) {
+func TestGetMoveResSubjectUsesDefaultWorkerTag(t *testing.T) {
 	moveRes := models.MoveData{GameId: "game1234"}
-	if got := getMoveResSubject(moveRes); got != "move-res.game1234" {
-		t.Fatalf("getMoveResSubject() = %q, want %q", got, "move-res.game1234")
+	if got := getMoveResSubject(moveRes); got != "move-res.default" {
+		t.Fatalf("getMoveResSubject() = %q, want %q", got, "move-res.default")
 	}
 }

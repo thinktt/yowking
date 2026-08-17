@@ -18,6 +18,7 @@ var log = logrus.New()
 const (
 	moveAckWait          = 30 * time.Second
 	moveProgressInterval = 15 * time.Second
+	defaultWorkerTag     = "default"
 )
 
 func main() {
@@ -26,8 +27,7 @@ func main() {
 		log.Fatal("NATS_TOKEN environment variable is not set")
 	}
 
-	// if WORKER_TAG exist then modify the subject and consumer names accordingly
-	workerTag := os.Getenv("WORKER_TAG")
+	workerTag := workerTagFromEnv(os.Getenv("WORKER_TAG"))
 	forceRandomOff, err := boolEnv("FORCE_RANDOM_OFF")
 	if err != nil {
 		log.Fatal(err)
@@ -39,12 +39,8 @@ func main() {
 	if forceRandomOff && forceRandomOn {
 		log.Fatal("FORCE_RANDOM_OFF and FORCE_RANDOM_ON cannot both be true")
 	}
-	moveReqSubject := "move-req"
-	consumerName := "kingworkers"
-	if workerTag != "" {
-		moveReqSubject += "." + workerTag
-		consumerName += "-" + workerTag
-	}
+	moveReqSubject := getMoveReqSubject(workerTag)
+	consumerName := getConsumerName(workerTag)
 
 	natsUrl := os.Getenv("NATS_URL")
 	if natsUrl == "" {
@@ -75,7 +71,7 @@ func main() {
 	// Create move-req-stream
 	_, err = js.AddStream(&nats.StreamConfig{
 		Name:     "move-req-stream",
-		Subjects: []string{"move-req", "move-req.*"},
+		Subjects: []string{"move-req.*"},
 	})
 	if err != nil {
 		log.Printf("Failed to create stream: %v", err)
@@ -140,6 +136,7 @@ func main() {
 			}
 			continue
 		}
+		moveReq = normalizeMoveRequest(moveReq)
 		moveReq = applyWorkerOverrides(moveReq, forceRandomOff, forceRandomOn)
 
 		// since we have move-req data we can now log with context
@@ -200,10 +197,31 @@ func startProgressHeartbeat(msg *nats.Msg, logContext *logrus.Entry) func() {
 }
 
 func prepareMoveResponse(moveReq models.MoveReq, moveRes models.MoveData) models.MoveData {
+	moveReq = normalizeMoveRequest(moveReq)
 	moveRes.Index = len(moveReq.Moves)
 	moveRes.GameId = moveReq.GameId
 	moveRes.WorkerTag = moveReq.WorkerTag
 	return moveRes
+}
+
+func workerTagFromEnv(value string) string {
+	if value == "" {
+		return defaultWorkerTag
+	}
+	return value
+}
+
+func normalizeMoveRequest(moveReq models.MoveReq) models.MoveReq {
+	moveReq.WorkerTag = workerTagFromEnv(moveReq.WorkerTag)
+	return moveReq
+}
+
+func getMoveReqSubject(workerTag string) string {
+	return fmt.Sprintf("move-req.%s", workerTagFromEnv(workerTag))
+}
+
+func getConsumerName(workerTag string) string {
+	return fmt.Sprintf("kingworkers-%s", workerTagFromEnv(workerTag))
 }
 
 func boolEnv(name string) (bool, error) {
@@ -230,9 +248,11 @@ func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn 
 	return moveReq
 }
 
-// PubMoveRes publishes legacy responses by game ID and tagged responses by
-// worker tag. The response payload carries the game identity in both cases.
+// PubMoveRes publishes responses by worker tag. The response payload carries
+// the game identity separately.
 func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
+	moveData.WorkerTag = workerTagFromEnv(moveData.WorkerTag)
+
 	// Convert your moveData to JSON
 	data, err := json.Marshal(moveData)
 	if err != nil {
@@ -251,8 +271,5 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 }
 
 func getMoveResSubject(moveData models.MoveData) string {
-	if moveData.WorkerTag != "" {
-		return fmt.Sprintf("move-res.%s", moveData.WorkerTag)
-	}
-	return fmt.Sprintf("move-res.%s", moveData.GameId)
+	return fmt.Sprintf("move-res.%s", workerTagFromEnv(moveData.WorkerTag))
 }

@@ -4,7 +4,6 @@ x-worker: &worker
   image: zen:5000/yowking:staging
   environment:
     NATS_URL: nats://zen:4222
-    WORKER_TAG: kingWC
   env_file:
     - env/king.env
   pids_limit: 8192
