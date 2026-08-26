@@ -6,6 +6,7 @@ type MoveReq struct {
 	CmpName        string   `json:"cmpName" binding:"required,alphanum,max=15"`
 	GameId         string   `json:"gameId" binding:"required,alphanum,max=15"`
 	WorkerTag      string   `json:"workerTag,omitempty"`
+	ApiTag         string   `json:"apiTag,omitempty"`
 	StopId         int      `json:"stopId" binding:"omitempty,alphanum,max=15"`
 	ClockTime      int      `json:"clockTime" binding:"omitempty,alphanum,max=15"`
 	RandomIsOff    bool     `json:"randomIsOff"`

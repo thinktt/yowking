@@ -62,22 +62,27 @@ func TestNormalizeMoveRequestAddsDefaultWorkerTag(t *testing.T) {
 	}
 }
 
+func TestNormalizeMoveRequestAddsDefaultAPITag(t *testing.T) {
+	moveReq := normalizeMoveRequest(models.MoveReq{GameId: "game1234"})
+	if moveReq.ApiTag != "default" {
+		t.Fatalf("expected default API tag, got %q", moveReq.ApiTag)
+	}
+}
+
 func TestGetMoveReqSubjectUsesDefaultWorkerTag(t *testing.T) {
 	if got := getMoveReqSubject(""); got != "move-req.default" {
 		t.Fatalf("getMoveReqSubject(\"\") = %q, want %q", got, "move-req.default")
 	}
 }
 
-func TestGetMoveResSubjectUsesWorkerTagWhenPresent(t *testing.T) {
-	moveRes := models.MoveData{GameId: "game1234", WorkerTag: "kingWC"}
-	if got := getMoveResSubject(moveRes); got != "move-res.kingWC" {
-		t.Fatalf("getMoveResSubject() = %q, want %q", got, "move-res.kingWC")
+func TestGetMoveResSubjectUsesAPITagWhenPresent(t *testing.T) {
+	if got := getMoveResSubject("arenaRunner"); got != "move-res.arenaRunner" {
+		t.Fatalf("getMoveResSubject() = %q, want %q", got, "move-res.arenaRunner")
 	}
 }
 
-func TestGetMoveResSubjectUsesDefaultWorkerTag(t *testing.T) {
-	moveRes := models.MoveData{GameId: "game1234"}
-	if got := getMoveResSubject(moveRes); got != "move-res.default" {
+func TestGetMoveResSubjectUsesDefaultAPITag(t *testing.T) {
+	if got := getMoveResSubject(""); got != "move-res.default" {
 		t.Fatalf("getMoveResSubject() = %q, want %q", got, "move-res.default")
 	}
 }

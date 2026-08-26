@@ -19,6 +19,7 @@ const (
 	moveAckWait          = 30 * time.Second
 	moveProgressInterval = 15 * time.Second
 	defaultWorkerTag     = "default"
+	defaultAPITag        = "default"
 )
 
 func main() {
@@ -156,7 +157,7 @@ func main() {
 		}
 		moveRes = prepareMoveResponse(moveReq, moveRes)
 
-		err = PubMoveRes(js, moveRes)
+		err = PubMoveRes(js, moveReq, moveRes)
 		if err != nil {
 			logContext.Errorf("Error publishing move response: %v", err)
 			continue
@@ -213,7 +214,15 @@ func workerTagFromEnv(value string) string {
 
 func normalizeMoveRequest(moveReq models.MoveReq) models.MoveReq {
 	moveReq.WorkerTag = workerTagFromEnv(moveReq.WorkerTag)
+	moveReq.ApiTag = apiTagFromRequest(moveReq.ApiTag)
 	return moveReq
+}
+
+func apiTagFromRequest(value string) string {
+	if value == "" {
+		return defaultAPITag
+	}
+	return value
 }
 
 func getMoveReqSubject(workerTag string) string {
@@ -248,9 +257,10 @@ func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn 
 	return moveReq
 }
 
-// PubMoveRes publishes responses by worker tag. The response payload carries
-// the game identity separately.
-func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
+// PubMoveRes publishes a response to the API tag from the move request.
+// The response payload carries the worker tag and game identity separately.
+func PubMoveRes(js nats.JetStreamContext, moveReq models.MoveReq, moveData models.MoveData) error {
+	moveReq = normalizeMoveRequest(moveReq)
 	moveData.WorkerTag = workerTagFromEnv(moveData.WorkerTag)
 
 	// Convert your moveData to JSON
@@ -259,7 +269,7 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 		return err
 	}
 
-	subject := getMoveResSubject(moveData)
+	subject := getMoveResSubject(moveReq.ApiTag)
 
 	// Publish the data
 	_, err = js.Publish(subject, data)
@@ -270,6 +280,6 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	return nil
 }
 
-func getMoveResSubject(moveData models.MoveData) string {
-	return fmt.Sprintf("move-res.%s", workerTagFromEnv(moveData.WorkerTag))
+func getMoveResSubject(apiTag string) string {
+	return fmt.Sprintf("move-res.%s", apiTagFromRequest(apiTag))
 }
