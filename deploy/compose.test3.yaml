@@ -4,7 +4,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: ${WORKER_TAG:-kingNT}
-      FORCE_RANDOM_OFF: "true"
     env_file:
       - env/king.env
     pids_limit: 256
@@ -16,7 +15,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: kingNTQuarter
-      FORCE_RANDOM_OFF: "true"
     env_file:
       - env/king.env
     pids_limit: 256

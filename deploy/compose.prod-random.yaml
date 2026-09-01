@@ -6,7 +6,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
@@ -24,7 +23,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
@@ -42,7 +40,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
@@ -60,7 +57,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
@@ -78,7 +74,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations
@@ -96,7 +91,6 @@ services:
     pids_limit: 8192
     environment:
       WORKER_TAG: zenRandom
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     volumes:
       - cal45:/opt/yowking/calibrations

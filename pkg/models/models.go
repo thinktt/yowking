@@ -9,8 +9,7 @@ type MoveReq struct {
 	ApiTag         string   `json:"apiTag,omitempty"`
 	StopId         int      `json:"stopId" binding:"omitempty,alphanum,max=15"`
 	ClockTime      int      `json:"clockTime" binding:"omitempty,alphanum,max=15"`
-	RandomIsOff    bool     `json:"randomIsOff"`
-	RandomIsForced bool     `json:"randomIsForced"`
+	RandomOverride *int     `json:"randomOverride,omitempty"`
 	ShouldSkipBook bool     `json:"shouldSkipBook"`
 	CmpVals        CmpVals  `json:"-"`
 }

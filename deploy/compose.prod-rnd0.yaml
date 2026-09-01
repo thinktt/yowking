@@ -6,7 +6,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -22,7 +21,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -38,7 +36,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -54,7 +51,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -70,7 +66,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -86,7 +81,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 
@@ -102,7 +96,6 @@ services:
       pids_limit: 8192
       environment:
         - WORKER_TAG=zenRnd0
-        - FORCE_RANDOM_OFF=true
       volumes:
         - cal45:/opt/yowking/calibrations
       env_file: 

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -29,17 +28,6 @@ func main() {
 	}
 
 	workerTag := workerTagFromEnv(os.Getenv("WORKER_TAG"))
-	forceRandomOff, err := boolEnv("FORCE_RANDOM_OFF")
-	if err != nil {
-		log.Fatal(err)
-	}
-	forceRandomOn, err := boolEnv("FORCE_RANDOM_ON")
-	if err != nil {
-		log.Fatal(err)
-	}
-	if forceRandomOff && forceRandomOn {
-		log.Fatal("FORCE_RANDOM_OFF and FORCE_RANDOM_ON cannot both be true")
-	}
 	moveReqSubject := getMoveReqSubject(workerTag)
 	consumerName := getConsumerName(workerTag)
 
@@ -51,12 +39,7 @@ func main() {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
 
-	log.Printf(
-		"worker configuration: tag=%q forceRandomOff=%t forceRandomOn=%t",
-		workerTag,
-		forceRandomOff,
-		forceRandomOn,
-	)
+	log.Printf("worker configuration: tag=%q", workerTag)
 
 	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
@@ -138,7 +121,6 @@ func main() {
 			continue
 		}
 		moveReq = normalizeMoveRequest(moveReq)
-		moveReq = applyWorkerOverrides(moveReq, forceRandomOff, forceRandomOn)
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
@@ -231,30 +213,6 @@ func getMoveReqSubject(workerTag string) string {
 
 func getConsumerName(workerTag string) string {
 	return fmt.Sprintf("kingworkers-%s", workerTagFromEnv(workerTag))
-}
-
-func boolEnv(name string) (bool, error) {
-	value := os.Getenv(name)
-	if value == "" {
-		return false, nil
-	}
-
-	parsed, err := strconv.ParseBool(value)
-	if err != nil {
-		return false, fmt.Errorf("%s must be a boolean: %w", name, err)
-	}
-	return parsed, nil
-}
-
-func applyWorkerOverrides(moveReq models.MoveReq, forceRandomOff, forceRandomOn bool) models.MoveReq {
-	if forceRandomOff {
-		moveReq.RandomIsOff = true
-	}
-	if forceRandomOn {
-		moveReq.RandomIsOff = false
-		moveReq.RandomIsForced = true
-	}
-	return moveReq
 }
 
 // PubMoveRes publishes a response to the API tag from the move request.

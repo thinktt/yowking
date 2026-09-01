@@ -4,7 +4,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: kingWCAceChaos
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     env_file:
       - env/king.env
@@ -17,7 +16,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: kingWCAceChaos
-      FORCE_RANDOM_ON: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     env_file:
       - env/king.env

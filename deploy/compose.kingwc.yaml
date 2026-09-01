@@ -6,7 +6,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: kingWC
-      FORCE_RANDOM_OFF: "true"
       ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
     env_file:
       - env/king.env

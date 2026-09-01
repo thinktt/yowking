@@ -4,7 +4,6 @@ services:
     environment:
       NATS_URL: nats://zen:4222
       WORKER_TAG: kingNTDiv1
-      FORCE_RANDOM_OFF: "true"
     env_file:
       - env/king.env
     pids_limit: 256

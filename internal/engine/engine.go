@@ -96,7 +96,13 @@ func GetMove(settings Settings) (MoveData, error) {
 		stopEngine(engine, cmd, log)
 	}()
 
-	applyRandomSetting(&settings)
+	// RandomOverride sets the random value for engine moves in this request.
+	// It is intended for admin diagnostic tests and may later be replaced by
+	// a broader cmpOverride feature.
+	if settings.RandomOverride != nil {
+		settings.CmpVals.Rnd = strconv.Itoa(*settings.RandomOverride)
+		log.WithField("randomOverride", *settings.RandomOverride).Info("using random override")
+	}
 
 	// log all the cmpVals with keys
 	// fmt.Printf("%+v\n", settings.CmpVals)
@@ -204,19 +210,6 @@ func getMoveTimeout() (time.Duration, error) {
 
 func hasMove(moveData MoveData) bool {
 	return moveData.CoordinateMove != "" || moveData.AlgebraMove != ""
-}
-
-func applyRandomSetting(settings *Settings) {
-	if settings.RandomIsOff {
-		settings.CmpVals.Rnd = "0"
-		log.Info("randomIsOff is set, setting cmp rnd val to 0")
-		return
-	}
-
-	if settings.RandomIsForced && (settings.CmpVals.Rnd == "" || settings.CmpVals.Rnd == "0") {
-		settings.CmpVals.Rnd = "50"
-		log.Info("randomIsForced is set, raising cmp rnd val to 50")
-	}
 }
 
 func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
