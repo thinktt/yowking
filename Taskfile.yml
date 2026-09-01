@@ -6,12 +6,78 @@ dotenv:
 vars:
   DEPS_IMAGE: "yowdeps"
   MAIN_IMAGE_LOCAL: "zen:5000/yowking:latest"
+  KING_NT_IMAGE: "zen:5000/yowking-nt:test3"
+  KING_NT_BASE_IMAGE: "yowking-worker-routing:latest"
+  KING_NT_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-idDiv1000ns.exe"
+  KING_NT_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/hard-idDiv1000ns-scale55-pass1/clockTimes.json"
+  KING_NT_WORKERS: 8
+  KING_NT_HALF_WORKERS: 8
+  KING_NT_QUARTER_WORKERS: 8
+  KING_DIV1_TEST5_IMAGE: "zen:5000/yowking-nt:div1-test5"
+  KING_DIV1_TEST5_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-div1.exe"
+  KING_DIV1_TEST5_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/hard-div1-refined/clockTimes.json"
+  KING_TC_IMAGE: "zen:5000/yowking-nt:kingtc"
+  KING_TC_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-threadCpu.exe"
+  KING_TC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingtc-full-refined-2026-07-17/clockTimes.json"
+  KING_TC_AUTOSCALE_IMAGE: "zen:5000/yowking-nt:kingtc-autoscale-smoke"
+  KING_TC_AUTOSCALE_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-fakeclock-threadCpu-scale.exe"
+  KING_TC_AUTOSCALE_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingtc-isolated-bee-refined-2026-07-21/clockTimes.json"
+  KING_WC_IMAGE: "zen:5000/yowking-nt:kingwc"
+  KING_WC_ENGINE: "../arena-runner/engine-patching/fake-clock/work/TheKing350-KingWC-live.exe"
+  KING_WC_CLOCKS: "../arena-runner/engine-patching/fake-clock/calibration/out/kingwc-isolated-three-group-2026-07-23/clockTimes.json"
+  PROD_RND0_IMAGE: "zen:5000/yowking:prod-rnd0"
+  PROD_RANDOM_IMAGE: "zen:5000/yowking:prod-random"
+  RYZ_HOST: "ryz"
+  RYZ_DIR: "/home/legolas/yowking"
+  RYZ_SSH: "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+  ACE_HOST: "ace"
+  ACE_DIR: "/home/agent/yowking"
+  ACE_SSH: "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
 
 tasks:
   default:
     desc: Show available tasks
     cmds:
       - task --list --sort none
+
+  sync:ryz:
+    desc: Mirror this yowking source tree to the dedicated Ryz work directory
+    cmds:
+      - '{{.RYZ_SSH}} {{.RYZ_HOST}} "mkdir -p {{.RYZ_DIR}}"'
+      - >
+        rsync -az --delete --info=progress2 -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        ./ {{.RYZ_HOST}}:{{.RYZ_DIR}}/
+
+  sync:ryz:dry:
+    desc: Preview the next yowking source mirror to Ryz
+    cmds:
+      - >
+        rsync -azn --delete --itemize-changes -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        ./ {{.RYZ_HOST}}:{{.RYZ_DIR}}/
+
+  sync:ace:
+    desc: Mirror yowking to Ace without starting workers
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "mkdir -p {{.ACE_DIR}}/deploy/env"'
+      - >
+        rsync -az --delete --info=progress2 -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        --exclude='.git/'
+        --exclude='dist/'
+        --exclude='.env'
+        --exclude='node_modules/'
+        --exclude='deploy/env/'
+        ./ {{.ACE_HOST}}:{{.ACE_DIR}}/
+      - >
+        rsync -az -e "ssh -i ~/.ssh/id_agent -o BatchMode=yes"
+        deploy/env/king.env {{.ACE_HOST}}:{{.ACE_DIR}}/deploy/env/king.env
 
   import:cm:
     desc: Step 1 - Import Chessmaster assets from CM_DIR into assets/cm
@@ -55,6 +121,225 @@ tasks:
       - docker rm yowking || true
       - docker image rm {{.MAIN_IMAGE_LOCAL}} || true
       - docker build -t {{.MAIN_IMAGE_LOCAL}} .
+
+  build:nt:dist:
+    desc: Build dist/ with the KingNT engine and hard-bot calibration
+    cmds:
+      - task gobuild
+      - test -f {{.KING_NT_ENGINE}}
+      - test -f {{.KING_NT_CLOCKS}}
+      - cp {{.KING_NT_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_NT_CLOCKS}} dist/calibrations/clockTimes.json
+
+  build:nt:image:
+    desc: Build the KingNT worker image
+    deps: [build:nt:dist]
+    cmds:
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_NT_IMAGE}} .
+
+  publish:nt:test3:
+    desc: Build and publish the reproducible Test 3 worker image to Zen
+    deps: [build:nt:image]
+    cmds:
+      - docker push {{.KING_NT_IMAGE}}
+
+  build:nt:test5:
+    desc: "Build the div1 Test 5 worker image from the refined Hard calibration."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_DIV1_TEST5_ENGINE}}
+      - test -f {{.KING_DIV1_TEST5_CLOCKS}}
+      - cp {{.KING_DIV1_TEST5_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_DIV1_TEST5_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_DIV1_TEST5_IMAGE}} .
+
+  publish:nt:test5:
+    desc: "Build and publish the div1 Test 5 worker image to Zen."
+    deps: [build:nt:test5]
+    cmds:
+      - docker push {{.KING_DIV1_TEST5_IMAGE}}
+
+  build:tc:
+    desc: "Build the KingTC worker image with thread-CPU timing and its selected clocks."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_TC_ENGINE}}
+      - test -f {{.KING_TC_CLOCKS}}
+      - cp {{.KING_TC_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_TC_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_TC_IMAGE}} .
+
+  publish:tc:
+    desc: "Build and publish the KingTC worker image to Zen."
+    deps: [build:tc]
+    cmds:
+      - docker push {{.KING_TC_IMAGE}}
+
+  build:tc:autoscale:
+    desc: "Build the KingTC autoscale smoke-test image from the scaled-clock candidate."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_TC_AUTOSCALE_ENGINE}}
+      - test -f {{.KING_TC_AUTOSCALE_CLOCKS}}
+      - cp {{.KING_TC_AUTOSCALE_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_TC_AUTOSCALE_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_TC_AUTOSCALE_IMAGE}} .
+
+  publish:tc:autoscale:
+    desc: "Build and publish the KingTC autoscale smoke-test image to Zen."
+    deps: [build:tc:autoscale]
+    cmds:
+      - docker push {{.KING_TC_AUTOSCALE_IMAGE}}
+
+  build:wc:
+    desc: "Build the KingWC worker image with its selected three-group calibration."
+    cmds:
+      - task gobuild
+      - test -f {{.KING_WC_ENGINE}}
+      - test -f {{.KING_WC_CLOCKS}}
+      - cp {{.KING_WC_ENGINE}} dist/TheKing350.exe
+      - cp {{.KING_WC_CLOCKS}} dist/calibrations/clockTimes.json
+      - docker build --build-arg BASE_IMAGE={{.KING_NT_BASE_IMAGE}} -f Dockerfile.nt -t {{.KING_WC_IMAGE}} .
+
+  deploy:wc:bee:
+    desc: "Start eight unrestricted KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc -f deploy/compose.kingwc.yaml up -d --scale worker={{.KING_NT_WORKERS}} worker
+
+  deploy:wc:bee:down:
+    desc: "Stop and remove KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc -f deploy/compose.kingwc.yaml down
+
+  deploy:wc:chaos:bee:
+    desc: "Start four force-random KingWC workers on Bee."
+    cmds:
+      - docker compose --project-name kingwc-chaos -f deploy/compose.kingwc-chaos.yaml up -d
+
+  deploy:wc:chaos:bee:down:
+    desc: "Stop and remove Bee force-random KingWC workers."
+    cmds:
+      - docker compose --project-name kingwc-chaos -f deploy/compose.kingwc-chaos.yaml down
+
+  deploy:wc:ace:
+    desc: "Start two rnd=0 KingWC workers on Ace."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace.yaml up -d"'
+
+  deploy:wc:ace:down:
+    desc: "Stop and remove Ace KingWC workers."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace.yaml down"'
+
+  deploy:wc:chaos:ace:
+    desc: "Start two force-random KingWC workers on Ace."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace-chaos.yaml up -d"'
+
+  deploy:wc:chaos:ace:down:
+    desc: "Stop and remove Ace force-random KingWC workers."
+    cmds:
+      - '{{.ACE_SSH}} {{.ACE_HOST}} "cd {{.ACE_DIR}} && docker compose -f deploy/compose.kingwc-ace-chaos.yaml down"'
+
+  deploy:prod:random:zen:
+    desc: "Replace two Zen rnd=0 workers with tagged force-random workers."
+    cmds:
+      - ssh zen "docker stop yowking-prod-rnd0-1213 yowking-prod-rnd0-1415"
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-random.yaml up -d"
+
+  deploy:prod:random:zen:down:
+    desc: "Stop the tagged Zen random workers and restore their rnd=0 workers."
+    cmds:
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-random.yaml down"
+      - ssh zen "cd /home/legolas/yowking && docker compose -f deploy/compose.prod-rnd0.yaml up -d yowking-prod-rnd0-1213 yowking-prod-rnd0-1415"
+
+  build:prod-rnd0:image:
+    desc: Build a Zen-production-derived worker with the current rnd=0-capable worker and wrapper
+    deps: [gobuild]
+    cmds:
+      - docker build -f Dockerfile.prod-rnd0 -t {{.PROD_RND0_IMAGE}} .
+
+  publish:prod-rnd0:
+    desc: Publish the production-derived rnd=0 test worker image to Zen
+    deps: [build:prod-rnd0:image]
+    cmds:
+      - docker push {{.PROD_RND0_IMAGE}}
+
+  build:prod-random:image:
+    desc: Build a Zen-production-derived force-random worker image
+    deps: [gobuild]
+    cmds:
+      - docker build -f Dockerfile.prod-rnd0 -t {{.PROD_RANDOM_IMAGE}} .
+
+  publish:prod-random:
+    desc: Publish the production-derived force-random worker image to Zen
+    deps: [build:prod-random:image]
+    cmds:
+      - docker push {{.PROD_RANDOM_IMAGE}}
+
+  deploy:test3:bee:
+    desc: Start eight unrestricted Test 3 workers on Bee tagged kingNT
+    cmds:
+      - WORKER_TAG=kingNT docker compose --project-name yowking -f deploy/compose.test3.yaml up -d --scale nt={{.KING_NT_WORKERS}} nt
+
+  deploy:test3:bee:down:
+    desc: Stop and remove Bee Test 3 workers
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml stop nt
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml rm -f nt
+
+  deploy:test5:bee:
+    desc: "Deploy eight unrestricted div1 Test 5 workers on Bee. Does not start the arena campaign."
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml stop nt nt-quarter || true
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml rm -f nt nt-quarter || true
+      - docker compose --project-name yowking -f deploy/compose.test5.yaml up -d --scale nt={{.KING_NT_WORKERS}} nt
+
+  deploy:test5:bee:down:
+    desc: "Stop and remove Bee Test 5 div1 workers."
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test5.yaml stop nt
+      - docker compose --project-name yowking -f deploy/compose.test5.yaml rm -f nt
+
+  deploy:test4:bee:
+    desc: Replace Bee Test 3 workers with eight quarter-CPU Test 4 workers
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml stop nt
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml rm -f nt
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml up -d --scale nt-quarter={{.KING_NT_QUARTER_WORKERS}} nt-quarter
+
+  deploy:test4:bee:down:
+    desc: Stop and remove Bee Test 4 quarter-CPU workers
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml stop nt-quarter
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml rm -f nt-quarter
+
+  deploy:tc:bee:
+    desc: "Replace prior experiment workers with eight unrestricted KingTC workers."
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml stop nt nt-quarter || true
+      - docker compose --project-name yowking -f deploy/compose.test3.yaml rm -f nt nt-quarter || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml up -d --scale worker={{.KING_NT_WORKERS}} worker
+
+  deploy:tc:bee:single:
+    desc: "Replace prior KingTC workers with one unrestricted worker for isolated repeatability tests."
+    cmds:
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml stop worker worker-quarter || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml rm -f worker worker-quarter || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml up -d --scale worker=1 worker
+
+  deploy:tc:bee:quarter:
+    desc: "Replace unrestricted KingTC workers with eight quarter-CPU KingTC workers."
+    cmds:
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml stop worker || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml rm -f worker || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml up -d --scale worker-quarter={{.KING_NT_QUARTER_WORKERS}} worker-quarter
+
+  deploy:tc:bee:down:
+    desc: "Stop and remove all KingTC experiment workers on Bee."
+    cmds:
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml stop worker worker-quarter || true
+      - docker compose --project-name kingtc -f deploy/compose.kingtc.yaml rm -f worker worker-quarter || true
   
   deploy:
     desc: Step 4 - Deploy one dev worker (only one for now)
@@ -81,6 +366,34 @@ tasks:
       - GOOS=linux CGO_ENABLED=0 go build -o dist/kingworker ./cmd/kingworker
       - GOOS=linux CGO_ENABLED=0 go build -o dist/kingctl ./cmd/kingctl
 
+  benchmark:kingtc:isolated:
+    desc: Run the wrapper-only KingTC benchmark on Bee's isolated no-turbo CPU pair.
+    deps: [gobuild]
+    vars:
+      RUN: '{{.RUN | default "kingtc-benchmark-isolated"}}'
+      REPEATS: '{{.REPEATS | default 5}}'
+    cmds:
+      - >-
+        scripts/run-isolated-benchmark.sh
+        node scripts/profile-kingtc-benchmark.mjs
+        --run {{.RUN}}
+        --repeats {{.REPEATS}}
+        --cpuset 14,15
+        --cgroup-parent king-benchmark-isolated.slice
+
+  benchmark:kingtc:matrix:
+    desc: Run Bee's full KingTC benchmark matrix and write a timestamped collection directory.
+    deps: [gobuild]
+    vars:
+      RUN: '{{.RUN | default "kingtc-benchmark-matrix-2026-07-21"}}'
+      REPEATS: '{{.REPEATS | default 3}}'
+    cmds:
+      - >-
+        HOST_LABEL=bee
+        OUT_DIR="reports/{{.RUN}}/bee"
+        REPEATS={{.REPEATS}}
+        scripts/run-kingtc-benchmark-matrix.sh
+
   deploy:dev:
     desc: Start one dev yowking worker from deploy/compose.dev.yaml
     cmds:
@@ -90,6 +403,28 @@ tasks:
     desc: Stop the dev yowking worker compose stack
     cmds:
       - docker compose --env-file .env -f deploy/compose.dev.yaml down
+
+  deploy:nt:
+    desc: Start eight KingNT workers tagged kingNT against Zen NATS
+    deps: [build:nt:image]
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.nt.yaml up -d --scale nt={{.KING_NT_WORKERS}}
+
+  deploy:nt:down:
+    desc: Stop the KingNT worker test containers
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.nt.yaml down
+
+  deploy:nt:half:
+    desc: Start eight half-CPU KingNT workers tagged kingNTHalf
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.nt.yaml up -d --scale yowking-nt-half-cpu={{.KING_NT_HALF_WORKERS}} yowking-nt-half-cpu
+
+  deploy:nt:half:down:
+    desc: Stop the half-CPU KingNT workers
+    cmds:
+      - docker compose --project-name yowking -f deploy/compose.nt.yaml stop yowking-nt-half-cpu
+      - docker compose --project-name yowking -f deploy/compose.nt.yaml rm -f yowking-nt-half-cpu
 
   depin:
     desc: For troubleshooting the dependency builder container, start deps container, exec in

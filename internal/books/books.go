@@ -47,7 +47,8 @@ func HeavyMoveFromMoves(moves []string, bookName string) (string, error) {
 func FENFromMoves(moves []string) (string, error) {
 	g := chess.NewGame()
 	for i, s := range moves {
-		if err := pushSloppy(g, s); err != nil {
+		err := g.PushNotationMove(s, chess.UCINotation{}, nil)
+		if err != nil {
 			return "", fmt.Errorf("apply move %d (%q): %w", i+1, s, err)
 		}
 	}
@@ -143,20 +144,4 @@ func polyglotEntryToUCIMove(entry chess.PolyglotEntry) (string, error) {
 	}
 
 	return uci, nil
-}
-
-func pushSloppy(g *chess.Game, s string) error {
-	if err := g.PushMove(s, nil); err == nil {
-		return nil
-	}
-	if err := g.PushNotationMove(s, chess.UCINotation{}, nil); err == nil {
-		return nil
-	}
-	if err := g.PushNotationMove(s, chess.LongAlgebraicNotation{}, nil); err == nil {
-		return nil
-	}
-	if err := g.PushNotationMove(s, chess.AlgebraicNotation{}, nil); err == nil {
-		return nil
-	}
-	return fmt.Errorf("invalid move")
 }

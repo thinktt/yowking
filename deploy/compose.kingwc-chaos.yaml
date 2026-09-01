@@ -1,0 +1,27 @@
+x-kingwc-chaos: &kingwc-chaos
+  image: zen:5000/yowking-nt:kingwc
+  environment:
+    NATS_URL: nats://zen:4222
+    WORKER_TAG: kingWCChaos
+    ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
+  env_file:
+    - env/king.env
+  pids_limit: 256
+  restart: unless-stopped
+
+services:
+  worker-1:
+    <<: *kingwc-chaos
+    container_name: yowking-kingwc-chaos-1
+
+  worker-2:
+    <<: *kingwc-chaos
+    container_name: yowking-kingwc-chaos-2
+
+  worker-3:
+    <<: *kingwc-chaos
+    container_name: yowking-kingwc-chaos-3
+
+  worker-4:
+    <<: *kingwc-chaos
+    container_name: yowking-kingwc-chaos-4

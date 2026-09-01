@@ -1,0 +1,21 @@
+services:
+  nt:
+    image: zen:5000/yowking-nt:test3
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: ${WORKER_TAG:-kingNT}
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped
+
+  nt-quarter:
+    image: zen:5000/yowking-nt:test3
+    cpus: 0.25
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingNTQuarter
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped

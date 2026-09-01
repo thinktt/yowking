@@ -15,6 +15,17 @@ import (
 )
 
 func main() {
+	if len(os.Args) == 2 && os.Args[1] == "--kingtc-benchmark" {
+		runBenchmarkMode()
+		return
+	}
+
+	autoScale, err := configureKingTCAutoScale()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "kingtc autoscale setup failed:", err)
+		os.Exit(1)
+	}
+
 	shouldPostInput := os.Getenv("SHOULD_POST_INPUT")
 	cmd := exec.Command("./TheKing350.exe")
 
@@ -39,6 +50,19 @@ func main() {
 		line := s.Text()
 		if shouldPostInput == "true" {
 			fmt.Println("In: " + line)
+		}
+		if line == "kingtc-benchmark" {
+			report, err := runKingTCBenchmark()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "kingtc-benchmark failed:", err)
+				continue
+			}
+			printBenchmarkReport(report)
+			continue
+		}
+		if line == "go" && autoScale.enabled {
+			fmt.Println(autoScale.logLine())
+			engine.Write([]byte(autoScale.command() + "\n"))
 		}
 		engine.Write([]byte(line + "\n"))
 		if line == "quit" {

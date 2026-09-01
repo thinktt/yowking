@@ -11,6 +11,8 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/thinktt/yowking/pkg/models"
@@ -23,6 +25,16 @@ type Settings = models.MoveReq
 var isVerboseMode = false
 var logger = logrus.New()
 var log *logrus.Entry
+
+const (
+	defaultMoveTimeout = 15 * time.Minute
+	engineStopTimeout  = 5 * time.Second
+)
+
+type engineOutput struct {
+	moveData MoveData
+	final    bool
+}
 
 func GetMove(settings Settings) (MoveData, error) {
 	// Collect any Wine helpers that exited after the previous move completed.
@@ -45,6 +57,7 @@ func GetMove(settings Settings) (MoveData, error) {
 	} else {
 		cmd = exec.Command("wine", "enginewrap.exe")
 	}
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 
 	engine, err := cmd.StdinPipe()
 	if err != nil {
@@ -64,10 +77,7 @@ func GetMove(settings Settings) (MoveData, error) {
 		return MoveData{}, err
 	}
 
-	moveChan := make(chan MoveData)
-	errChan := make(chan error)
-	defer close(moveChan)
-	defer close(errChan)
+	moveChan := make(chan engineOutput, 1)
 
 	// handle the engine streams in real time
 	go readEngineOut(engineOut, moveChan, settings.StopId)
@@ -86,9 +96,12 @@ func GetMove(settings Settings) (MoveData, error) {
 		stopEngine(engine, cmd, log)
 	}()
 
-	if settings.RandomIsOff {
-		settings.CmpVals.Rnd = "0"
-		log.Info("randomIsOff is set, setting cmp rnd val to 0")
+	// RandomOverride sets the random value for engine moves in this request.
+	// It is intended for admin diagnostic tests and may later be replaced by
+	// a broader cmpOverride feature.
+	if settings.RandomOverride != nil {
+		settings.CmpVals.Rnd = strconv.Itoa(*settings.RandomOverride)
+		log.WithField("randomOverride", *settings.RandomOverride).Info("using random override")
 	}
 
 	// log all the cmpVals with keys
@@ -128,9 +141,11 @@ func GetMove(settings Settings) (MoveData, error) {
 	}
 
 	select {
-	case moveData := <-moveChan:
+	case result := <-moveChan:
 		// having move Data right now means the engine didn't like the settings
-		return moveData, nil
+		if result.final {
+			return result.moveData, nil
+		}
 	default:
 		log.Println("engine accepted the settings witouth error")
 	}
@@ -138,9 +153,63 @@ func GetMove(settings Settings) (MoveData, error) {
 	// start the engine
 	engine.Write([]byte("go\n"))
 
-	// wait for the engine to send back a move
-	moveData := <-moveChan
-	return moveData, nil
+	moveTimeout, err := getMoveTimeout()
+	if err != nil {
+		return MoveData{}, err
+	}
+	timer := time.NewTimer(moveTimeout)
+	defer timer.Stop()
+
+	// Keep the newest post-line move available as a fallback if the final move
+	// does not arrive before the worker's deadline.
+	moveCandidate := MoveData{}
+	for {
+		select {
+		case result := <-moveChan:
+			if hasMove(result.moveData) {
+				moveCandidate = result.moveData
+			}
+			if result.final {
+				return result.moveData, nil
+			}
+		case <-timer.C:
+			if hasMove(moveCandidate) {
+				warning := fmt.Sprintf(
+					"engine timed out after %s; using latest analysis move",
+					moveTimeout,
+				)
+				moveCandidate.Warning = &warning
+				moveCandidate.Type = "engine"
+				return moveCandidate, nil
+			}
+
+			errMsg := fmt.Sprintf(
+				"engine timed out after %s without a usable move",
+				moveTimeout,
+			)
+			return MoveData{Err: &errMsg}, nil
+		}
+	}
+}
+
+func getMoveTimeout() (time.Duration, error) {
+	value := strings.TrimSpace(os.Getenv("ENGINE_MOVE_TIMEOUT"))
+	if value == "" {
+		return defaultMoveTimeout, nil
+	}
+
+	timeout, err := time.ParseDuration(value)
+	if err != nil {
+		return 0, fmt.Errorf("ENGINE_MOVE_TIMEOUT must be a duration: %w", err)
+	}
+	if timeout <= 0 {
+		return 0, errors.New("ENGINE_MOVE_TIMEOUT must be greater than zero")
+	}
+	return timeout, nil
+}
+
+func hasMove(moveData MoveData) bool {
+	return moveData.CoordinateMove != "" || moveData.AlgebraMove != ""
 }
 
 func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
@@ -152,8 +221,30 @@ func stopEngine(engine io.WriteCloser, cmd *exec.Cmd, log *logrus.Entry) {
 	if err := engine.Close(); err != nil {
 		log.WithError(err).Debug("failed to close engine input")
 	}
-	if err := cmd.Wait(); err != nil {
-		log.WithError(err).Debug("engine launcher exited with error")
+	waitDone := make(chan error, 1)
+	go func() {
+		waitDone <- cmd.Wait()
+	}()
+
+	select {
+	case err := <-waitDone:
+		if err != nil {
+			log.WithError(err).Debug("engine launcher exited with error")
+		}
+	case <-time.After(engineStopTimeout):
+		log.Warn("engine launcher did not exit after quit; killing process group")
+		if err := unix.Kill(-cmd.Process.Pid, unix.SIGKILL); err != nil {
+			log.WithError(err).Debug("failed to kill engine process group")
+			_ = cmd.Process.Kill()
+		}
+		select {
+		case err := <-waitDone:
+			if err != nil {
+				log.WithError(err).Debug("engine launcher exited after kill")
+			}
+		case <-time.After(engineStopTimeout):
+			log.Error("engine launcher did not exit after kill")
+		}
 	}
 
 	reaped := reapExitedWineChildren()
@@ -188,9 +279,10 @@ func reapExitedWineChildren() int {
 	}
 }
 
-func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
+func readEngineOut(r io.Reader, moveChan chan engineOutput, stopId int) {
 	s := bufio.NewScanner(r)
 	moveCandidate := MoveData{}
+	final := false
 
 	for s.Scan() {
 		engineLine := s.Text()
@@ -203,6 +295,7 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 			strings.Contains(engineLine, "Illegal") {
 			errStr := "callout by engine: " + engineLine
 			moveCandidate = MoveData{Err: &errStr}
+			final = true
 			break
 		}
 
@@ -210,6 +303,7 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 		words := strings.Fields(engineLine)
 		if strings.Contains(engineLine, "move") && len(words) == 2 {
 			moveCandidate.CoordinateMove = strings.Fields(engineLine)[1]
+			final = true
 			break
 		}
 
@@ -219,10 +313,12 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 			continue
 		}
 		moveCandidate = moveData
+		sendLatestEngineOutput(moveChan, engineOutput{moveData: moveCandidate})
 
 		// if the move line is the stopId move line, break and send this move
 		if moveData.Id == stopId {
 			log.Println("engine found stopId, move:", moveData.AlgebraMove)
+			final = true
 			break
 		}
 	}
@@ -230,8 +326,28 @@ func readEngineOut(r io.Reader, moveChan chan MoveData, stopId int) {
 		log.WithError(err).Error("failed to read engine output")
 	}
 
-	// moveCandidate.Err = errStr
-	moveChan <- moveCandidate
+	if !final && !hasMove(moveCandidate) {
+		errStr := "engine output closed before producing a move"
+		moveCandidate.Err = &errStr
+	}
+	sendLatestEngineOutput(moveChan, engineOutput{
+		moveData: moveCandidate,
+		final:    true,
+	})
+}
+
+func sendLatestEngineOutput(moveChan chan engineOutput, result engineOutput) {
+	select {
+	case moveChan <- result:
+		return
+	default:
+	}
+
+	select {
+	case <-moveChan:
+	default:
+	}
+	moveChan <- result
 }
 
 func readEngineErrs(r io.Reader) {

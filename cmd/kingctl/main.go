@@ -5,10 +5,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/thinktt/yowking/internal/books"
 	"github.com/thinktt/yowking/internal/booktester"
 	"github.com/thinktt/yowking/internal/moves"
 	"github.com/thinktt/yowking/pkg/models"
@@ -53,13 +55,14 @@ func printUsage() {
 	fmt.Println("")
 	fmt.Println("Commands:")
 	fmt.Println("  move    Run move resolution directly (book + engine), no NATS")
-	fmt.Println("  book    Run book tests/memory checks")
+	fmt.Println("  book    Run book tests or batch position checks")
 	fmt.Println("")
 	fmt.Println("Examples:")
 	fmt.Println(`  kingctl move '{"cmpName":"Wizard","gameId":"g1","moves":["e2e4"]}'`)
 	fmt.Println(`  kingctl move --skip-book '{"cmpName":"Wizard","gameId":"g1","moves":["e2e4"]}'`)
 	fmt.Println(`  kingctl book fens`)
 	fmt.Println(`  kingctl book mem`)
+	fmt.Println(`  kingctl book positions '{"cmpNames":["Orin"],"positions":[{"id":"p1","moves":["e2e4"]}]}'`)
 }
 
 func runMoveCommand(commandArgs []string) error {
@@ -134,6 +137,10 @@ func prepareLocalRuntime(binaryDirectoryPath string) error {
 }
 
 func runBookCommand(commandArgs []string) error {
+	if len(commandArgs) == 2 && commandArgs[0] == "positions" {
+		return runBookPositionsCommand(commandArgs[1])
+	}
+
 	bookSubcommand, err := parseBookCommandArgs(commandArgs)
 	if err != nil {
 		return err
@@ -147,15 +154,111 @@ func runBookCommand(commandArgs []string) error {
 	return booktester.Run(booktesterArgs, binaryDirectoryPath)
 }
 
+type bookPositionsRequest struct {
+	CmpNames  []string       `json:"cmpNames"`
+	Positions []bookPosition `json:"positions"`
+}
+
+type bookPosition struct {
+	ID    string   `json:"id"`
+	Moves []string `json:"moves"`
+}
+
+type bookPositionResult struct {
+	ID            string                           `json:"id"`
+	FEN           string                           `json:"fen"`
+	OutOfBook     bool                             `json:"outOfBook"`
+	Personalities map[string]bookPersonalityResult `json:"personalities"`
+}
+
+type bookPersonalityResult struct {
+	Book    string   `json:"book"`
+	Moves   []string `json:"moves"`
+	HasMove bool     `json:"hasMove"`
+}
+
+func runBookPositionsCommand(rawJSON string) error {
+	if rawJSON == "-" {
+		data, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			return fmt.Errorf("read book positions request: %w", err)
+		}
+		rawJSON = string(data)
+	}
+
+	request := bookPositionsRequest{}
+	if err := json.Unmarshal([]byte(rawJSON), &request); err != nil {
+		return fmt.Errorf("parse book positions request: %w", err)
+	}
+	if len(request.CmpNames) == 0 || len(request.Positions) == 0 {
+		return errors.New("book positions requires cmpNames and positions")
+	}
+
+	binaryDirectoryPath, err := binaryDir()
+	if err != nil {
+		return err
+	}
+	if err := os.Chdir(binaryDirectoryPath); err != nil {
+		return fmt.Errorf("change dir to %q: %w", binaryDirectoryPath, err)
+	}
+	personalities.Reload()
+
+	results := make([]bookPositionResult, 0, len(request.Positions))
+	for _, position := range request.Positions {
+		if position.ID == "" {
+			return errors.New("book position id is required")
+		}
+		fen, err := books.FENFromMoves(position.Moves)
+		if err != nil {
+			return fmt.Errorf("position %s: %w", position.ID, err)
+		}
+
+		result := bookPositionResult{
+			ID:            position.ID,
+			FEN:           fen,
+			OutOfBook:     true,
+			Personalities: make(map[string]bookPersonalityResult, len(request.CmpNames)),
+		}
+		for _, cmpName := range request.CmpNames {
+			cmp, ok := personalities.CmpMap[cmpName]
+			if !ok {
+				return fmt.Errorf("%s is not a valid personality", cmpName)
+			}
+			bookMoves, err := books.GetAllBookMoves(fen, cmp.Book)
+			if err != nil {
+				return fmt.Errorf("position %s personality %s: %w", position.ID, cmpName, err)
+			}
+			moves := make([]string, 0, len(bookMoves))
+			for _, move := range bookMoves {
+				moves = append(moves, move.Move)
+			}
+			hasMove := len(moves) > 0
+			result.Personalities[cmpName] = bookPersonalityResult{
+				Book:    cmp.Book,
+				Moves:   moves,
+				HasMove: hasMove,
+			}
+			if hasMove {
+				result.OutOfBook = false
+			}
+		}
+		results = append(results, result)
+	}
+
+	return writeJSON(struct {
+		Positions []bookPositionResult `json:"positions"`
+	}{Positions: results})
+}
+
 func parseBookCommandArgs(commandArgs []string) (string, error) {
 	if len(commandArgs) != 1 {
-		return "", errors.New("usage: kingctl book <fens|mem>")
+		return "", errors.New("usage: kingctl book <fens|mem> or kingctl book positions <json>")
 	}
 	bookSubcommand := commandArgs[0]
 	isFens := bookSubcommand == "fens"
 	isMem := bookSubcommand == "mem"
 	if !isFens && !isMem {
-		return "", errors.New("usage: kingctl book <fens|mem>")
+		return "", errors.New("usage: kingctl book <fens|mem> or kingctl book positions <json>")
 	}
 	return bookSubcommand, nil
 }

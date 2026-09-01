@@ -1,0 +1,43 @@
+name: yowking-staging
+
+x-worker: &worker
+  image: zen:5000/yowking:staging
+  environment:
+    NATS_URL: nats://zen:4222
+  env_file:
+    - env/king.env
+  pids_limit: 8192
+  restart: always
+
+services:
+  worker-1:
+    <<: *worker
+    container_name: yowking-kingwc-staging-1
+
+  worker-2:
+    <<: *worker
+    container_name: yowking-kingwc-staging-2
+
+  worker-3:
+    <<: *worker
+    container_name: yowking-kingwc-staging-3
+
+  worker-4:
+    <<: *worker
+    container_name: yowking-kingwc-staging-4
+
+  worker-5:
+    <<: *worker
+    container_name: yowking-kingwc-staging-5
+
+  worker-6:
+    <<: *worker
+    container_name: yowking-kingwc-staging-6
+
+  worker-7:
+    <<: *worker
+    container_name: yowking-kingwc-staging-7
+
+  worker-8:
+    <<: *worker
+    container_name: yowking-kingwc-staging-8

@@ -1,0 +1,45 @@
+name: kingwc-rnd0
+
+x-worker: &worker
+  image: zen:5000/yowking-nt:kingwc
+  environment:
+    NATS_URL: nats://zen:4222
+    WORKER_TAG: kingWC
+    ENGINE_MOVE_TIMEOUT: ${ENGINE_MOVE_TIMEOUT:-15m}
+  env_file:
+    - env/king.env
+  pids_limit: 256
+  restart: unless-stopped
+
+services:
+  worker-1:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-1
+
+  worker-2:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-2
+
+  worker-3:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-3
+
+  worker-4:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-4
+
+  worker-5:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-5
+
+  worker-6:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-6
+
+  worker-7:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-7
+
+  worker-8:
+    <<: *worker
+    container_name: yowking-kingwc-rnd0-8

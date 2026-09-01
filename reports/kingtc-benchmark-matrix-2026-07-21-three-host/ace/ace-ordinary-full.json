@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-07-21T20:14:59.911Z",
+  "runName": "ace-ordinary-full",
+  "benchmark": "enginewrap.exe --kingtc-benchmark; two warmups then five fixed prime-count passes to 1,500,000",
+  "environment": {
+    "hostname": "ace",
+    "cpuModel": "Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz",
+    "cpuLimit": null,
+    "cpusetCpus": null,
+    "cgroupParent": null,
+    "workers": 1,
+    "image": "zen:5000/yowking:prod-rnd0"
+  },
+  "results": [
+    {
+      "repeat": 1,
+      "workers": 1,
+      "wrapperPid": 17936,
+      "wallTimeMs": 3114.423375,
+      "wrapper": {
+        "primes": 114155,
+        "limit": 1500000,
+        "warmups": 2,
+        "runs": 5,
+        "cpuNs": [
+          420000000,
+          410000000,
+          410000000,
+          410000000,
+          420000000
+        ],
+        "medianCpuNs": 410000000
+      },
+      "contenderMedianCpuNs": [
+        410000000
+      ],
+      "counters": {
+        "instructions": {
+          "count": 10142257620
+        },
+        "cycles": {
+          "count": 8664572266
+        },
+        "branches": {
+          "count": 2557852494
+        },
+        "branch-misses": {
+          "count": 5067997
+        }
+      },
+      "perfDiagnostics": "Events disabled\nEvents enabled"
+    },
+    {
+      "repeat": 2,
+      "workers": 1,
+      "wrapperPid": 18076,
+      "wallTimeMs": 3114.570207,
+      "wrapper": {
+        "primes": 114155,
+        "limit": 1500000,
+        "warmups": 2,
+        "runs": 5,
+        "cpuNs": [
+          410000000,
+          420000000,
+          410000000,
+          420000000,
+          410000000
+        ],
+        "medianCpuNs": 410000000
+      },
+      "contenderMedianCpuNs": [
+        410000000
+      ],
+      "counters": {
+        "instructions": {
+          "count": 10142240838
+        },
+        "cycles": {
+          "count": 8669229235
+        },
+        "branches": {
+          "count": 2557849233
+        },
+        "branch-misses": {
+          "count": 5072974
+        }
+      },
+      "perfDiagnostics": "Events disabled\nEvents enabled"
+    },
+    {
+      "repeat": 3,
+      "workers": 1,
+      "wrapperPid": 18216,
+      "wallTimeMs": 3118.669526,
+      "wrapper": {
+        "primes": 114155,
+        "limit": 1500000,
+        "warmups": 2,
+        "runs": 5,
+        "cpuNs": [
+          410000000,
+          420000000,
+          410000000,
+          410000000,
+          430000000
+        ],
+        "medianCpuNs": 410000000
+      },
+      "contenderMedianCpuNs": [
+        410000000
+      ],
+      "counters": {
+        "instructions": {
+          "count": 10142307490
+        },
+        "cycles": {
+          "count": 8666324581
+        },
+        "branches": {
+          "count": 2557860873
+        },
+        "branch-misses": {
+          "count": 5061814
+        }
+      },
+      "perfDiagnostics": "Events disabled\nEvents enabled"
+    }
+  ],
+  "summary": {
+    "repeats": 3,
+    "wrapperMedianCpuNs": [
+      410000000,
+      410000000,
+      410000000
+    ],
+    "wallTimesMs": [
+      3114.423375,
+      3114.570207,
+      3118.669526
+    ],
+    "instructions": [
+      10142257620,
+      10142240838,
+      10142307490
+    ],
+    "cycles": [
+      8664572266,
+      8669229235,
+      8666324581
+    ],
+    "instructionRange": 66652,
+    "wrapperCpuRangeNs": 0
+  }
+}

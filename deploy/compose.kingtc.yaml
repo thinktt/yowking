@@ -1,0 +1,23 @@
+name: kingtc
+
+services:
+  worker:
+    image: zen:5000/yowking-nt:kingtc
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingTC
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped
+
+  worker-quarter:
+    image: zen:5000/yowking-nt:kingtc
+    cpus: 0.25
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingTCQuarter
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped

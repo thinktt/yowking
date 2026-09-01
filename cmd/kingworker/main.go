@@ -14,20 +14,22 @@ import (
 
 var log = logrus.New()
 
+const (
+	moveAckWait          = 30 * time.Second
+	moveProgressInterval = 15 * time.Second
+	defaultWorkerTag     = "default"
+	defaultAPITag        = "default"
+)
+
 func main() {
 	token := os.Getenv("NATS_TOKEN")
 	if token == "" {
 		log.Fatal("NATS_TOKEN environment variable is not set")
 	}
 
-	// if WORKER_TAG exist then modify the subject and consumer names accordingly
-	workerTag := os.Getenv("WORKER_TAG")
-	moveReqSubject := "move-req"
-	consumerName := "kingworkers"
-	if workerTag != "" {
-		moveReqSubject += "." + workerTag
-		consumerName += "-" + workerTag
-	}
+	workerTag := workerTagFromEnv(os.Getenv("WORKER_TAG"))
+	moveReqSubject := getMoveReqSubject(workerTag)
+	consumerName := getConsumerName(workerTag)
 
 	natsUrl := os.Getenv("NATS_URL")
 	if natsUrl == "" {
@@ -36,6 +38,8 @@ func main() {
 	} else {
 		log.Println("NATS_URL set to:", natsUrl)
 	}
+
+	log.Printf("worker configuration: tag=%q", workerTag)
 
 	nc, err := nats.Connect(natsUrl, nats.Token(token))
 	if err != nil {
@@ -51,7 +55,7 @@ func main() {
 	// Create move-req-stream
 	_, err = js.AddStream(&nats.StreamConfig{
 		Name:     "move-req-stream",
-		Subjects: []string{"move-req", "move-req.*"},
+		Subjects: []string{"move-req.*"},
 	})
 	if err != nil {
 		log.Printf("Failed to create stream: %v", err)
@@ -74,7 +78,7 @@ func main() {
 		moveReqSubject,
 		consumerName,
 		nats.ManualAck(),
-		nats.AckWait(30*time.Second),
+		nats.AckWait(moveAckWait),
 	)
 	if err != nil {
 		log.Fatalf("Error subscribing to stream queue: %v", err)
@@ -111,8 +115,12 @@ func main() {
 		if err != nil {
 			errMsg := fmt.Sprintf("Error unmarshaling data: %v", err)
 			log.Error(errMsg)
+			if ackErr := m.Ack(); ackErr != nil {
+				log.Errorf("Error acknowledging malformed move request: %v", ackErr)
+			}
 			continue
 		}
+		moveReq = normalizeMoveRequest(moveReq)
 
 		// since we have move-req data we can now log with context
 		logContext := logrus.WithFields(logrus.Fields{
@@ -121,33 +129,105 @@ func main() {
 			"workerTag": moveReq.WorkerTag,
 		})
 
+		stopProgress := startProgressHeartbeat(m, logContext)
 		moveRes, err := moves.HandleMoveReq(moveReq)
+		stopProgress()
 		if err != nil {
 			logContext.Errorf("Error handling move request: %v", err)
-			continue
+			errMsg := err.Error()
+			moveRes.Err = &errMsg
 		}
+		moveRes = prepareMoveResponse(moveReq, moveRes)
 
-		err = PubMoveRes(js, moveRes)
+		err = PubMoveRes(js, moveReq, moveRes)
 		if err != nil {
 			logContext.Errorf("Error publishing move response: %v", err)
-			// continue
+			continue
 		}
 		logContext.Println("succesfully published move response")
 
-		m.Ack()
+		if err := m.Ack(); err != nil {
+			logContext.Errorf("Error acknowledging move request: %v", err)
+		}
 	}
 }
 
-// PubMoveRes publishes the move data to the move_res.<gameId> subject
-func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
+func startProgressHeartbeat(msg *nats.Msg, logContext *logrus.Entry) func() {
+	done := make(chan struct{})
+	stopped := make(chan struct{})
+
+	go func() {
+		defer close(stopped)
+		ticker := time.NewTicker(moveProgressInterval)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ticker.C:
+				if err := msg.InProgress(); err != nil {
+					logContext.WithError(err).Warn("failed to extend move request acknowledgement")
+				}
+			case <-done:
+				return
+			}
+		}
+	}()
+
+	return func() {
+		close(done)
+		<-stopped
+	}
+}
+
+func prepareMoveResponse(moveReq models.MoveReq, moveRes models.MoveData) models.MoveData {
+	moveReq = normalizeMoveRequest(moveReq)
+	moveRes.Index = len(moveReq.Moves)
+	moveRes.GameId = moveReq.GameId
+	moveRes.WorkerTag = moveReq.WorkerTag
+	return moveRes
+}
+
+func workerTagFromEnv(value string) string {
+	if value == "" {
+		return defaultWorkerTag
+	}
+	return value
+}
+
+func normalizeMoveRequest(moveReq models.MoveReq) models.MoveReq {
+	moveReq.WorkerTag = workerTagFromEnv(moveReq.WorkerTag)
+	moveReq.ApiTag = apiTagFromRequest(moveReq.ApiTag)
+	return moveReq
+}
+
+func apiTagFromRequest(value string) string {
+	if value == "" {
+		return defaultAPITag
+	}
+	return value
+}
+
+func getMoveReqSubject(workerTag string) string {
+	return fmt.Sprintf("move-req.%s", workerTagFromEnv(workerTag))
+}
+
+func getConsumerName(workerTag string) string {
+	return fmt.Sprintf("kingworkers-%s", workerTagFromEnv(workerTag))
+}
+
+// PubMoveRes publishes a response to the API tag from the move request.
+// The response payload carries the worker tag and game identity separately.
+func PubMoveRes(js nats.JetStreamContext, moveReq models.MoveReq, moveData models.MoveData) error {
+	moveReq = normalizeMoveRequest(moveReq)
+	moveData.WorkerTag = workerTagFromEnv(moveData.WorkerTag)
+
 	// Convert your moveData to JSON
 	data, err := json.Marshal(moveData)
 	if err != nil {
 		return err
 	}
 
-	// Generate the subject name
-	subject := fmt.Sprintf("move-res.%s", moveData.GameId)
+	subject := getMoveResSubject(moveReq.ApiTag)
 
 	// Publish the data
 	_, err = js.Publish(subject, data)
@@ -156,4 +236,8 @@ func PubMoveRes(js nats.JetStreamContext, moveData models.MoveData) error {
 	}
 
 	return nil
+}
+
+func getMoveResSubject(apiTag string) string {
+	return fmt.Sprintf("move-res.%s", apiTagFromRequest(apiTag))
 }

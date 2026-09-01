@@ -1,0 +1,10 @@
+services:
+  nt:
+    image: zen:5000/yowking-nt:div1-test5
+    environment:
+      NATS_URL: nats://zen:4222
+      WORKER_TAG: kingNTDiv1
+    env_file:
+      - env/king.env
+    pids_limit: 256
+    restart: unless-stopped

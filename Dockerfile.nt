@@ -1,0 +1,7 @@
+ARG BASE_IMAGE=yowking-worker-routing:latest
+FROM ${BASE_IMAGE}
+
+COPY dist/kingworker /opt/yowking/kingworker
+COPY dist/enginewrap.exe /opt/yowking/enginewrap.exe
+COPY dist/TheKing350.exe /opt/yowking/TheKing350.exe
+COPY dist/calibrations/clockTimes.json /opt/yowking/calibrations/clockTimes.json
